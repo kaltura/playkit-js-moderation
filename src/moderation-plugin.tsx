@@ -1,57 +1,95 @@
-import { h } from "preact";
+import {h} from 'preact';
 import {
   ContribPluginManager,
   CorePlugin,
   OnMediaLoad,
   OnMediaUnload,
-  OnPluginSetup,
-
   ContribServices,
   ContribPluginData,
-  ContribPluginConfigs
-} from "@playkit-js-contrib/plugin";
-import { getContribLogger } from "@playkit-js-contrib/common";
+  ContribPluginConfigs,
+} from '@playkit-js-contrib/plugin';
+import {UpperBarItem, OverlayItem, OverlayPositions} from '@playkit-js-contrib/ui';
+import {getContribLogger, ObjectUtils} from '@playkit-js-contrib/common';
 import * as classes from './moderation-plugin.scss';
+import {Moderation} from './components/moderation';
+import {PluginButton} from './components/plugin-button';
 
 const pluginName = `moderation`;
 
 const logger = getContribLogger({
-  class: "ModerationPlugin",
-  module: "moderation-plugin"
+  class: 'ModerationPlugin',
+  module: 'moderation-plugin',
 });
 
-interface ModerationPluginConfig {
-}
+const {get} = ObjectUtils;
 
-export class ModerationPlugin implements OnMediaLoad, OnMediaUnload, OnPluginSetup, OnMediaUnload {
+interface ModerationPluginConfig {}
+
+export class ModerationPlugin
+  implements OnMediaLoad, OnMediaUnload, OnMediaUnload {
+  private _upperBarItem: UpperBarItem | null = null;
+  private _moderationOverlay: OverlayItem | null = null;
 
   constructor(
     private _corePlugin: CorePlugin,
     private _contribServices: ContribServices,
     private _configs: ContribPluginConfigs<ModerationPluginConfig>
-  ) {
-  }
-
-  onPluginSetup(): void {
-  }
+  ) {}
 
   onMediaLoad(): void {
+    logger.trace('Info plugin loaded', {
+      method: 'onMediaLoad',
+    });
+    this._addPluginIcon();
   }
 
   onMediaUnload(): void {
+    if (this._upperBarItem) {
+      this._contribServices.upperBarManager.remove(this._upperBarItem);
+      this._upperBarItem = null;
+    }
+    if (this._moderationOverlay) {
+      this._toggleOverlay();
+    }
   }
 
-  onPluginDestroy(): void {
+  private _toggleOverlay = () => {
+    if (this._moderationOverlay) {
+      this._contribServices.overlayManager.remove(this._moderationOverlay);
+      this._moderationOverlay = null;
+      return;
+    }
+    this._moderationOverlay = this._contribServices.overlayManager.add({
+      label: 'moderation-overlay',
+      position: OverlayPositions.PlayerArea,
+      renderContent: () => (
+        <Moderation
+          onClick={this._toggleOverlay}
+        />
+      ),
+    });
+  };
+
+  private _addPluginIcon(): void {
+    const {} = this._configs.pluginConfig;
+    this._upperBarItem = this._contribServices.upperBarManager.add({
+      label: 'Moderation',
+      onClick: this._toggleOverlay,
+      renderItem: () => <PluginButton />,
+    });
   }
 }
 
 ContribPluginManager.registerPlugin(
   pluginName,
   (data: ContribPluginData<ModerationPluginConfig>) => {
-    return new ModerationPlugin(data.corePlugin, data.contribServices, data.configs);
+    return new ModerationPlugin(
+      data.corePlugin,
+      data.contribServices,
+      data.configs
+    );
   },
   {
-    defaultConfig: {
-    }
+    defaultConfig: {},
   }
 );
