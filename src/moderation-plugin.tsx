@@ -15,16 +15,16 @@ import {
   OverlayPositions,
   ToastSeverity,
 } from '@playkit-js-contrib/ui';
-import {getContribLogger, ObjectUtils} from '@playkit-js-contrib/common';
+import {getContribLogger} from '@playkit-js-contrib/common';
 import {
   BaseEntryFlagAction,
   KalturaModerationFlagType,
 } from 'kaltura-typescript-client/api/types';
 import {KalturaClient} from 'kaltura-typescript-client';
 import {KalturaModerationFlag} from 'kaltura-typescript-client/api/types/KalturaModerationFlag';
-import {Moderation} from './components/moderation';
+import {Moderation, ModerateOption} from './components/moderation';
 import {PluginButton} from './components/plugin-button';
-
+import * as styles from './moderation-plugin.scss';
 const pluginName = `moderation`;
 
 const logger = getContribLogger({
@@ -32,11 +32,10 @@ const logger = getContribLogger({
   module: 'moderation-plugin',
 });
 
-// const {get} = ObjectUtils;
-
 interface ModerationPluginConfig {
   reportLength: number;
-  onSentSuccessfulMessage: string;
+  onReportSentMessage: string;
+  moderateOptions: ModerateOption[];
 }
 
 export class ModerationPlugin
@@ -87,7 +86,10 @@ export class ModerationPlugin
     contentType: KalturaModerationFlagType,
     content: string
   ) => {
-    const {playerConfig, pluginConfig: { onSentSuccessfulMessage }} = this._configs;
+    const {
+      playerConfig,
+      pluginConfig: {onReportSentMessage},
+    } = this._configs;
     const request = new BaseEntryFlagAction({
       moderationFlag: new KalturaModerationFlag({
         flaggedEntryId: playerConfig.sources.id,
@@ -103,8 +105,8 @@ export class ModerationPlugin
         });
         this._toggleOverlay();
         this._displayToast({
-          text: onSentSuccessfulMessage,
-          icon: () => <span>icon</span>,
+          text: onReportSentMessage,
+          icon: <div className={styles.reportIcon} />,
           severity: ToastSeverity.Success,
         });
         if (this._wasPlayed) {
@@ -127,17 +129,17 @@ export class ModerationPlugin
   }): void => {
     //display toast
     this._contribServices.toastManager.add({
-      title: "Notifications",
+      title: 'Report Content',
       text: options.text,
       icon: options.icon,
-      duration: 5000,
+      duration: 95000,
       severity: ToastSeverity.Success || ToastSeverity.Error,
       onClick: () => {},
     });
   };
 
   private _toggleOverlay = () => {
-    const {reportLength} = this._configs.pluginConfig;
+    const {reportLength, moderateOptions} = this._configs.pluginConfig;
     const isPlaying = !(this._player as any).paused;
     logger.trace(`Info toggle overlay player`, {
       method: '_toggleOverlay',
@@ -167,6 +169,7 @@ export class ModerationPlugin
           onClick={this._toggleOverlay}
           onSubmit={this._sentReport}
           reportLength={reportLength}
+          moderateOptions={moderateOptions}
         />
       ),
     });
@@ -195,7 +198,13 @@ ContribPluginManager.registerPlugin(
   {
     defaultConfig: {
       reportLength: 500,
-      onSentSuccessfulMessage: "Send report",
+      onReportSentMessage: 'Send report',
+      moderateOptions: [
+        {id: 1, label: 'Sexual Content'},
+        {id: 2, label: 'Violent Or Repulsive'},
+        {id: 3, label: 'Harmful Or Dangerous Act'},
+        {id: 4, label: 'Spam / Commercials'},
+      ],
     },
   }
 );

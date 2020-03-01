@@ -1,5 +1,5 @@
 import {h, Component} from 'preact';
-import {getContribLogger} from '@playkit-js-contrib/common';
+import {getContribLogger, ObjectUtils} from '@playkit-js-contrib/common';
 import {
   KeyboardKeys,
   Popover,
@@ -10,11 +10,18 @@ import {KalturaModerationFlagType} from 'kaltura-typescript-client/api/types';
 import {CloseButton} from '../close-button';
 import {PopoverMenu, PopoverMenuItem} from '../popover-menu';
 import * as styles from './moderation.scss';
+const {get} = ObjectUtils;
+
+export interface ModerateOption {
+  id: number;
+  label: string;
+}
 
 interface ModerationProps {
   onClick: () => void;
   onSubmit: (contentType: KalturaModerationFlagType, content: string) => void;
   reportLength: number;
+  moderateOptions: ModerateOption[];
 }
 
 interface ModerationState {
@@ -29,14 +36,7 @@ const logger = getContribLogger({
 });
 
 const INITIAL_CONTENT_VALUE = 'Describe what you saw...';
-
-const CONTENT_TYPES = [
-  'Choose a reason for reporting this content',
-  'Sexual Content',
-  'Violent Or Repulsive',
-  'Harmful Or Dangerous Act',
-  'Spam / Commercials',
-];
+const DEFAULT_CONTENT_TYPE = 'Choose a reason for reporting this content';
 
 export class Moderation extends Component<ModerationProps, ModerationState> {
   state: ModerationState = {
@@ -65,10 +65,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     return false;
   }
 
-  private _onContentTypeChange = (index: number) => {
+  private _onContentTypeChange = (id: number) => {
     this.setState({
-      // 'index + 1': first element of CONTENT_TYPES ignores as a default value;
-      reportContentType: index + 1,
+      reportContentType: id,
     });
   };
 
@@ -142,11 +141,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   );
 
   private _getPopoverMenuOptions = () => {
-    return CONTENT_TYPES.filter(
-      (contentType: string, index: number) => index
-    ).map((contentType: string, index: number) => ({
-      label: contentType,
-      onMenuChosen: () => this._onContentTypeChange(index),
+    return this.props.moderateOptions.map(({ label, id }: ModerateOption) => ({
+      label: label || '',
+      onMenuChosen: () => this._onContentTypeChange(id || -1),
     }));
   };
 
@@ -159,6 +156,15 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     );
   };
 
+  private _getContentType = () => {
+    return (
+      this.props.moderateOptions.find(
+        (moderateOption: ModerateOption) =>
+          moderateOption.id === this.state.reportContentType
+      ) || {}
+    );
+  };
+
   render(props: ModerationProps) {
     const {onClick, reportLength} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
@@ -166,17 +172,17 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
         <CloseButton onClick={onClick} />
         <div className={styles.mainWrapper}>
-          <div className={styles.title}>What’s wrong with this content?</div>
+          <div className={[styles.title, 'kaltura-moderation__title'].join(' ')}>What’s wrong with this content?</div>
           <Popover
-            className="download-print-popover"
+            className={styles.reportPopover}
             verticalPosition={PopoverVerticalPositions.Bottom}
             horizontalPosition={PopoverHorizontalPositions.Right}
             content={this._popoverContent()}>
             <div className={styles.selectWrapper}>
               <div className={styles.select}>
                 {reportContentType > -1
-                  ? CONTENT_TYPES[reportContentType]
-                  : CONTENT_TYPES[0]}
+                  ? get(this._getContentType(), 'label', '')
+                  : DEFAULT_CONTENT_TYPE}
               </div>
               <div className={styles.downArrow} />
             </div>
