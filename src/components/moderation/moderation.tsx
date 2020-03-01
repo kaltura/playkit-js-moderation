@@ -6,26 +6,19 @@ import {
   PopoverHorizontalPositions,
   PopoverVerticalPositions,
 } from '@playkit-js-contrib/ui';
+import {KalturaModerationFlagType} from 'kaltura-typescript-client/api/types';
 import {CloseButton} from '../close-button';
 import {PopoverMenu, PopoverMenuItem} from '../popover-menu';
-import {
-  BaseEntryFlagAction,
-  KalturaModerationFlagType
-} from "kaltura-typescript-client/api/types";
-import {KalturaClient} from "kaltura-typescript-client";
-import {KalturaModerationFlag} from "kaltura-typescript-client/api/types/KalturaModerationFlag";
 import * as styles from './moderation.scss';
 
 interface ModerationProps {
-  entryId: string;
-  ks: string;
-  endpoint: string;
   onClick: () => void;
+  onSubmit: (contentType: KalturaModerationFlagType, content: string) => void;
   reportLength: number;
 }
 
 interface ModerationState {
-  reportContentType: KalturaModerationFlagType | -1;
+  reportContentType: number;
   reportContent: string;
   isTextareaActive: boolean;
 }
@@ -46,23 +39,6 @@ const CONTENT_TYPES = [
 ];
 
 export class Moderation extends Component<ModerationProps, ModerationState> {
-
-  private _kalturaClient = new KalturaClient();
-  private _entryId: string;
-
-  constructor(props: ModerationProps) {
-    super();
-    this._entryId = props.entryId;
-    this._kalturaClient.setOptions({
-      clientTag: "playkit-js-transcript",
-      endpointUrl: props.endpoint
-    });
-
-    this._kalturaClient.setDefaultRequestOptions({
-      ks: props.ks
-    });
-  }
-
   state: ModerationState = {
     reportContent: INITIAL_CONTENT_VALUE,
     reportContentType: -1,
@@ -70,7 +46,6 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   };
 
   componentDidMount(): void {
-
     logger.trace('Moderation plugin mount', {
       method: 'componentDidMount',
     });
@@ -128,7 +103,6 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   };
 
   private _handleSubmit = (event: any) => {
-
     event.preventDefault();
     const {reportContent, reportContentType} = this.state;
     logger.trace('Moderation plugin submit click', {
@@ -141,28 +115,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       // TODO - handle validation
       return;
     }
-
-
-    const request = new BaseEntryFlagAction({
-      moderationFlag: new KalturaModerationFlag({
-        flaggedEntryId: this._entryId,
-        flagType: reportContentType + 1, // reportContentType is index of dropdown
-        comments: reportContent
-      })
-    });
-    this._kalturaClient.request(request).then(
-      data => {
-        logger.trace('Moderation plugin submit OK', {
-          method: 'handleSubmit',
-        });
-      }, error => {
-        logger.trace('Moderation plugin submit failed', {
-          method: 'handleSubmit',
-          data: error
-        });
-      })
-
-
+    this.props.onSubmit(reportContentType, reportContent);
   };
 
   private _onKeyDown = (e: KeyboardEvent, callBack: Function) => {
@@ -211,7 +164,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
-        <CloseButton onClick={onClick}/>
+        <CloseButton onClick={onClick} />
         <div className={styles.mainWrapper}>
           <div className={styles.title}>What’s wrong with this content?</div>
           <Popover

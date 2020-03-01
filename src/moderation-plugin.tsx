@@ -4,6 +4,7 @@ import {
   CorePlugin,
   OnMediaLoad,
   OnMediaUnload,
+  OnPluginSetup,
   ContribServices,
   ContribPluginData,
   ContribPluginConfigs,
@@ -14,13 +15,14 @@ import {
   OverlayPositions,
 } from '@playkit-js-contrib/ui';
 import {getContribLogger, ObjectUtils} from '@playkit-js-contrib/common';
+import {
+  BaseEntryFlagAction,
+  KalturaModerationFlagType,
+} from 'kaltura-typescript-client/api/types';
 import {KalturaClient} from 'kaltura-typescript-client';
-import {KalturaModerationFlagType} from 'kaltura-typescript-client/api/types/KalturaModerationFlagType';
 import {KalturaModerationFlag} from 'kaltura-typescript-client/api/types/KalturaModerationFlag';
-import * as classes from './moderation-plugin.scss';
 import {Moderation} from './components/moderation';
 import {PluginButton} from './components/plugin-button';
-
 
 const pluginName = `moderation`;
 
@@ -29,17 +31,18 @@ const logger = getContribLogger({
   module: 'moderation-plugin',
 });
 
-const {get} = ObjectUtils;
+// const {get} = ObjectUtils;
 
 interface ModerationPluginConfig {
   reportLength: number;
 }
 
 export class ModerationPlugin
-  implements OnMediaLoad, OnMediaUnload, OnMediaUnload {
+  implements OnMediaLoad, OnMediaUnload, OnPluginSetup, OnMediaUnload {
   private _upperBarItem: UpperBarItem | null = null;
   private _moderationOverlay: OverlayItem | null = null;
   private _wasPlayed = false; // keep state of the player so we can resume if needed
+  private _kalturaClient = new KalturaClient();
 
   constructor(
     private _corePlugin: CorePlugin,
@@ -47,6 +50,19 @@ export class ModerationPlugin
     private _configs: ContribPluginConfigs<ModerationPluginConfig>,
     private _player: KalturaPlayerTypes.Player
   ) {
+  }
+
+  onPluginSetup(): void {
+    const { playerConfig } = this._configs;
+
+    this._kalturaClient.setOptions({
+      clientTag: 'playkit-js-transcript',
+      endpointUrl: playerConfig.provider.env.serviceUrl,
+    });
+
+    this._kalturaClient.setDefaultRequestOptions({
+        ks: playerConfig.session.ks
+    });
   }
 
   onMediaLoad(): void {
@@ -66,18 +82,47 @@ export class ModerationPlugin
     }
   }
 
+  private _sentReport = (
+    contentType: KalturaModerationFlagType,
+    content: string
+  ) => {
+    const {playerConfig} = this._configs;
+    const request = new BaseEntryFlagAction({
+      moderationFlag: new KalturaModerationFlag({
+        flaggedEntryId: playerConfig.sources.id,
+        flagType: contentType,
+        comments: content,
+      }),
+    });
+
+    this._kalturaClient.request(request).then(
+      () => {
+        logger.trace('Moderation plugin submit OK', {
+          method: 'handleSubmit',
+        });
+        this._toggleOverlay();
+      },
+      error => {
+        logger.trace('Moderation plugin submit failed', {
+          method: 'handleSubmit',
+          data: error,
+        });
+      }
+    );
+  };
+
   private _toggleOverlay = () => {
-    const { reportLength } = this._configs.pluginConfig;
+    const {reportLength} = this._configs.pluginConfig;
     const isPlaying = !(this._player as any).paused;
     logger.trace(`Info toggle overlay player`, {
-      method: '_toggleOverlay'
+      method: '_toggleOverlay',
     });
     if (this._moderationOverlay) {
       this._contribServices.overlayManager.remove(this._moderationOverlay);
       this._moderationOverlay = null;
       if (this._wasPlayed) {
         logger.trace(`Info plugin paused player`, {
-          method: '_toggleOverlay'
+          method: '_toggleOverlay',
         });
         this._wasPlayed = false;
         this._player.play();
@@ -96,10 +141,8 @@ export class ModerationPlugin
       position: OverlayPositions.PlayerArea,
       renderContent: () => (
         <Moderation
-          entryId={playerConfig.sources.id}
-          endpoint={playerConfig.provider.env.serviceUrl}
-          ks={(playerConfig as any).session.ks}
           onClick={this._toggleOverlay}
+          onSubmit={this._sentReport}
           reportLength={reportLength}
         />
       ),
@@ -111,7 +154,7 @@ export class ModerationPlugin
     this._upperBarItem = this._contribServices.upperBarManager.add({
       label: 'Moderation',
       onClick: this._toggleOverlay,
-      renderItem: () => <PluginButton/>,
+      renderItem: () => <PluginButton />,
     });
   }
 }
