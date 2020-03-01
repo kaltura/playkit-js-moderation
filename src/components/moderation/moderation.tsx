@@ -1,5 +1,4 @@
-import {Component, h} from 'preact';
-import * as styles from './moderation.scss';
+import {h, Component} from 'preact';
 import {getContribLogger} from '@playkit-js-contrib/common';
 import {
   KeyboardKeys,
@@ -15,12 +14,14 @@ import {
 } from "kaltura-typescript-client/api/types";
 import {KalturaClient} from "kaltura-typescript-client";
 import {KalturaModerationFlag} from "kaltura-typescript-client/api/types/KalturaModerationFlag";
+import * as styles from './moderation.scss';
 
 interface ModerationProps {
   entryId: string;
   ks: string;
   endpoint: string;
   onClick: () => void;
+  reportLength: number;
 }
 
 interface ModerationState {
@@ -37,6 +38,7 @@ const logger = getContribLogger({
 const INITIAL_CONTENT_VALUE = 'Describe what you saw...';
 
 const CONTENT_TYPES = [
+  'Choose a reason for reporting this content',
   'Sexual Content',
   'Violent Or Repulsive',
   'Harmful Or Dangerous Act',
@@ -73,21 +75,35 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       method: 'componentDidMount',
     });
   }
+  shouldComponentUpdate(
+    nextProps: Readonly<ModerationProps>,
+    nextState: Readonly<ModerationState>
+  ) {
+    const {reportContent, reportContentType, isTextareaActive} = this.state;
+    if (
+      reportContent !== nextState.reportContent ||
+      reportContentType !== nextState.reportContentType ||
+      isTextareaActive !== nextState.isTextareaActive
+    ) {
+      return true;
+    }
+    return false;
+  }
 
   private _onContentTypeChange = (index: number) => {
     this.setState({
-      reportContentType: index,
+      // 'index + 1': first element of CONTENT_TYPES ignores as a default value;
+      reportContentType: index + 1,
     });
   };
 
   private _onContentChange = (event: any) => {
     const {value} = event.target;
-    if (value.length > 500) {
-      return;
-    }
-    this.setState({
-      reportContent: value,
-    });
+    const {reportLength} = this.props;
+
+    this.setState((state: ModerationState) => ({
+      reportContent: value.length > reportLength ? state.reportContent : value,
+    }));
   };
 
   private _handleFocus = () => {
@@ -173,7 +189,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   );
 
   private _getPopoverMenuOptions = () => {
-    return CONTENT_TYPES.map((contentType: string, index: number) => ({
+    return CONTENT_TYPES.filter(
+      (contentType: string, index: number) => index
+    ).map((contentType: string, index: number) => ({
       label: contentType,
       onMenuChosen: () => this._onContentTypeChange(index),
     }));
@@ -189,7 +207,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   };
 
   render(props: ModerationProps) {
-    const {onClick} = props;
+    const {onClick, reportLength} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
@@ -201,12 +219,13 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             verticalPosition={PopoverVerticalPositions.Bottom}
             horizontalPosition={PopoverHorizontalPositions.Right}
             content={this._popoverContent()}>
-            <div className={styles.select}>
-              {reportContentType > -1
-                ? <span>{CONTENT_TYPES[reportContentType]}</span>
-                : <span>Choose a reason for reporting this content</span>
-              }
-              <img className={styles.arrow} />
+            <div className={styles.selectWrapper}>
+              <div className={styles.select}>
+                {reportContentType > -1
+                  ? CONTENT_TYPES[reportContentType]
+                  : CONTENT_TYPES[0]}
+              </div>
+              <div className={styles.downArrow} />
             </div>
           </Popover>
           <form onSubmit={this._handleSubmit}>
@@ -223,9 +242,14 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
                   reportContent === INITIAL_CONTENT_VALUE
                     ? 0
                     : reportContent.length
-                }/500`}
+                }/${reportLength}`}
               </div>
-              <button className={styles.submitButton} type="submit">
+              <button
+                className={[
+                  styles.submitButton,
+                  reportContentType === -1 ? styles.disabled : '',
+                ].join(' ')}
+                type="submit">
                 Report
               </button>
             </div>
