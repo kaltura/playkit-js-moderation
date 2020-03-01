@@ -1,4 +1,4 @@
-import {h} from 'preact';
+import {h, ComponentChild} from 'preact';
 import {
   ContribPluginManager,
   CorePlugin,
@@ -13,6 +13,7 @@ import {
   UpperBarItem,
   OverlayItem,
   OverlayPositions,
+  ToastSeverity,
 } from '@playkit-js-contrib/ui';
 import {getContribLogger, ObjectUtils} from '@playkit-js-contrib/common';
 import {
@@ -35,6 +36,7 @@ const logger = getContribLogger({
 
 interface ModerationPluginConfig {
   reportLength: number;
+  onSentSuccessfulMessage: string;
 }
 
 export class ModerationPlugin
@@ -49,11 +51,10 @@ export class ModerationPlugin
     private _contribServices: ContribServices,
     private _configs: ContribPluginConfigs<ModerationPluginConfig>,
     private _player: KalturaPlayerTypes.Player
-  ) {
-  }
+  ) {}
 
   onPluginSetup(): void {
-    const { playerConfig } = this._configs;
+    const {playerConfig} = this._configs;
 
     this._kalturaClient.setOptions({
       clientTag: 'playkit-js-transcript',
@@ -61,7 +62,7 @@ export class ModerationPlugin
     });
 
     this._kalturaClient.setDefaultRequestOptions({
-        ks: playerConfig.session.ks
+      ks: playerConfig.session.ks,
     });
   }
 
@@ -86,7 +87,7 @@ export class ModerationPlugin
     contentType: KalturaModerationFlagType,
     content: string
   ) => {
-    const {playerConfig} = this._configs;
+    const {playerConfig, pluginConfig: { onSentSuccessfulMessage }} = this._configs;
     const request = new BaseEntryFlagAction({
       moderationFlag: new KalturaModerationFlag({
         flaggedEntryId: playerConfig.sources.id,
@@ -101,6 +102,14 @@ export class ModerationPlugin
           method: 'handleSubmit',
         });
         this._toggleOverlay();
+        this._displayToast({
+          text: onSentSuccessfulMessage,
+          icon: () => <span>icon</span>,
+          severity: ToastSeverity.Success,
+        });
+        if (this._wasPlayed) {
+          this._player.play();
+        }
       },
       error => {
         logger.trace('Moderation plugin submit failed', {
@@ -109,6 +118,22 @@ export class ModerationPlugin
         });
       }
     );
+  };
+
+  private _displayToast = (options: {
+    text: string;
+    icon: ComponentChild;
+    severity: ToastSeverity;
+  }): void => {
+    //display toast
+    this._contribServices.toastManager.add({
+      title: "Notifications",
+      text: options.text,
+      icon: options.icon,
+      duration: 5000,
+      severity: ToastSeverity.Success || ToastSeverity.Error,
+      onClick: () => {},
+    });
   };
 
   private _toggleOverlay = () => {
@@ -133,8 +158,6 @@ export class ModerationPlugin
       this._wasPlayed = true;
       this._player.pause();
     }
-
-    const {playerConfig} = this._configs;
 
     this._moderationOverlay = this._contribServices.overlayManager.add({
       label: 'moderation-overlay',
@@ -172,6 +195,7 @@ ContribPluginManager.registerPlugin(
   {
     defaultConfig: {
       reportLength: 500,
+      onSentSuccessfulMessage: "Send report",
     },
   }
 );
