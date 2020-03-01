@@ -8,8 +8,15 @@ import {
   ContribPluginData,
   ContribPluginConfigs,
 } from '@playkit-js-contrib/plugin';
-import {UpperBarItem, OverlayItem, OverlayPositions} from '@playkit-js-contrib/ui';
+import {
+  UpperBarItem,
+  OverlayItem,
+  OverlayPositions,
+} from '@playkit-js-contrib/ui';
 import {getContribLogger, ObjectUtils} from '@playkit-js-contrib/common';
+import {KalturaClient} from 'kaltura-typescript-client';
+import {KalturaModerationFlagType} from 'kaltura-typescript-client/api/types/KalturaModerationFlagType';
+import {KalturaModerationFlag} from 'kaltura-typescript-client/api/types/KalturaModerationFlag';
 import * as classes from './moderation-plugin.scss';
 import {Moderation} from './components/moderation';
 import {PluginButton} from './components/plugin-button';
@@ -23,7 +30,9 @@ const logger = getContribLogger({
 
 const {get} = ObjectUtils;
 
-interface ModerationPluginConfig {}
+interface ModerationPluginConfig {
+  reportLength: number;
+}
 
 export class ModerationPlugin
   implements OnMediaLoad, OnMediaUnload, OnMediaUnload {
@@ -54,6 +63,7 @@ export class ModerationPlugin
   }
 
   private _toggleOverlay = () => {
+    const { reportLength } = this._configs.pluginConfig;
     if (this._moderationOverlay) {
       this._contribServices.overlayManager.remove(this._moderationOverlay);
       this._moderationOverlay = null;
@@ -65,6 +75,7 @@ export class ModerationPlugin
       renderContent: () => (
         <Moderation
           onClick={this._toggleOverlay}
+          reportLength={reportLength}
         />
       ),
     });
@@ -90,6 +101,8 @@ ContribPluginManager.registerPlugin(
     );
   },
   {
-    defaultConfig: {},
+    defaultConfig: {
+      reportLength: 500,
+    },
   }
 );
