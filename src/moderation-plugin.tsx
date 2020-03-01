@@ -132,7 +132,7 @@ export class ModerationPlugin
       title: 'Report Content',
       text: options.text,
       icon: options.icon,
-      duration: 95000,
+      duration: 5000,
       severity: ToastSeverity.Success || ToastSeverity.Error,
       onClick: () => {},
     });
