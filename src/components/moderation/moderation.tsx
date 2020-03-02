@@ -108,7 +108,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       method: 'handleSubmit',
     });
     if (reportContentType === -1) {
-      logger.trace('User did not select reason', {
+      logger.trace('Moderation User did not select reason', {
         method: 'handleSubmit',
       });
       // TODO - handle validation

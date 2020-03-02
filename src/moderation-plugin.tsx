@@ -35,6 +35,7 @@ const logger = getContribLogger({
 interface ModerationPluginConfig {
   reportLength: number;
   onReportSentMessage: string;
+  onReportErrorMessage: string;
   moderateOptions: ModerateOption[];
 }
 
@@ -66,7 +67,7 @@ export class ModerationPlugin
   }
 
   onMediaLoad(): void {
-    logger.trace('Info plugin loaded', {
+    logger.trace('Moderation plugin loaded', {
       method: 'onMediaLoad',
     });
     this._addPluginIcon();
@@ -88,7 +89,7 @@ export class ModerationPlugin
   ) => {
     const {
       playerConfig,
-      pluginConfig: {onReportSentMessage},
+      pluginConfig: {onReportSentMessage, onReportErrorMessage},
     } = this._configs;
     const request = new BaseEntryFlagAction({
       moderationFlag: new KalturaModerationFlag({
@@ -106,7 +107,7 @@ export class ModerationPlugin
         this._toggleOverlay();
         this._displayToast({
           text: onReportSentMessage,
-          icon: <div className={styles.reportIcon} />,
+          icon: <div className={[styles.toastIcon, styles.success].join(' ')} />,
           severity: ToastSeverity.Success,
         });
         if (this._wasPlayed) {
@@ -117,6 +118,12 @@ export class ModerationPlugin
         logger.trace('Moderation plugin submit failed', {
           method: 'handleSubmit',
           data: error,
+        });
+        this._toggleOverlay();
+        this._displayToast({
+          text: onReportErrorMessage,
+          icon: <div className={[styles.toastIcon, styles.error].join(' ')} />,
+          severity: ToastSeverity.Error,
         });
       }
     );
@@ -134,21 +141,25 @@ export class ModerationPlugin
       icon: options.icon,
       duration: 5000,
       severity: ToastSeverity.Success || ToastSeverity.Error,
-      onClick: () => {},
+      onClick: () => {
+        logger.trace(`Moderation clicked on toast`, {
+          method: '_displayToast',
+        });
+      },
     });
   };
 
   private _toggleOverlay = () => {
     const {reportLength, moderateOptions} = this._configs.pluginConfig;
     const isPlaying = !(this._player as any).paused;
-    logger.trace(`Info toggle overlay player`, {
+    logger.trace(`Moderation toggle overlay player`, {
       method: '_toggleOverlay',
     });
     if (this._moderationOverlay) {
       this._contribServices.overlayManager.remove(this._moderationOverlay);
       this._moderationOverlay = null;
       if (this._wasPlayed) {
-        logger.trace(`Info plugin paused player`, {
+        logger.trace(`Moderation plugin paused player`, {
           method: '_toggleOverlay',
         });
         this._wasPlayed = false;
@@ -199,6 +210,7 @@ ContribPluginManager.registerPlugin(
     defaultConfig: {
       reportLength: 500,
       onReportSentMessage: 'Send report',
+      onReportErrorMessage: 'The report failed to send',
       moderateOptions: [
         {id: 1, label: 'Sexual Content'},
         {id: 2, label: 'Violent Or Repulsive'},

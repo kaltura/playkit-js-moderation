@@ -1,8 +1,13 @@
-.report-icon {
+.toast-icon {
     width: 16px;
     height: 16px;
     margin-right: 7px;
-    background-image: url('./assets/report.svg');
     background-position: center;
     background-repeat: no-repeat;
+    &.success {
+        background-image: url('./assets/report.svg');
+    }
+    &.error {
+        background-image: url('./assets/error.svg');
+    }
 }
