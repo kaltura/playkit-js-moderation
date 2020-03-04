@@ -50,20 +50,6 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       method: 'componentDidMount',
     });
   }
-  shouldComponentUpdate(
-    nextProps: Readonly<ModerationProps>,
-    nextState: Readonly<ModerationState>
-  ) {
-    const {reportContent, reportContentType, isTextareaActive} = this.state;
-    if (
-      reportContent !== nextState.reportContent ||
-      reportContentType !== nextState.reportContentType ||
-      isTextareaActive !== nextState.isTextareaActive
-    ) {
-      return true;
-    }
-    return false;
-  }
 
   private _onContentTypeChange = (id: number) => {
     this.setState({
@@ -111,7 +97,6 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       logger.trace('Moderation User did not select reason', {
         method: 'handleSubmit',
       });
-      // TODO - handle validation
       return;
     }
     this.props.onSubmit(reportContentType, reportContent);
@@ -141,7 +126,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   );
 
   private _getPopoverMenuOptions = () => {
-    return this.props.moderateOptions.map(({ label, id }: ModerateOption) => ({
+    return this.props.moderateOptions.map(({label, id}: ModerateOption) => ({
       label: label || '',
       onMenuChosen: () => this._onContentTypeChange(id || -1),
     }));
@@ -172,7 +157,10 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
         <CloseButton onClick={onClick} />
         <div className={styles.mainWrapper}>
-          <div className={[styles.title, 'kaltura-moderation__title'].join(' ')}>What’s wrong with this content?</div>
+          <div
+            className={[styles.title, 'kaltura-moderation__title'].join(' ')}>
+            What’s wrong with this content?
+          </div>
           <Popover
             className={styles.reportPopover}
             verticalPosition={PopoverVerticalPositions.Bottom}

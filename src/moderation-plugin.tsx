@@ -36,6 +36,7 @@ interface ModerationPluginConfig {
   reportLength: number;
   onReportSentMessage: string;
   onReportErrorMessage: string;
+  notificatonDuration: number;
   moderateOptions: ModerateOption[];
 }
 
@@ -107,7 +108,9 @@ export class ModerationPlugin
         this._toggleOverlay();
         this._displayToast({
           text: onReportSentMessage,
-          icon: <div className={[styles.toastIcon, styles.success].join(' ')} />,
+          icon: (
+            <div className={[styles.toastIcon, styles.success].join(' ')} />
+          ),
           severity: ToastSeverity.Success,
         });
         if (this._wasPlayed) {
@@ -134,12 +137,13 @@ export class ModerationPlugin
     icon: ComponentChild;
     severity: ToastSeverity;
   }): void => {
+    const {notificatonDuration} = this._configs.pluginConfig;
     //display toast
     this._contribServices.toastManager.add({
       title: 'Report Content',
       text: options.text,
       icon: options.icon,
-      duration: 5000,
+      duration: notificatonDuration,
       severity: ToastSeverity.Success || ToastSeverity.Error,
       onClick: () => {
         logger.trace(`Moderation clicked on toast`, {
@@ -211,6 +215,7 @@ ContribPluginManager.registerPlugin(
       reportLength: 500,
       onReportSentMessage: 'Send report',
       onReportErrorMessage: 'The report failed to send',
+      notificatonDuration: 5000,
       moderateOptions: [
         {id: 1, label: 'Sexual Content'},
         {id: 2, label: 'Violent Or Repulsive'},
