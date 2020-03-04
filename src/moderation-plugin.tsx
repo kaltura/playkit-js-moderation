@@ -76,6 +76,9 @@ export class ModerationPlugin
 
   onMediaUnload(): void {
     if (this._upperBarItem) {
+      logger.trace('Moderation plugin remove plugin icon', {
+        method: 'onMediaUnload',
+      });
       this._contribServices.upperBarManager.remove(this._upperBarItem);
       this._upperBarItem = null;
     }

@@ -30,7 +30,7 @@ interface PopoverMenuProps {
  */
 
 export class PopoverMenu extends Component<PopoverMenuProps> {
-    render(props: any) {
+    render(props: PopoverMenuProps) {
         return (
             <div className={styles.popoverMenu}>
                 {props.options.map((el: PopoverMenuItem) => {
