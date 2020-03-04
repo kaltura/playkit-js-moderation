@@ -167,13 +167,14 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
           </Popover>
           <form onSubmit={this._handleSubmit}>
             <textarea
-              className={isTextareaActive ? styles.active : ''}
-              value={reportContent}
+              className={[styles.reportContent, isTextareaActive ? styles.active : ''].join(' ')}
               onInput={this._onContentChange}
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}
               placeholder="Describe what you saw..."
-            />
+            >
+              {reportContent}
+            </textarea>
             <div className={styles.submitWrapper}>
               <div className={styles.characterCounter}>
                 {`${reportContent.length}/${reportLength}`}
