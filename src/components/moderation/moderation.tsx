@@ -167,7 +167,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
           </Popover>
           <form onSubmit={this._handleSubmit}>
             <textarea
-              className={[styles.reportContent, isTextareaActive ? styles.active : ''].join(' ')}
+              className={[styles.textarea, isTextareaActive ? styles.active : ''].join(' ')}
               onInput={this._onContentChange}
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}

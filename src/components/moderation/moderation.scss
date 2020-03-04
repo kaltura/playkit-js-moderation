@@ -1,32 +1,18 @@
 @import '../../variables.scss';
 
-/* TODO: (1) remove this once 3rd party cross-browser custom scroll bar is Added */
-.body::-webkit-scrollbar {
-  width: 4px;
-}
-
-/* Track TODO: as (1)*/
-.body::-webkit-scrollbar-track {
-  background: rgba(33, 33, 33, 0.9);
-}
-
-/* Handle TODO: as (1) */
-.body::-webkit-scrollbar-thumb {
-  border-radius: 3px;
-  background-color: rgba($color: $white-color, $alpha: 0.3);
-}
-
 .root {
   position: absolute;
-  height: 100%;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   padding: 60px 32px 32px 32px;
   color: $white-color;
+  background-color: $root-background;
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
-  background-color: $root-background;
   .main-wrapper {
     height: 100%;
     width: 400px;
@@ -80,7 +66,7 @@
         background-repeat: no-repeat;
       }
     }
-    .report-content {
+    .textarea {
       resize: none;
       width: 100%;
       height: 72px;
@@ -106,6 +92,15 @@
       &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
         color: $gray-color;
         opacity: 1; /* Firefox */
+      }
+      &::-webkit-scrollbar {
+        width: 11px;
+      }
+      &::-webkit-scrollbar-thumb {
+        border-radius: 8px;
+        background-color: rgba(255, 255, 255, 0.3);
+        border: 4px solid rgba(0, 0, 0, 0);
+        background-clip: padding-box;
       }
     }
     .submit-wrapper {
