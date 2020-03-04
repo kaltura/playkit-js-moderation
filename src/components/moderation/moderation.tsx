@@ -35,12 +35,11 @@ const logger = getContribLogger({
   module: 'info-plugin',
 });
 
-const INITIAL_CONTENT_VALUE = 'Describe what you saw...';
 const DEFAULT_CONTENT_TYPE = 'Choose a reason for reporting this content';
 
 export class Moderation extends Component<ModerationProps, ModerationState> {
   state: ModerationState = {
-    reportContent: INITIAL_CONTENT_VALUE,
+    reportContent: '',
     reportContentType: -1,
     isTextareaActive: false,
   };
@@ -67,23 +66,14 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   };
 
   private _handleFocus = () => {
-    if (this.state.reportContent === INITIAL_CONTENT_VALUE) {
-      this.setState({
-        reportContent: '',
-        isTextareaActive: true,
-      });
-    }
+    this.setState({
+      isTextareaActive: true,
+    });
   };
 
   private _handleBlur = () => {
     this.setState((state: ModerationState) => ({
-      reportContent: !state.reportContent
-        ? INITIAL_CONTENT_VALUE
-        : state.reportContent,
-      isTextareaActive:
-        state.reportContent && state.reportContent !== INITIAL_CONTENT_VALUE
-          ? true
-          : false,
+      isTextareaActive: state.reportContent.length > 0,
     }));
   };
 
@@ -182,14 +172,11 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
               onInput={this._onContentChange}
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}
+              placeholder="Describe what you saw..."
             />
             <div className={styles.submitWrapper}>
               <div className={styles.characterCounter}>
-                {`${
-                  reportContent === INITIAL_CONTENT_VALUE
-                    ? 0
-                    : reportContent.length
-                }/${reportLength}`}
+                {`${reportContent.length}/${reportLength}`}
               </div>
               <button
                 className={[

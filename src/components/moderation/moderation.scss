@@ -95,6 +95,18 @@
       &.active {
         background-color: $black-color;
       }
+      &:-ms-input-placeholderr { /* Internet Explorer 10-11 */
+        color: $gray-color !important;
+        font-size: 15px;
+        opacity: 1;
+      }
+      &::-ms-input-placeholder { /* Microsoft Edge */
+        color: $gray-color;
+      }
+      &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: $gray-color;
+        opacity: 1; /* Firefox */
+      }
     }
     .submit-wrapper {
       width: 100%;
