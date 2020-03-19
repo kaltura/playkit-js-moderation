@@ -13,6 +13,19 @@
   background-color: $root-background;
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
+  .close-button {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    cursor: pointer;
+    background-image: url('../../assets/close.svg');
+    &:focus {
+      outline: 1px solid $focus-color;
+    }
+}
   .main-wrapper {
     height: 100%;
     width: 400px;
@@ -48,6 +61,10 @@
       width: 100%;
       margin-bottom: 16px;
       cursor: pointer;
+      padding: 0;
+      background: initial;
+      color: $white-color;
+      border: none;
       &:focus {
         outline: 1px solid $focus-color;
       }
@@ -124,6 +141,7 @@
         font-weight: bold;
         background-color: $submit-button-color;
         border: none;
+        outline: none !important; // overwrites player styles
         cursor: pointer;
         &.disabled {
           background-color: $semigray-color;
@@ -132,7 +150,7 @@
           background-color: darken($color: $submit-button-color, $amount: 10);
         }
         &:focus {
-          outline: 1px solid $focus-color;
+          box-shadow: 0px 0px 0px 1px $focus-color;
         }
       }
     }

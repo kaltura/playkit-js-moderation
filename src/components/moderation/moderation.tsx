@@ -7,7 +7,6 @@ import {
   PopoverVerticalPositions,
 } from '@playkit-js-contrib/ui';
 import {KalturaModerationFlagType} from 'kaltura-typescript-client/api/types';
-import {CloseButton} from '../close-button';
 import {PopoverMenu, PopoverMenuItem} from '../popover-menu';
 import * as styles from './moderation.scss';
 const {get} = ObjectUtils;
@@ -38,6 +37,8 @@ const logger = getContribLogger({
 const DEFAULT_CONTENT_TYPE = 'Choose a reason for reporting this content';
 
 export class Moderation extends Component<ModerationProps, ModerationState> {
+  _closeButtonNode: null | HTMLDivElement = null;
+
   state: ModerationState = {
     reportContent: '',
     reportContentType: -1,
@@ -48,6 +49,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     logger.trace('Moderation plugin mount', {
       method: 'componentDidMount',
     });
+    if (this._closeButtonNode) {
+      this._closeButtonNode.focus();
+    }
   }
 
   private _onContentTypeChange = (id: number) => {
@@ -140,12 +144,28 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     );
   };
 
+  private _handleClose = (event: MouseEvent | KeyboardEvent) => {
+    if (event.type === "keypress" && get(event, 'keyCode', null) !== KeyboardKeys.Enter) {
+      return;
+    }
+    this.props.onClick();
+  }
+
   render(props: ModerationProps) {
-    const {onClick, reportLength} = props;
+    const { reportLength} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
-        <CloseButton onClick={onClick} />
+        <div
+          className={[styles.closeButton, 'kaltura-moderation__close-button'].join(' ')}
+          role="button"
+          tabIndex={1}
+          onClick={this._handleClose}
+          onKeyPress={this._handleClose}
+          ref={(node: HTMLDivElement) => {
+            this._closeButtonNode = node;
+          }}
+        />
         <div className={styles.mainWrapper}>
           <div
             className={[styles.title, 'kaltura-moderation__title'].join(' ')}>
@@ -156,14 +176,17 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             verticalPosition={PopoverVerticalPositions.Bottom}
             horizontalPosition={PopoverHorizontalPositions.Right}
             content={this._popoverContent()}>
-            <div className={styles.selectWrapper}>
+            <button
+              className={styles.selectWrapper}
+              tabIndex={1}
+            >
               <div className={styles.select}>
                 {reportContentType > -1
                   ? get(this._getContentType(), 'label', '')
                   : DEFAULT_CONTENT_TYPE}
               </div>
               <div className={styles.downArrow} />
-            </div>
+            </button>
           </Popover>
           <form onSubmit={this._handleSubmit}>
             <textarea
@@ -171,6 +194,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
               onInput={this._onContentChange}
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}
+              tabIndex={1}
               placeholder="Describe what you saw..."
             >
               {reportContent}
@@ -184,7 +208,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
                   styles.submitButton,
                   reportContentType === -1 ? styles.disabled : '',
                 ].join(' ')}
-                type="submit">
+                tabIndex={1}
+                type="submit"
+              >
                 Report
               </button>
             </div>
