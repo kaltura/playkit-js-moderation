@@ -21,6 +21,7 @@ interface ModerationProps {
   onSubmit: (contentType: KalturaModerationFlagType, content: string) => void;
   reportLength: number;
   moderateOptions: ModerateOption[];
+  closeButtonSelectedByDefault: boolean;
 }
 
 interface ModerationState {
@@ -49,7 +50,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     logger.trace('Moderation plugin mount', {
       method: 'componentDidMount',
     });
-    if (this._closeButtonNode) {
+    if (this.props.closeButtonSelectedByDefault && this._closeButtonNode) {
       this._closeButtonNode.focus();
     }
   }
@@ -113,7 +114,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       tabIndex={1}
       role="button"
       onClick={() => el.onMenuChosen()}
-      onKeyDown={e => this._onKeyDown(e, el.onMenuChosen)}
+      onKeyDown={(e) => this._onKeyDown(e, el.onMenuChosen)}
       className={styles.popoverMenuItem}>
       {el.label}
     </div>
@@ -145,19 +146,25 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   };
 
   private _handleClose = (event: MouseEvent | KeyboardEvent) => {
-    if (event.type === "keypress" && get(event, 'keyCode', null) !== KeyboardKeys.Enter) {
+    if (
+      event.type === 'keypress' &&
+      get(event, 'keyCode', null) !== KeyboardKeys.Enter
+    ) {
       return;
     }
     this.props.onClick();
-  }
+  };
 
   render(props: ModerationProps) {
-    const { reportLength} = props;
+    const {reportLength} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
         <div
-          className={[styles.closeButton, 'kaltura-moderation__close-button'].join(' ')}
+          className={[
+            styles.closeButton,
+            'kaltura-moderation__close-button',
+          ].join(' ')}
           role="button"
           tabIndex={1}
           onClick={this._handleClose}
@@ -176,10 +183,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             verticalPosition={PopoverVerticalPositions.Bottom}
             horizontalPosition={PopoverHorizontalPositions.Right}
             content={this._popoverContent()}>
-            <button
-              className={styles.selectWrapper}
-              tabIndex={1}
-            >
+            <button className={styles.selectWrapper} tabIndex={1}>
               <div className={styles.select}>
                 {reportContentType > -1
                   ? get(this._getContentType(), 'label', '')
@@ -190,13 +194,15 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
           </Popover>
           <form onSubmit={this._handleSubmit}>
             <textarea
-              className={[styles.textarea, isTextareaActive ? styles.active : ''].join(' ')}
+              className={[
+                styles.textarea,
+                isTextareaActive ? styles.active : '',
+              ].join(' ')}
               onInput={this._onContentChange}
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}
               tabIndex={1}
-              placeholder="Describe what you saw..."
-            >
+              placeholder="Describe what you saw...">
               {reportContent}
             </textarea>
             <div className={styles.submitWrapper}>
@@ -209,8 +215,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
                   reportContentType === -1 ? styles.disabled : '',
                 ].join(' ')}
                 tabIndex={1}
-                type="submit"
-              >
+                type="submit">
                 Report
               </button>
             </div>
