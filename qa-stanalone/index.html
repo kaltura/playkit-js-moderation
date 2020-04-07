@@ -120,6 +120,21 @@
                 QA (php7)<br />
             </div>
 
+            <div>
+                <span class="field-name">Subtitle:</span>
+                <input type="text" id="subtitle" name="subtitle" placeholder="subtitle" value="" /><br />
+            </div>
+
+            <div style="width: 100%">
+                <span class="field-name" style="width: 180px;">Report length:</span>
+                <input type="number" id="reportLength" name="reportLength" placeholder="reportLength" value="800" /><br />
+            </div>
+
+            <div style="width: 100%">
+                <span class="field-name" style="width: 180px;">Popup duration, ms:</span>
+                <input type="number" id="notificatonDuration" name="notificatonDuration" placeholder="notificatonDuration" value="5000" /><br />
+            </div>
+
             <div class="action-buttons">
                 <button type="submit" class="submit">Submit</button>
             </div>
@@ -148,6 +163,11 @@
             var width = urlParams.get("width") >>> 0;
             var height = urlParams.get("height") >>> 0;
             var prodOrQA = urlParams.get("prodOrQA");
+
+            var reportLength = urlParams.get("reportLength");
+            var subtitle = urlParams.get("subtitle");
+            var notificatonDuration = urlParams.get("notificatonDuration");
+
             var env;
 
             // Insert params to form and put default values when needed
@@ -182,6 +202,19 @@
                 };
             }
 
+            if (reportLength) {
+                document.getElementById("reportLength").value = reportLength;
+                reportLength = Number(reportLength);
+            }
+            if (subtitle) {
+                subtitle = subtitle.replace(/\+/gi, ' ');
+                document.getElementById("subtitle").value = subtitle;
+            }
+            if (notificatonDuration) {
+                document.getElementById("notificatonDuration").value = notificatonDuration;
+                Number(notificatonDuration);
+            }
+
             // Validation check
             if (entryId && partnerId && uiConfId) {
                 errorMsg.style.display = "none";
@@ -194,10 +227,14 @@
             var playerDiv = document.getElementById("player-div");
             playerDiv.style.width = width + "px";
             playerDiv.style.height = height + "px";
-
+ 
             if (isValid) {
                 var plugins = {
-                    'moderation': {}
+                    'moderation': {
+                        reportLength: reportLength,
+                        subtitle: subtitle,
+                        notificatonDuration: notificatonDuration,
+                    }
                 };
 
                 var player;
