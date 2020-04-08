@@ -38,6 +38,7 @@ interface ModerationPluginConfig {
   onReportErrorMessage: string;
   notificatonDuration: number;
   moderateOptions: ModerateOption[];
+  subtitle: string;
 }
 
 export class ModerationPlugin
@@ -157,7 +158,7 @@ export class ModerationPlugin
   };
 
   private _toggleOverlay = () => {
-    const {reportLength, moderateOptions} = this._configs.pluginConfig;
+    const {reportLength, moderateOptions, subtitle} = this._configs.pluginConfig;
     const isPlaying = !(this._player as any).paused;
     logger.trace(`Moderation toggle overlay player`, {
       method: '_toggleOverlay',
@@ -187,6 +188,7 @@ export class ModerationPlugin
           onClick={this._toggleOverlay}
           onSubmit={this._sentReport}
           reportLength={reportLength}
+          subtitle={subtitle}
           moderateOptions={moderateOptions}
         />
       ),
@@ -218,6 +220,7 @@ ContribPluginManager.registerPlugin(
       reportLength: 500,
       onReportSentMessage: 'Send report',
       onReportErrorMessage: 'The report failed to send',
+      subtitle: '',
       notificatonDuration: 5000,
       moderateOptions: [
         {id: 1, label: 'Sexual Content'},

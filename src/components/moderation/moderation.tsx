@@ -21,6 +21,7 @@ interface ModerationProps {
   onSubmit: (contentType: KalturaModerationFlagType, content: string) => void;
   reportLength: number;
   moderateOptions: ModerateOption[];
+  subtitle: string;
 }
 
 interface ModerationState {
@@ -152,7 +153,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   }
 
   render(props: ModerationProps) {
-    const { reportLength} = props;
+    const { reportLength, subtitle } = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
@@ -171,6 +172,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             className={[styles.title, 'kaltura-moderation__title'].join(' ')}>
             What’s wrong with this content?
           </div>
+          {subtitle ? (
+            <div className={[styles.subtitle].join(' ')}>{subtitle}</div>
+          ) : null}
           <Popover
             className={styles.reportPopover}
             verticalPosition={PopoverVerticalPositions.Bottom}
