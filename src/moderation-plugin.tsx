@@ -25,7 +25,7 @@ import {KalturaModerationFlag} from 'kaltura-typescript-client/api/types/Kaltura
 import {Moderation, ModerateOption} from './components/moderation';
 import {PluginButton} from './components/plugin-button';
 import * as styles from './moderation-plugin.scss';
-const pluginName = `moderation`;
+const pluginName = `playkit-js-moderation`;
 
 const logger = getContribLogger({
   class: 'ModerationPlugin',
