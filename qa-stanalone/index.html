@@ -82,7 +82,7 @@
         <script type="text/javascript" src="assets/jsonform.js"></script>
 
         <script type="text/javascript">
-            var version = "0.0.1";
+            var version = "0.0.2";
 
             // schema documentation:
             // https://github.com/jsonform/jsonform/wiki#previous
@@ -98,11 +98,11 @@
                 },
                 ks: {
                   type: 'string',
-                  title: 'ks for playback and BE API'
+                  title: 'KS'
                 },
                 partnerId: {
                   type: 'string',
-                  title: 'owner of this entry-id',
+                  title: 'partnerId',
                   required: true
                 },
                 uiConfId: {
@@ -140,31 +140,31 @@
                 },
                 subtitle: {
                     type: 'string',
-                    title: 'Bla bla subtitle',
+                    title: 'Subtitle',
                 },
                 notificatonDuration: {
                     type: 'number',
                     title: 'Duration of notificatons',
                     default: 5500
                 },
-                moderateOptions: {
-                    type: "array",
-                    items: {
-                        type: "object",
-                        properties: {
-                            id: {
-                                type: "number",
-                                title: "Id",
-                                required: true,
-                            },
-                            label: {
-                                type: "string",
-                                title: "Label",
-                                required: true,
-                            }
-                        }
-                    }
-                }
+                // moderateOptions: {
+                //     type: "array",
+                //     items: {
+                //         type: "object",
+                //         properties: {
+                //             id: {
+                //                 type: "number",
+                //                 title: "Id",
+                //                 required: true,
+                //             },
+                //             label: {
+                //                 type: "string",
+                //                 title: "Label",
+                //                 required: true,
+                //             }
+                //         }
+                //     }
+                // }
             }
             $('form.test-form').submit(function(event) {
                 event.preventDefault();
@@ -244,7 +244,7 @@
 
             if (isValid) {
                 var plugins = {
-                    'moderation': pluginConfiguration
+                    'playkit-js-moderation': pluginConfiguration
                 };
 
                 var player;
