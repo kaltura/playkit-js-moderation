@@ -163,7 +163,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
           tabIndex={1}
           onClick={this._handleClose}
           onKeyPress={this._handleClose}
-          ref={(node: HTMLDivElement) => {
+          ref={(node: HTMLDivElement | null) => {
             this._closeButtonNode = node;
           }}
         />
