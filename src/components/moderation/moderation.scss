@@ -135,12 +135,12 @@
       .character-counter {
         font-size: 14px;
         text-align: right;
+        margin-right: 12px;
         color: $character-counter-color;
       }
       .submit-button {
         width: 88px;
         height: 32px;
-        margin-left: 12px;
         border-radius: 18px;
         color: $white-color;
         text-align: center;
@@ -165,6 +165,9 @@
 }
 
 :global {
+  .kaltura-moderation__root .playkit-tooltip {
+    width: auto;
+  }
   .playkit-player.playkit-size-sm,
   .playkit-player.playkit-size-xs {
     .kaltura-moderation__close-button {
