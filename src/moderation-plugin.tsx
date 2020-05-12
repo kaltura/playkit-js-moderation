@@ -41,7 +41,7 @@ interface ModerationPluginConfig {
 }
 
 export class ModerationPlugin
-  implements OnMediaLoad, OnMediaUnload, OnPluginSetup, OnMediaUnload {
+  implements OnMediaLoad, OnMediaUnload, OnPluginSetup {
   private _upperBarItem: UpperBarItem | null = null;
   private _moderationOverlay: OverlayItem | null = null;
   private _wasPlayed = false; // keep state of the player so we can resume if needed
@@ -77,14 +77,10 @@ export class ModerationPlugin
 
   onMediaUnload(): void {
     if (this._upperBarItem) {
-      logger.trace('Moderation plugin remove plugin icon', {
+      logger.trace('Moderation plugin unloaded', {
         method: 'onMediaUnload',
       });
-      this._contribServices.upperBarManager.remove(this._upperBarItem);
-      this._upperBarItem = null;
-    }
-    if (this._moderationOverlay) {
-      this._toggleOverlay();
+      this._moderationOverlay = null;
     }
   }
 
