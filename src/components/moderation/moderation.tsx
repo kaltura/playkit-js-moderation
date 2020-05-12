@@ -18,7 +18,7 @@ export interface ModerateOption {
 
 interface ModerationProps {
   onClick: () => void;
-  onSubmit: (contentType: KalturaModerationFlagType, content: string) => void;
+  onSubmit: (contentType: KalturaModerationFlagType, content: string, callBack: () => void) => void;
   reportLength: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
@@ -96,8 +96,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       });
       return;
     }
-    this.props.onSubmit(reportContentType, reportContent);
-    this.setState({ ...initialState })
+    this.props.onSubmit(reportContentType, reportContent, () => {
+      this.setState({...initialState});
+    });
   };
 
   private _onKeyDown = (e: KeyboardEvent, callBack: Function) => {
