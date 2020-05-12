@@ -37,14 +37,16 @@ const logger = getContribLogger({
 
 const DEFAULT_CONTENT_TYPE = 'Choose a reason for reporting this content';
 
+const initialState: ModerationState = {
+  reportContent: '',
+  reportContentType: -1,
+  isTextareaActive: false,
+};
+
 export class Moderation extends Component<ModerationProps, ModerationState> {
   _closeButtonNode: null | HTMLDivElement = null;
 
-  state: ModerationState = {
-    reportContent: '',
-    reportContentType: -1,
-    isTextareaActive: false,
-  };
+  state: ModerationState = { ...initialState };
 
   componentDidMount(): void {
     logger.trace('Moderation plugin mount', {
@@ -95,6 +97,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       return;
     }
     this.props.onSubmit(reportContentType, reportContent);
+    this.setState({ ...initialState })
   };
 
   private _onKeyDown = (e: KeyboardEvent, callBack: Function) => {
