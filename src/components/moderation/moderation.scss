@@ -117,6 +117,10 @@
         color: $gray-color;
         opacity: 1; /* Firefox */
       }
+      &::selection {
+        border-radius: 2px;
+        background-color: #5b80a7;
+      }
       &::-webkit-scrollbar {
         width: 11px;
       }
