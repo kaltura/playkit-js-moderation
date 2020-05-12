@@ -157,7 +157,12 @@ export class ModerationPlugin
     });
   };
 
-  private _toggleOverlay = () => {
+  private _toggleOverlay = (event?: MouseEvent) => {
+    let closeButtonSelected = false;
+    if (event && event.x === 0 && event.y === 0) {
+      // triggered by keyboard
+      closeButtonSelected = true;
+    }
     const {reportLength, moderateOptions, subtitle} = this._configs.pluginConfig;
     const isPlaying = !(this._player as any).paused;
     logger.trace(`Moderation toggle overlay player`, {
@@ -190,6 +195,7 @@ export class ModerationPlugin
           reportLength={reportLength}
           subtitle={subtitle}
           moderateOptions={moderateOptions}
+          closeButtonSelected={closeButtonSelected}
         />
       ),
     });

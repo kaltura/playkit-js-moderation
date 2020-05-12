@@ -22,6 +22,7 @@ interface ModerationProps {
   reportLength: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
+  closeButtonSelected: boolean;
 }
 
 interface ModerationState {
@@ -50,7 +51,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     logger.trace('Moderation plugin mount', {
       method: 'componentDidMount',
     });
-    if (this._closeButtonNode) {
+    if (this._closeButtonNode && this.props.closeButtonSelected) {
       this._closeButtonNode.focus();
     }
   }
