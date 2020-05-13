@@ -62,13 +62,8 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   };
 
   private _onContentChange = (event: any) => {
-    let {value} = event.target;
-    const {reportLength} = this.props;
-    if (value.length > reportLength) {
-      value = value.substring(0, reportLength);
-    }
     this.setState({
-      reportContent: value,
+      reportContent: event.target.value,
     });
   };
 
@@ -209,6 +204,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
               tabIndex={1}
               placeholder="Describe what you saw..."
               value={reportContent}
+              maxLength={reportLength}
             />
             <div className={styles.submitWrapper}>
               <div className={styles.characterCounter}>
