@@ -19,11 +19,12 @@ export interface ModerateOption {
 
 interface ModerationProps {
   onClick: () => void;
-  onSubmit: (contentType: KalturaModerationFlagType, content: string) => void;
+  onSubmit: (contentType: KalturaModerationFlagType, content: string, callBack: () => void) => void;
   reportLength: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
   tooltipMessage: string;
+  closeButtonSelected: boolean;
 }
 
 interface ModerationState {
@@ -39,20 +40,22 @@ const logger = getContribLogger({
 
 const DEFAULT_CONTENT_TYPE = 'Choose a reason for reporting this content';
 
+const initialState: ModerationState = {
+  reportContent: '',
+  reportContentType: -1,
+  isTextareaActive: false,
+};
+
 export class Moderation extends Component<ModerationProps, ModerationState> {
   _closeButtonNode: null | HTMLDivElement = null;
 
-  state: ModerationState = {
-    reportContent: '',
-    reportContentType: -1,
-    isTextareaActive: false,
-  };
+  state: ModerationState = { ...initialState };
 
   componentDidMount(): void {
     logger.trace('Moderation plugin mount', {
       method: 'componentDidMount',
     });
-    if (this._closeButtonNode) {
+    if (this._closeButtonNode && this.props.closeButtonSelected) {
       this._closeButtonNode.focus();
     }
   }
@@ -64,12 +67,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   };
 
   private _onContentChange = (event: any) => {
-    const {value} = event.target;
-    const {reportLength} = this.props;
-
-    this.setState((state: ModerationState) => ({
-      reportContent: value.length > reportLength ? state.reportContent : value,
-    }));
+    this.setState({
+      reportContent: event.target.value,
+    });
   };
 
   private _handleFocus = () => {
@@ -96,7 +96,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       });
       return;
     }
-    this.props.onSubmit(reportContentType, reportContent);
+    this.props.onSubmit(reportContentType, reportContent, () => {
+      this.setState({...initialState});
+    });
   };
 
   private _onKeyDown = (e: KeyboardEvent, callBack: Function) => {
@@ -207,9 +209,10 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}
               tabIndex={1}
-              placeholder="Describe what you saw...">
-              {reportContent}
-            </textarea>
+              placeholder="Describe what you saw..."
+              value={reportContent}
+              maxLength={reportLength}
+            />
             <div className={styles.submitWrapper}>
               <div className={styles.characterCounter}>
                 {`${reportContent.length}/${reportLength}`}

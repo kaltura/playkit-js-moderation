@@ -77,20 +77,17 @@ export class ModerationPlugin
 
   onMediaUnload(): void {
     if (this._upperBarItem) {
-      logger.trace('Moderation plugin remove plugin icon', {
+      logger.trace('Moderation plugin unloaded', {
         method: 'onMediaUnload',
       });
-      this._contribServices.upperBarManager.remove(this._upperBarItem);
-      this._upperBarItem = null;
-    }
-    if (this._moderationOverlay) {
-      this._toggleOverlay();
+      this._moderationOverlay = null;
     }
   }
 
   private _sentReport = (
     contentType: KalturaModerationFlagType,
-    content: string
+    content: string,
+    callback?: () => void
   ) => {
     const {
       playerConfig,
@@ -119,6 +116,9 @@ export class ModerationPlugin
         });
         if (this._wasPlayed) {
           this._player.play();
+        }
+        if (callback) {
+          callback();
         }
       },
       error => {
@@ -157,13 +157,13 @@ export class ModerationPlugin
     });
   };
 
-  private _toggleOverlay = () => {
-    const {
-      reportLength,
-      moderateOptions,
-      subtitle,
-      tooltipMessage,
-    } = this._configs.pluginConfig;
+  private _toggleOverlay = (event?: MouseEvent) => {
+    let closeButtonSelected = false;
+    if (event && event.x === 0 && event.y === 0) {
+      // triggered by keyboard
+      closeButtonSelected = true;
+    }
+    const {reportLength, moderateOptions, subtitle, tooltipMessage} = this._configs.pluginConfig;
     const isPlaying = !(this._player as any).paused;
     logger.trace(`Moderation toggle overlay player`, {
       method: '_toggleOverlay',
@@ -196,6 +196,7 @@ export class ModerationPlugin
           subtitle={subtitle}
           tooltipMessage={tooltipMessage}
           moderateOptions={moderateOptions}
+          closeButtonSelected={closeButtonSelected}
         />
       ),
     });
