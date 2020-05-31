@@ -86,7 +86,8 @@ export class ModerationPlugin
 
   private _sentReport = (
     contentType: KalturaModerationFlagType,
-    content: string
+    content: string,
+    callback?: () => void
   ) => {
     const {
       playerConfig,
@@ -115,6 +116,9 @@ export class ModerationPlugin
         });
         if (this._wasPlayed) {
           this._player.play();
+        }
+        if (callback) {
+          callback();
         }
       },
       error => {
