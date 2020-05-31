@@ -10,6 +10,7 @@ import {KalturaModerationFlagType} from 'kaltura-typescript-client/api/types';
 import {PopoverMenu, PopoverMenuItem} from '../popover-menu';
 import * as styles from './moderation.scss';
 const {get} = ObjectUtils;
+const {Tooltip} = KalturaPlayer.ui.components;
 
 export interface ModerateOption {
   id: number;
@@ -22,6 +23,7 @@ interface ModerationProps {
   reportLength: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
+  tooltipMessage: string;
   closeButtonSelected: boolean;
 }
 
@@ -158,7 +160,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   };
 
   render(props: ModerationProps) {
-    const {reportLength, subtitle} = props;
+    const {reportLength, subtitle, tooltipMessage} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
@@ -215,15 +217,17 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
               <div className={styles.characterCounter}>
                 {`${reportContent.length}/${reportLength}`}
               </div>
-              <button
-                className={[
-                  styles.submitButton,
-                  reportContentType === -1 ? styles.disabled : '',
-                ].join(' ')}
-                tabIndex={1}
-                type="submit">
-                Report
-              </button>
+              <Tooltip label={tooltipMessage} classNames={styles.tooltip}>
+                <button
+                  className={[
+                    styles.submitButton,
+                    reportContentType === -1 ? styles.disabled : '',
+                  ].join(' ')}
+                  tabIndex={1}
+                  type="submit">
+                  Report
+                </button>
+              </Tooltip>
             </div>
           </form>
         </div>

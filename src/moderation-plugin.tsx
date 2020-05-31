@@ -38,6 +38,7 @@ interface ModerationPluginConfig {
   notificatonDuration: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
+  tooltipMessage: string;
 }
 
 export class ModerationPlugin
@@ -52,8 +53,7 @@ export class ModerationPlugin
     private _contribServices: ContribServices,
     private _configs: ContribPluginConfigs<ModerationPluginConfig>,
     private _player: KalturaPlayerTypes.Player
-  ) {
-  }
+  ) {}
 
   onPluginSetup(): void {
     const {playerConfig} = this._configs;
@@ -110,7 +110,7 @@ export class ModerationPlugin
         this._displayToast({
           text: onReportSentMessage,
           icon: (
-            <div className={[styles.toastIcon, styles.success].join(' ')}/>
+            <div className={[styles.toastIcon, styles.success].join(' ')} />
           ),
           severity: ToastSeverity.Success,
         });
@@ -129,7 +129,7 @@ export class ModerationPlugin
         this._toggleOverlay();
         this._displayToast({
           text: onReportErrorMessage,
-          icon: <div className={[styles.toastIcon, styles.error].join(' ')}/>,
+          icon: <div className={[styles.toastIcon, styles.error].join(' ')} />,
           severity: ToastSeverity.Error,
         });
       }
@@ -163,7 +163,7 @@ export class ModerationPlugin
       // triggered by keyboard
       closeButtonSelected = true;
     }
-    const {reportLength, moderateOptions, subtitle} = this._configs.pluginConfig;
+    const {reportLength, moderateOptions, subtitle, tooltipMessage} = this._configs.pluginConfig;
     const isPlaying = !(this._player as any).paused;
     logger.trace(`Moderation toggle overlay player`, {
       method: '_toggleOverlay',
@@ -194,6 +194,7 @@ export class ModerationPlugin
           onSubmit={this._sentReport}
           reportLength={reportLength}
           subtitle={subtitle}
+          tooltipMessage={tooltipMessage}
           moderateOptions={moderateOptions}
           closeButtonSelected={closeButtonSelected}
         />
@@ -206,7 +207,7 @@ export class ModerationPlugin
     this._upperBarItem = this._contribServices.upperBarManager.add({
       label: 'Moderation',
       onClick: this._toggleOverlay,
-      renderItem: () => <PluginButton/>,
+      renderItem: () => <PluginButton />,
     });
   }
 }
@@ -228,6 +229,7 @@ ContribPluginManager.registerPlugin(
       onReportErrorMessage: 'The report failed to send',
       subtitle: '',
       notificatonDuration: 5000,
+      tooltipMessage: 'Send report',
       moderateOptions: [
         {id: 1, label: 'Sexual Content'},
         {id: 2, label: 'Violent Or Repulsive'},
