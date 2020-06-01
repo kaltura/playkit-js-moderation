@@ -1,6 +1,6 @@
 {
   "name": "@playkit-js/moderation-plugin",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "private": false,
   "bugs": {
     "url": "https://github.com/kaltura/playkit-js-moderation/issues"
@@ -12,9 +12,9 @@
   },
   "dependencies": {
     "@playkit-js-contrib/cli": "1.1.0",
-    "@playkit-js-contrib/common": "^4.0.0",
-    "@playkit-js-contrib/plugin": "^4.0.0",
-    "@playkit-js-contrib/ui": "^4.0.0",
+    "@playkit-js-contrib/common": "^4.0.1",
+    "@playkit-js-contrib/plugin": "^4.0.1",
+    "@playkit-js-contrib/ui": "^4.0.1",
     "classnames": "2.2.6",
     "kaltura-typescript-client": "file:libs/kaltura-typescript-client-7.0.0-v20190324-101134.tgz",
     "null": "^2.0.0"
