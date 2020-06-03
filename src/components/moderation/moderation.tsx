@@ -47,7 +47,9 @@ const initialState: ModerationState = {
 };
 
 export class Moderation extends Component<ModerationProps, ModerationState> {
+  _rootNode: null | HTMLDivElement = null;
   _closeButtonNode: null | HTMLDivElement = null;
+  _submitButtonNode: null | HTMLButtonElement = null;
 
   state: ModerationState = { ...initialState };
 
@@ -55,8 +57,10 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     logger.trace('Moderation plugin mount', {
       method: 'componentDidMount',
     });
-    if (this._closeButtonNode && this.props.closeButtonSelected) {
-      this._closeButtonNode.focus();
+    if (this.props.closeButtonSelected) {
+      this._closeButtonNode?.focus();
+    } else {
+      this._rootNode?.focus();
     }
   }
 
@@ -159,11 +163,35 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     this.props.onClick();
   };
 
+  private _manageKeyDownEvent = (event: KeyboardEvent) => {
+    if (event.keyCode === KeyboardKeys.Esc) {
+      this._handleClose(event);
+    }
+    if (event.keyCode === 9) {
+      if (event.target === this._closeButtonNode && event.shiftKey) {
+        event.preventDefault();
+        this._submitButtonNode?.focus();
+        return;
+      }
+      if (event.target === this._submitButtonNode && !event.shiftKey) {
+        event.preventDefault();
+        this._closeButtonNode?.focus();
+      }
+    }
+  }
+
   render(props: ModerationProps) {
     const {reportLength, subtitle, tooltipMessage} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
-      <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
+      <div
+        className={[styles.root, 'kaltura-moderation__root'].join(' ')}
+        onKeyDown={this._manageKeyDownEvent}
+        tabIndex={-1}
+        ref={(node: HTMLDivElement | null) => {
+          this._rootNode = node;
+        }}
+      >
         <div
           className={[
             styles.closeButton,
@@ -224,7 +252,11 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
                     reportContentType === -1 ? styles.disabled : '',
                   ].join(' ')}
                   tabIndex={1}
-                  type="submit">
+                  type="submit"
+                  ref={(node: HTMLButtonElement | null) => {
+                    this._submitButtonNode = node;
+                  }}
+                >
                   Report
                 </button>
               </Tooltip>
