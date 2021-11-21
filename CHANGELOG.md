@@ -2,38 +2,42 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [2.0.2](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.1...v2.0.2) (2020-06-01)
+### [1.1.2](https://github.com/kaltura/playkit-js-share/compare/v1.1.1...v1.1.2) (2021-07-27)
 
-### [2.0.1](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.0...v2.0.1) (2020-05-06)
-
-### [0.0.4](https://github.com/kaltura/playkit-js-moderation/compare/v0.0.3...v2.0.0) (2020-05-04)
-
-### [0.0.3](https://github.com/kaltura/playkit-js-moderation/compare/v0.0.2...v0.0.3) (2020-04-21)
-
-### 0.0.2 (2020-04-16)
+### [1.1.1](https://github.com/kaltura/playkit-js-share/compare/v1.1.0...v1.1.1) (2021-07-27)
 
 
-### Features
+### Bug Fixes
 
-* **FEV-468:** add API logic ([c9cba90](https://github.com/kaltura/playkit-js-moderation/commit/c9cba90e1d5f04f2e5cd6d212aaf95a508dcdc37))
-* **FEV-468:** display toast after report successfully send ([c8e412f](https://github.com/kaltura/playkit-js-moderation/commit/c8e412ff2c485b88bee4a076edca9b6f4573265a))
-* **FEV-468:** fix PR comments ([6475ae3](https://github.com/kaltura/playkit-js-moderation/commit/6475ae3ebd31776ea0241b6016706ff7663621e8))
-* **FEV-468:** fix PR comments, IE11 support on dev ([827396a](https://github.com/kaltura/playkit-js-moderation/commit/827396a0b1ed23e8af51a6770a006b34bd296e8b))
-* **FEV-468:** moved API logic to the root plugin-component ([397d940](https://github.com/kaltura/playkit-js-moderation/commit/397d940e5ee6d668782e93da868ad40dfe696732))
-* **FEV-468:** pause and resume video logic ([5e0b16e](https://github.com/kaltura/playkit-js-moderation/commit/5e0b16e2eda8cd55ba9c61d6972593b0b58ef500))
-* **FEV-468:** responsive design, report options from config ([204aa48](https://github.com/kaltura/playkit-js-moderation/commit/204aa4830c316c0aeac078c562c1ef2aa7bcaa43))
-* **FEV-468:** sending report - on error toast ([1ced0f9](https://github.com/kaltura/playkit-js-moderation/commit/1ced0f9cd125e838b866412e1e475fdc9007c63e))
-* **FEV-468:** style changes ([f229a9c](https://github.com/kaltura/playkit-js-moderation/commit/f229a9c07115d8daaae95b775c25537c22eee859))
-* **FEV-468:** style changes ([8fb4d6b](https://github.com/kaltura/playkit-js-moderation/commit/8fb4d6b19d68d94cd31671fcd2f7e1f2c29d3d1e))
-* **FEV-468:** tech fix ([e89f917](https://github.com/kaltura/playkit-js-moderation/commit/e89f917bc5c0cbfac09d7a1356bf14ccd8b35593))
-* **FEV-468:** textarea styles ([54ff25f](https://github.com/kaltura/playkit-js-moderation/commit/54ff25f31c810189a4cc8e544e1b1a47d34504c6))
-* **FEV-468:** use placeholder  ([3942b24](https://github.com/kaltura/playkit-js-moderation/commit/3942b24a260757c16687660bf8e2efa666490b2f))
-* **FEV-481:** add accessibility ([12eccc8](https://github.com/kaltura/playkit-js-moderation/commit/12eccc8eed34354313005fd25576049da2408421))
-* **FEV-481:** fix submit button styles on focus ([b6cfcc9](https://github.com/kaltura/playkit-js-moderation/commit/b6cfcc9044e610bd51da0f163f6ecb659bcc9f9f))
+* **FEC-11253:** Remove start time from UI when sharing a live stream ([#8](https://github.com/kaltura/playkit-js-share/issues/8)) ([4eadb84](https://github.com/kaltura/playkit-js-share/commit/4eadb84d8dae47bac07b3e19ab1bd9172e9d5547))
+* **FEC-11392:** document.querySelector breaks ([#9](https://github.com/kaltura/playkit-js-share/issues/9)) ([bcaee25](https://github.com/kaltura/playkit-js-share/commit/bcaee25f141cd0105beb1af27c609991c46bbfba))
 
-### 0.0.1( (2020-01-27)
+
+### Build System
+
+* Ignore tests for release & tag commit ([6f57feb](https://github.com/kaltura/playkit-js-share/commit/6f57feb300148980be8fc6a5afbacd163a909066))
+* **FEC-11389:** reduce builds from travis ([2b578bb](https://github.com/kaltura/playkit-js-share/commit/2b578bb292f64ab85183c454d4f437da3991fe88))
+
+## 1.1.0 (2021-07-01)
 
 
 ### Features
 
-* add initial plugin repository
+* **FEC-10835:** expose share to plugin ([#1](https://github.com/kaltura/playkit-js-share/issues/1)) ([a56a63f](https://github.com/kaltura/playkit-js-share/commit/a56a63fa3ab13ef8014dbfe8c838ff1cbe050adb))
+
+
+### Bug Fixes
+
+* **FEC-11377:** IE doesn't support replaceAll ([#7](https://github.com/kaltura/playkit-js-share/issues/7)) ([5c5f048](https://github.com/kaltura/playkit-js-share/commit/5c5f04802c1f628c6453f32b8dc980e756516019))
+* allow empty shareOptions ([b48a953](https://github.com/kaltura/playkit-js-share/commit/b48a95397e016a3f2eb9d536fecbace53f36782a))
+* hide embed for empty embedUrl ([c6492cf](https://github.com/kaltura/playkit-js-share/commit/c6492cfcad99ec7d5b2ffe6ba2be6018523d8bc1))
+* **FEC-11338:** update share ui ([#5](https://github.com/kaltura/playkit-js-share/issues/5)) ([9a961b6](https://github.com/kaltura/playkit-js-share/commit/9a961b6c93b757723b77b3ae79dea8c55ce33001))
+* **FEC-11369:** add embedUrl and naming convention ([#6](https://github.com/kaltura/playkit-js-share/issues/6)) ([d78caaa](https://github.com/kaltura/playkit-js-share/commit/d78caaa79da09a440109449d3c2f174617617fad))
+* relocate the share component ([#2](https://github.com/kaltura/playkit-js-share/issues/2)) ([07966e9](https://github.com/kaltura/playkit-js-share/commit/07966e9f5f1be7eee1f80ad2ff09ff2756050bc6))
+* remove unused property ([66451ad](https://github.com/kaltura/playkit-js-share/commit/66451adc2eb2fbc6d6ea93ec424df708adf8d4db))
+
+
+### Build System
+
+* fix lint and flow ([#4](https://github.com/kaltura/playkit-js-share/issues/4)) ([00af616](https://github.com/kaltura/playkit-js-share/commit/00af61642adb771ae766206f3a752b0be142fc79))
+* fix travis comment row ([#3](https://github.com/kaltura/playkit-js-share/issues/3)) ([accedc8](https://github.com/kaltura/playkit-js-share/commit/accedc87515817b02d8798f63b57e1e841680b27))

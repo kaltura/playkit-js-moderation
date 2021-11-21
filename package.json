@@ -1,76 +1,125 @@
 {
-  "name": "@playkit-js/moderation-plugin",
+  "name": "@playkit-js/moderation",
   "version": "2.0.2",
-  "private": false,
+  "keywords": [
+    "kaltura",
+    "player",
+    "playkit-js",
+    "playkit-js-moderation",
+    "html5 player"
+  ],
+  "homepage": "https://github.com/kaltura/playkit-js-moderation#readme",
   "bugs": {
     "url": "https://github.com/kaltura/playkit-js-moderation/issues"
   },
-  "homepage": "https://github.com/kaltura/playkit-js-moderation#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kaltura/playkit-js-moderation.git"
   },
+  "license": "AGPL-3.0",
+  "main": "dist/playkit-share.js",
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "webpack --mode production",
+    "clean": "rm -rf ./dist",
+    "dev": "webpack-dev-server --mode development",
+    "docs:generate": "documentation build flow-typed/** src/** -f md -o docs/api.md",
+    "docs:serve": "documentation serve flow-typed/** src/** --watch",
+    "eslint": "eslint . --color",
+    "flow": "flow check",
+    "precommit": "lint-staged",
+    "prettier:fix": "prettier --write .",
+    "pushTaggedRelease": "git push --follow-tags --no-verify origin master",
+    "release": "standard-version",
+    "test": "NODE_ENV=test karma start --color --mode development",
+    "watch": "webpack --progress --colors --watch --mode development"
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "*.{json,md,scss}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "dependencies": {
-    "@playkit-js-contrib/cli": "1.1.0",
-    "@playkit-js-contrib/common": "^4.0.1",
     "@playkit-js-contrib/plugin": "^4.0.1",
     "@playkit-js-contrib/ui": "^4.0.1",
-    "classnames": "2.2.6",
-    "kaltura-typescript-client": "file:libs/kaltura-typescript-client-7.0.0-v20190324-101134.tgz",
-    "null": "^2.0.0"
+    "kaltura-typescript-client": "file:libs/kaltura-typescript-client-7.0.0-v20190324-101134.tgz"
   },
   "devDependencies": {
-    "@commitlint/cli": "8.3.5",
-    "@commitlint/config-conventional": "8.3.4",
-    "@types/classnames": "2.2.9",
-    "@types/node": "13.7.6",
-    "@typescript-eslint/eslint-plugin": "2.21.0",
-    "@typescript-eslint/parser": "2.21.0",
-    "husky": "3.1.0",
-    "preact": "^10.4.1",
-    "tslint": "5.20.1",
-    "typescript": "3.8.2"
+    "@babel/cli": "^7.10.5",
+    "@babel/core": "^7.10.5",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/plugin-proposal-decorators": "^7.14.2",
+    "@babel/plugin-proposal-export-default-from": "^7.12.13",
+    "@babel/plugin-proposal-export-namespace-from": "^7.14.2",
+    "@babel/plugin-proposal-object-rest-spread": "^7.14.2",
+    "@babel/plugin-transform-classes": "^7.14.2",
+    "@babel/plugin-transform-flow-strip-types": "^7.10.4",
+    "@babel/plugin-transform-property-mutators": "^7.12.13",
+    "@babel/plugin-transform-react-jsx": "^7.14.3",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-flow": "^7.10.4",
+    "@babel/register": "^7.10.5",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-istanbul": "^6.0.0",
+    "chai": "^4.2.0",
+    "conventional-github-releaser": "3.1.3",
+    "cross-env": "^7.0.2",
+    "css-loader": "3.6.0",
+    "documentation": "^13.0.2",
+    "eslint": "^7.4.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-mocha-no-only": "^1.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.23.2",
+    "flow-bin": "^0.129.0",
+    "husky": "^4.2.5",
+    "istanbul": "^0.4.5",
+    "kaltura-player-js": "https://github.com/kaltura/kaltura-player-js.git#master",
+    "karma": "^5.1.0",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-cli": "^2.0.0",
+    "karma-coverage": "^2.0.2",
+    "karma-firefox-launcher": "^1.3.0",
+    "karma-ie-launcher": "^1.0.0",
+    "karma-mocha": "^2.0.1",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-safari-launcher": "^1.0.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^4.0.2",
+    "lint-staged": "^10.2.11",
+    "mocha": "^8.0.1",
+    "mocha-cli": "^1.0.1",
+    "node-sass": "^4.14.1",
+    "prettier": "^2.0.5",
+    "sass-loader": "^10.0.1",
+    "sinon": "^9.0.2",
+    "sinon-chai": "^3.5.0",
+    "standard-version": "^6.0.1",
+    "style-loader": "^1.2.1",
+    "svg-url-loader": "^7.1.1",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
-  "license": "AGPL-3.0",
-  "files": [
-    "dist",
-    "LICENSE",
-    "README.md",
-    "CHANGELOG.md",
-    "src"
-  ],
-  "scripts": {
-    "clean": "rm -rf dist",
-    "reset": "npm run clean && rm -rf node_modules",
-    "build": "kcontrib build",
-    "build:dev": "kcontrib build --dev",
-    "serve": "kcontrib serve",
-    "serve:update-modes": "kcontrib serve --update-modes",
-    "serve:update-player": "kcontrib serve --update-player",
-    "analyze": "npm run build && npx source-map-explorer dist/playkit-js-moderation.js",
-    "lint": "tsc --noEmit && eslint ./src --ext .ts,.tsx",
-    "lint:fix": "tsc --noEmit && eslint ./src --ext .ts,.tsx --fix",
-    "husky:pre-commit": "lint-staged",
-    "husky:commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-    "deploy:prepare": "kcontrib deploy --prepare",
-    "deploy:publish-to-npm": "kcontrib deploy --publish",
-    "deploy:next:prepare": "kcontrib deploy --prepare --prerelease next",
-    "contrib:latest": "kcontrib infra --type=latest",
-    "infra:latest": "kcontrib infra --type=latest",
-    "infra:next": "kcontrib infra --type=next",
-    "infra:local": "kcontrib infra --type=local",
-    "infra:add": "kcontrib infra --add"
+  "peerDependencies": {
+    "kaltura-player-js": "https://github.com/kaltura/kaltura-player-js.git#v1.0.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+  "publishConfig": {
+    "access": "public"
+  },
+  "kcc": {
+    "name": "playkit-moderation"
+  },
+  "author": "yuval.keidar <keidaryu@gmail.com>"
 }

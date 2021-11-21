@@ -1,37 +1,28 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true
-    },
-    "extends": [
-        "plugin:@typescript-eslint/recommended",
-        "prettier/@typescript-eslint",
-        "plugin:prettier/recommended"
-    ],
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
-    },
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "jsx": true
-        }
-    },
-    "plugins": [
-        "@typescript-eslint",
-        "filenames"
-    ],
-    "rules": {
-        "filenames/match-regex": [2, "^[a-z-]+([.]d|[.]types)?$", true],
-        "@typescript-eslint/no-unused-vars": [0, { "varsIgnorePattern": "^h$" }],
-        "react/react-in-jsx-scope": "off",
-        "@typescript-eslint/no-empty-function": "off",
-        "@typescript-eslint/triple-slash-reference": "off",
-        "@typescript-eslint/no-empty-interface": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/explicit-function-return-type": "off"
-    }
+  "parser": "babel-eslint",
+  "extends": ["eslint:recommended", "plugin:flowtype/recommended", "plugin:react/recommended"],
+  "plugins": ["prettier", "import", "flowtype", "mocha-no-only", "react"],
+  "env": {
+    "browser": true,
+    "es6": true,
+    "mocha": true,
+    "amd": true,
+    "commonjs": true
+  },
+  "globals": {
+    "should": true,
+    "sinon": true,
+    "__VERSION__": true,
+    "__NAME__": true,
+    "process": true,
+    "__dirname": true
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "mocha-no-only/mocha-no-only": "off",
+    "react/prop-types": "off",
+    "react/no-deprecated": "off",
+    "require-jsdoc": ["error"],
+    "valid-jsdoc": ["error"]
+  }
 }

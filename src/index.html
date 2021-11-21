@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdnapisec.kaltura.com/p/2215841/embedPlaykitJs/uiconf_id/42237501/"></script>
+  <script src="./playkit-share.js"></script>
+</head>
+
+<body>
+<input type="button" onclick="changeMedia()" value="Change Media"/>
+
+  <div id="player-placeholder" style="width: 640px; height: 360px;"></div>
+  <script>
+    let config = {
+      logLevel: "DEBUG",
+      "targetId": "player-placeholder",
+      "provider": {
+        "partnerId": "2215841",
+        "uiConfId": "42237501"
+      },
+      plugins:{
+        share:{
+          // shareUrl: string - Default will take the parent url
+          // enableTimeOffset: boolean - Default false
+          // useNative: boolean - use native API
+          // shareOptions: ShareOptions - social network config
+          // embedBaseUrl?: string, base url for embed url
+          // uiConfId?: string, uiConfId for embed url
+          // partnerId?: string, partnerId for embed url
+          // entryId?: string entryId for embed url
+        }
+      }
+    }
+
+
+    var kalturaPlayer = KalturaPlayer.setup(config);
+    kalturaPlayer.loadMedia({ entryId: "1_ebs5e9cy" });
+  </script>
+</body>
+
+</html>
