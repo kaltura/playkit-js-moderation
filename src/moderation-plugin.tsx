@@ -77,7 +77,7 @@ export class ModerationPlugin
 
   onMediaUnload(): void {
     if (this._upperBarItem) {
-      logger.trace('Moderation plugin  unloaded', {
+      logger.trace('Moderation plugin unloaded', {
         method: 'onMediaUnload',
       });
       this._moderationOverlay = null;
