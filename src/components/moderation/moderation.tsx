@@ -1,4 +1,4 @@
-import {h, Component} from 'preact';
+import {h, Component, Fragment} from 'preact';
 import {getContribLogger, ObjectUtils} from '@playkit-js-contrib/common';
 import {
   KeyboardKeys,
@@ -190,14 +190,16 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             verticalPosition={PopoverVerticalPositions.Bottom}
             horizontalPosition={PopoverHorizontalPositions.Right}
             content={this._popoverContent()}>
-            <button className={styles.selectWrapper} tabIndex={1}>
-              <div className={styles.select}>
-                {reportContentType > -1
-                  ? get(this._getContentType(), 'label', '')
-                  : DEFAULT_CONTENT_TYPE}
-              </div>
-              <div className={styles.downArrow} />
-            </button>
+            <Fragment>
+              <button className={styles.selectWrapper} tabIndex={1}>
+                <div className={styles.select}>
+                  {reportContentType > -1
+                    ? get(this._getContentType(), 'label', '')
+                    : DEFAULT_CONTENT_TYPE}
+                </div>
+                <div className={styles.downArrow} />
+              </button>
+            </Fragment>
           </Popover>
           <form onSubmit={this._handleSubmit}>
             <textarea
