@@ -190,14 +190,16 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             verticalPosition={PopoverVerticalPositions.Bottom}
             horizontalPosition={PopoverHorizontalPositions.Right}
             content={this._popoverContent()}>
-            <button className={styles.selectWrapper} tabIndex={1}>
-              <div className={styles.select}>
-                {reportContentType > -1
-                  ? get(this._getContentType(), 'label', '')
-                  : DEFAULT_CONTENT_TYPE}
-              </div>
-              <div className={styles.downArrow} />
-            </button>
+            <div>
+              <button className={styles.selectWrapper} tabIndex={1}>
+                <div className={styles.select}>
+                  {reportContentType > -1
+                    ? get(this._getContentType(), 'label', '')
+                    : DEFAULT_CONTENT_TYPE}
+                </div>
+                <div className={styles.downArrow} />
+              </button>
+            </div>
           </Popover>
           <form onSubmit={this._handleSubmit}>
             <textarea
