@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.4](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.2...v2.0.4) (2021-12-02)
+
+
+### Bug Fixes
+
+* **FEV468:** I as User want to report inappropriate content to the moderator ([ea0448b](https://github.com/kaltura/playkit-js-moderation/commit/ea0448bc0f4062c5ee85509d5cc3fd9c64774ac7))
+
 ### [2.0.2](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.1...v2.0.2) (2020-06-01)
 
 ### [2.0.1](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.0...v2.0.1) (2020-05-06)
