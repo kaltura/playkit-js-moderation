@@ -1,6 +1,6 @@
 {
   "name": "@playkit-js/moderation",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "private": false,
   "bugs": {
     "url": "https://github.com/kaltura/playkit-js-moderation/issues"
@@ -9,6 +9,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kaltura/playkit-js-moderation.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@playkit-js-contrib/cli": "1.1.0",
