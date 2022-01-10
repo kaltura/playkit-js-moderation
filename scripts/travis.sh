@@ -5,7 +5,8 @@ npm install
 if [ "${TRAVIS_MODE}" = "release" ] || [ "${TRAVIS_MODE}" = "releaseCanary" ]; then
   if [ "${TRAVIS_MODE}" = "releaseCanary" ]; then
     echo "Run standard-version"
-    npm run bump-canary
+    # npm run bump-canary
+    npx standard-version --prerelease canary --skip.commit=true --skip.tag=true
     sha=$(git rev-parse --verify --short HEAD)
     echo "Current sha ${sha}"
     commitNumberAfterTag=$(git rev-list  `git rev-list --tags --no-walk --max-count=1`..HEAD --count)
