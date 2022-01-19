@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.11...v2.1.1) (2022-01-19)
+
 ### [2.0.11](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.10...v2.0.11) (2021-12-06)
 
 ### [2.0.10](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.9...v2.0.10) (2021-12-06)
