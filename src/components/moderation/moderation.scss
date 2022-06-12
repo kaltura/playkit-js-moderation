@@ -13,6 +13,7 @@
   background-color: $root-background;
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
+  z-index: 1;
   .close-button {
     position: absolute;
     top: 32px;
