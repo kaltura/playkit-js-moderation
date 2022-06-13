@@ -13,8 +13,8 @@ import {KalturaModerationFlag} from 'kaltura-typescript-client/api/types/Kaltura
 import {Moderation, ModerateOption} from './components/moderation';
 import {PluginButton} from './components/plugin-button';
 import * as styles from './moderation-plugin.scss';
-// import {ui} from 'kaltura-player-js';
-// const {SidePanelModes, SidePanelPositions, ReservedPresetNames} = ui;
+import {ui} from 'kaltura-player-js';
+const {SidePanelModes, SidePanelPositions, ReservedPresetNames} = ui;
 
 const reservedPresetNames = {
   Playback: 'Playback',
@@ -55,7 +55,7 @@ interface ModerationPluginConfig {
   tooltipMessage: string;
 }
 
-export class ModerationPlugin  extends KalturaPlayer.core.BasePlugin {
+export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   private _moderationOverlay = null;
   private _wasPlayed = false; // keep state of the player so we can resume if needed
   private _kalturaClient = new KalturaClient();
@@ -68,7 +68,6 @@ export class ModerationPlugin  extends KalturaPlayer.core.BasePlugin {
     private _contribServices: ContribServices,
   ) {
     super(name, _player, _configs);
-    console.log('player', _player)
   }
 
   onPluginSetup(): void {
@@ -229,7 +228,6 @@ export class ModerationPlugin  extends KalturaPlayer.core.BasePlugin {
   };
 
   private _addPluginIcon(): void {
-    const {} = this._configs;
     const _toggleOverlay = this._toggleOverlay;
     this._player.ui.addComponent({
       label: 'Moderation',
