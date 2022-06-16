@@ -5,6 +5,7 @@ import {PluginButton} from './components/plugin-button';
 import * as styles from './moderation-plugin.scss';
 import {ui} from 'kaltura-player-js';
 import {ContribServices} from './contrib-services';
+import {OnClickEvent} from './components/a11y-wrapper';
 const {ReservedPresetAreas, ReservedPresetNames} = ui;
 
 interface ModerationPluginConfig {
@@ -46,7 +47,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   }
 
   loadMedia(): void {
-    this.logger.trace('Moderation plugin loaded', {
+    this.logger.debug('Moderation plugin loaded', {
       method: 'loadMedia'
     });
     this._addPluginIcon();
@@ -109,14 +110,14 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       duration: notificatonDuration,
       severity: ToastSeverity.Success || ToastSeverity.Error,
       onClick: () => {
-        this.logger.trace(`Moderation clicked on toast`, {
+        this.logger.debug(`Moderation clicked on toast`, {
           method: '_displayToast'
         });
       }
     });
   };
 
-  private _toggleOverlay = (event?: MouseEvent) => {
+  private _toggleOverlay = (event: OnClickEvent, byKeyboard?: boolean) => {
     if (this._removeActiveOverlay !== null) {
       this._removeOverlay();
 
@@ -128,21 +129,20 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     }
 
     let closeButtonSelected = false;
-    if (event && event.x === 0 && event.y === 0) {
-      // triggered by keyboard
+    if (byKeyboard) {
       closeButtonSelected = true;
     }
     const {reportLength, moderateOptions, subtitle, tooltipMessage} = this.config;
     const isPlaying = !(this._player as any).paused;
 
-    this.logger.trace(`Moderation toggle overlay player`, {
+    this.logger.debug(`Moderation toggle overlay player`, {
       method: '_toggleOverlay'
     });
 
     if (this._moderationOverlay) {
       this._moderationOverlay = null;
       if (this._wasPlayed) {
-        this.logger.trace(`Moderation plugin paused player`, {
+        this.logger.debug(`Moderation plugin paused player`, {
           method: '_toggleOverlay'
         });
         this._wasPlayed = false;
@@ -174,6 +174,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   };
 
   private _addPluginIcon(): void {
+    const {tooltipMessage} = this.config;
     if (this._removePluginIcon) {
       return;
     }
@@ -181,7 +182,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       label: 'Moderation',
       area: ReservedPresetAreas.TopBarRightControls,
       presets: [ReservedPresetNames.Playback, ReservedPresetNames.Live],
-      get: () => <PluginButton toggleOverlay={this._toggleOverlay} />
+      get: () => <PluginButton onClick={this._toggleOverlay} label={tooltipMessage} />
     });
   }
 

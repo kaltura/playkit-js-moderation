@@ -1,8 +1,12 @@
 import {h, Component, Fragment} from 'preact';
 import {KeyboardKeys, Popover, PopoverHorizontalPositions, PopoverVerticalPositions} from '../popover';
 import {PopoverMenu, PopoverMenuItem} from '../popover-menu';
+import {OnClick, A11yWrapper} from '../a11y-wrapper';
+import {icons} from '../icons';
 import * as styles from './moderation.scss';
-const {Tooltip} = KalturaPlayer.ui.components;
+
+const {Tooltip, Icon} = KalturaPlayer.ui.components;
+const {withText, Text} = KalturaPlayer.ui.preacti18n;
 
 export interface ModerateOption {
   id: number;
@@ -10,13 +14,15 @@ export interface ModerateOption {
 }
 
 interface ModerationProps {
-  onClick: () => void;
+  onClick: OnClick;
   onSubmit: (contentType: number, content: string, callBack: () => void) => void;
   reportLength: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
   tooltipMessage: string;
   closeButtonSelected: boolean;
+  sendReportLabel?: string;
+  closeLabel?: string;
 }
 
 interface ModerationState {
@@ -33,8 +39,14 @@ const initialState: ModerationState = {
   isTextareaActive: false
 };
 
+const translates = {
+  sendReportLabel: <Text id="moderation.send_report">Report</Text>,
+  closeLabel: <Text id="moderation.close">Close</Text>
+};
+
+@withText(translates)
 export class Moderation extends Component<ModerationProps, ModerationState> {
-  _closeButtonNode: null | HTMLDivElement = null;
+  _closeButtonNode: null | HTMLButtonElement = null;
 
   state: ModerationState = {...initialState};
 
@@ -117,29 +129,28 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     return this.props.moderateOptions.find((moderateOption: ModerateOption) => moderateOption.id === this.state.reportContentType) || {};
   };
 
-  private _handleClose = (event: MouseEvent | KeyboardEvent) => {
-    // @ts-ignore
-    if (event.type === 'keypress' && event?.keyCode !== KeyboardKeys.Enter) {
-      return;
-    }
-    this.props.onClick();
-  };
-
   render(props: ModerationProps) {
-    const {reportLength, subtitle, tooltipMessage} = props;
+    const {reportLength, subtitle, tooltipMessage, onClick, closeLabel} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
-        <div
-          className={[styles.closeButton, 'kaltura-moderation__close-button'].join(' ')}
-          role="button"
-          tabIndex={1}
-          onClick={this._handleClose}
-          onKeyPress={this._handleClose}
-          ref={(node: HTMLDivElement | null) => {
-            this._closeButtonNode = node;
-          }}
-        />
+        <A11yWrapper onClick={onClick}>
+          <button
+            aria-label={closeLabel}
+            className={[styles.closeButton, 'kaltura-moderation__close-button'].join(' ')}
+            tabIndex={1}
+            ref={node => {
+              this._closeButtonNode = node;
+            }}>
+            <Icon
+              id="moderation-plugin-close-button"
+              height={icons.BigSize}
+              width={icons.BigSize}
+              viewBox={`0 0 ${icons.BigSize} ${icons.BigSize}`}
+              path={icons.CLOSE_ICON}
+            />
+          </button>
+        </A11yWrapper>
         <div className={styles.mainWrapper}>
           <div className={[styles.title, 'kaltura-moderation__title'].join(' ')}>What’s wrong with this content?</div>
           {subtitle ? <div className={[styles.subtitle].join(' ')}>{subtitle}</div> : null}
@@ -170,7 +181,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
               <div className={styles.characterCounter}>{`${reportContent.length}/${reportLength}`}</div>
               <Tooltip label={tooltipMessage} classNames={styles.tooltip}>
                 <button className={[styles.submitButton, reportContentType === -1 ? styles.disabled : ''].join(' ')} tabIndex={1} type="submit">
-                  Report
+                  {this.props.sendReportLabel}
                 </button>
               </Tooltip>
             </div>

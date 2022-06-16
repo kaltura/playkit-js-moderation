@@ -18,15 +18,17 @@
     position: absolute;
     top: 32px;
     right: 32px;
+    display: flex;
     width: 32px;
     height: 32px;
-    min-width: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
     cursor: pointer;
-    background-image: url('../../assets/close.svg');
     &:focus {
       outline: 1px solid $focus-color;
     }
-}
+  }
   .main-wrapper {
     height: 100%;
     width: 400px;
@@ -59,7 +61,7 @@
         background-color: $semigray-color;
       }
       &:focus {
-          outline: 1px solid $focus-color;
+        outline: 1px solid $focus-color;
       }
     }
     .select-wrapper {
@@ -106,15 +108,18 @@
       &.active {
         background-color: $black-color;
       }
-      &:-ms-input-placeholderr { /* Internet Explorer 10-11 */
+      &:-ms-input-placeholderr {
+        /* Internet Explorer 10-11 */
         color: $gray-color !important;
         font-size: 15px;
         opacity: 1;
       }
-      &::-ms-input-placeholder { /* Microsoft Edge */
+      &::-ms-input-placeholder {
+        /* Microsoft Edge */
         color: $gray-color;
       }
-      &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      &::placeholder {
+        /* Chrome, Firefox, Opera, Safari 10.1+ */
         color: $gray-color;
         opacity: 1; /* Firefox */
       }
@@ -167,6 +172,12 @@
       }
     }
   }
+
+  // TODO: remove once player fix the font
+  * {
+    font-family: sans-serif;
+    font-style: normal;
+  }
 }
 
 :global {
@@ -193,4 +204,10 @@
       display: none;
     }
   }
+}
+
+// TODO: remove once core team fix alignment of plugin icons
+:global(.playkit-player .playkit-top-bar .playkit-right-controls) {
+  display: flex;
+  flex-direction: row;
 }
