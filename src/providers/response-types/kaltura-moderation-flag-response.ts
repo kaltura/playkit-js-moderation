@@ -6,7 +6,7 @@ export class KalturaModerationFlagResponse extends BaseServiceResult {
 
   constructor(responseObj: any) {
     super(responseObj);
-    if (!this.hasError) {
+    if (!this.hasError && responseObj.id) {
       this.data = new KalturaModerationFlag(responseObj);
     }
   }

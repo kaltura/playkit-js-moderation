@@ -23,7 +23,7 @@ interface ModerationPluginConfig {
 export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: ModerationPluginConfig = {
     reportLength: 500,
-    onReportSentMessage: 'Send report',
+    onReportSentMessage: 'The report sent',
     onReportErrorMessage: 'The report failed to send',
     subtitle: '',
     notificatonDuration: 5000,
@@ -61,7 +61,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   private _sentReport = (contentType: number, content: string, callback?: () => void) => {
     const {onReportSentMessage, onReportErrorMessage} = this.config;
     const {sources} = this._player;
-
     return this._player.provider
       .doRequest([{loader: ReportLoader, params: {comments: content, flagType: contentType, flaggedEntryId: sources.id}}])
       .then((data: Map<string, any>) => {
@@ -103,7 +102,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       text: options.text,
       icon: options.icon,
       duration: notificatonDuration,
-      severity: ToastSeverity.Success || ToastSeverity.Error,
+      severity: options.severity,
       onClick: () => {
         this.logger.debug(`Moderation clicked on toast`, {
           method: '_displayToast'

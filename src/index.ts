@@ -1,5 +1,4 @@
-// import "./moderation-plugin";
-import {ModerationPlugin} from "./moderation-plugin";
+import {ModerationPlugin} from './moderation-plugin';
 
 declare var __VERSION__: string;
 declare var __NAME__: string;
