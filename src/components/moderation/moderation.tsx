@@ -23,6 +23,9 @@ interface ModerationProps {
   closeButtonSelected: boolean;
   sendReportLabel?: string;
   closeLabel?: string;
+  reportPlaceholder?: string;
+  defaultContentType?: string;
+  reportTitle?: string;
 }
 
 interface ModerationState {
@@ -30,8 +33,6 @@ interface ModerationState {
   reportContent: string;
   isTextareaActive: boolean;
 }
-
-const DEFAULT_CONTENT_TYPE = 'Choose a reason for reporting this content';
 
 const initialState: ModerationState = {
   reportContent: '',
@@ -41,7 +42,10 @@ const initialState: ModerationState = {
 
 const translates = {
   sendReportLabel: <Text id="moderation.send_report">Report</Text>,
-  closeLabel: <Text id="moderation.close">Close</Text>
+  closeLabel: <Text id="moderation.close">Close</Text>,
+  reportPlaceholder: <Text id="moderation.report_placeholder">Describe what you saw...</Text>,
+  defaultContentType: <Text id="moderation.default_content_type">Choose a reason for reporting this content</Text>,
+  reportTitle: <Text id="moderation.report_title">What’s wrong with this content?</Text>
 };
 
 @withText(translates)
@@ -152,7 +156,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
           </button>
         </A11yWrapper>
         <div className={styles.mainWrapper}>
-          <div className={[styles.title, 'kaltura-moderation__title'].join(' ')}>What’s wrong with this content?</div>
+          <div className={[styles.title, 'kaltura-moderation__title'].join(' ')}>{this.props.reportTitle}</div>
           {subtitle ? <div className={[styles.subtitle].join(' ')}>{subtitle}</div> : null}
           <Popover
             className={styles.reportPopover}
@@ -161,28 +165,30 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             content={this._popoverContent()}>
             <Fragment>
               <button className={styles.selectWrapper} tabIndex={1}>
-                <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : DEFAULT_CONTENT_TYPE}</div>
+                <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
                 <div className={styles.downArrow} />
               </button>
             </Fragment>
           </Popover>
-          <form onSubmit={this._handleSubmit}>
+          <form>
             <textarea
               className={[styles.textarea, isTextareaActive ? styles.active : ''].join(' ')}
               onInput={this._onContentChange}
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}
               tabIndex={1}
-              placeholder="Describe what you saw..."
+              placeholder={this.props.reportPlaceholder}
               value={reportContent}
               maxLength={reportLength}
             />
             <div className={styles.submitWrapper}>
               <div className={styles.characterCounter}>{`${reportContent.length}/${reportLength}`}</div>
               <Tooltip label={tooltipMessage} classNames={styles.tooltip}>
-                <button className={[styles.submitButton, reportContentType === -1 ? styles.disabled : ''].join(' ')} tabIndex={1} type="submit">
-                  {this.props.sendReportLabel}
-                </button>
+                <A11yWrapper onClick={this._handleSubmit}>
+                  <button className={[styles.submitButton, reportContentType === -1 ? styles.disabled : ''].join(' ')} tabIndex={1}>
+                    {this.props.sendReportLabel}
+                  </button>
+                </A11yWrapper>
               </Tooltip>
             </div>
           </form>
