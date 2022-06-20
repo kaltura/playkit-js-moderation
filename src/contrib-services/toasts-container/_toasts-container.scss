@@ -1,0 +1,21 @@
+.toastsContainer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 8px 16px 0;
+  min-width: 120px;
+  max-width: 264px;
+  display: flex;
+  flex-direction: column;
+}
+
+.toastRow {
+  height: 42px;
+  min-width: 120px;
+  max-width: 264px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  text-overflow: ellipsis;
+  align-self: flex-end;
+}

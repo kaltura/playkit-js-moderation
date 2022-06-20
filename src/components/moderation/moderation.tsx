@@ -1,16 +1,12 @@
 import {h, Component, Fragment} from 'preact';
-import {getContribLogger, ObjectUtils} from '@playkit-js-contrib/common';
-import {
-  KeyboardKeys,
-  Popover,
-  PopoverHorizontalPositions,
-  PopoverVerticalPositions,
-} from '@playkit-js-contrib/ui';
-import {KalturaModerationFlagType} from 'kaltura-typescript-client/api/types';
+import {KeyboardKeys, Popover, PopoverHorizontalPositions, PopoverVerticalPositions} from '../popover';
 import {PopoverMenu, PopoverMenuItem} from '../popover-menu';
+import {OnClick, A11yWrapper} from '../a11y-wrapper';
+import {icons} from '../icons';
 import * as styles from './moderation.scss';
-const {get} = ObjectUtils;
-const {Tooltip} = KalturaPlayer.ui.components;
+
+const {Tooltip, Icon} = KalturaPlayer.ui.components;
+const {withText, Text} = KalturaPlayer.ui.preacti18n;
 
 export interface ModerateOption {
   id: number;
@@ -18,13 +14,18 @@ export interface ModerateOption {
 }
 
 interface ModerationProps {
-  onClick: () => void;
-  onSubmit: (contentType: KalturaModerationFlagType, content: string, callBack: () => void) => void;
+  onClick: OnClick;
+  onSubmit: (contentType: number, content: string, callBack: () => void) => void;
   reportLength: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
   tooltipMessage: string;
   closeButtonSelected: boolean;
+  sendReportLabel?: string;
+  closeLabel?: string;
+  reportPlaceholder?: string;
+  defaultContentType?: string;
+  reportTitle?: string;
 }
 
 interface ModerationState {
@@ -33,28 +34,27 @@ interface ModerationState {
   isTextareaActive: boolean;
 }
 
-const logger = getContribLogger({
-  class: 'Info',
-  module: 'info-plugin',
-});
-
-const DEFAULT_CONTENT_TYPE = 'Choose a reason for reporting this content';
-
 const initialState: ModerationState = {
   reportContent: '',
   reportContentType: -1,
-  isTextareaActive: false,
+  isTextareaActive: false
 };
 
-export class Moderation extends Component<ModerationProps, ModerationState> {
-  _closeButtonNode: null | HTMLDivElement = null;
+const translates = {
+  sendReportLabel: <Text id="moderation.send_report">Report</Text>,
+  closeLabel: <Text id="moderation.close">Close</Text>,
+  reportPlaceholder: <Text id="moderation.report_placeholder">Describe what you saw...</Text>,
+  defaultContentType: <Text id="moderation.default_content_type">Choose a reason for reporting this content</Text>,
+  reportTitle: <Text id="moderation.report_title">What’s wrong with this content?</Text>
+};
 
-  state: ModerationState = { ...initialState };
+@withText(translates)
+export class Moderation extends Component<ModerationProps, ModerationState> {
+  _closeButtonNode: null | HTMLButtonElement = null;
+
+  state: ModerationState = {...initialState};
 
   componentDidMount(): void {
-    logger.trace('Moderation plugin mount', {
-      method: 'componentDidMount',
-    });
     if (this._closeButtonNode && this.props.closeButtonSelected) {
       this._closeButtonNode.focus();
     }
@@ -62,38 +62,32 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
 
   private _onContentTypeChange = (id: number) => {
     this.setState({
-      reportContentType: id,
+      reportContentType: id
     });
   };
 
   private _onContentChange = (event: any) => {
     this.setState({
-      reportContent: event.target.value,
+      reportContent: event.target.value
     });
   };
 
   private _handleFocus = () => {
     this.setState({
-      isTextareaActive: true,
+      isTextareaActive: true
     });
   };
 
   private _handleBlur = () => {
     this.setState((state: ModerationState) => ({
-      isTextareaActive: state.reportContent.length > 0,
+      isTextareaActive: state.reportContent.length > 0
     }));
   };
 
   private _handleSubmit = (event: any) => {
     event.preventDefault();
     const {reportContent, reportContentType} = this.state;
-    logger.trace('Moderation plugin submit click', {
-      method: 'handleSubmit',
-    });
     if (reportContentType === -1) {
-      logger.trace('Moderation User did not select reason', {
-        method: 'handleSubmit',
-      });
       return;
     }
     this.props.onSubmit(reportContentType, reportContent, () => {
@@ -107,7 +101,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       e.stopPropagation();
     }
     switch (e.keyCode) {
-      case 13: // Enter pressed
+      case KeyboardKeys.Enter: // Enter pressed
         callBack();
         break;
     }
@@ -127,64 +121,43 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   private _getPopoverMenuOptions = () => {
     return this.props.moderateOptions.map(({label, id}: ModerateOption) => ({
       label: label || '',
-      onMenuChosen: () => this._onContentTypeChange(id || -1),
+      onMenuChosen: () => this._onContentTypeChange(id || -1)
     }));
   };
 
   private _popoverContent = () => {
-    return (
-      <PopoverMenu
-        itemRenderer={this._popoverMenuItemRenderer}
-        options={this._getPopoverMenuOptions()}
-      />
-    );
+    return <PopoverMenu itemRenderer={this._popoverMenuItemRenderer} options={this._getPopoverMenuOptions()} />;
   };
 
-  private _getContentType = () => {
-    return (
-      this.props.moderateOptions.find(
-        (moderateOption: ModerateOption) =>
-          moderateOption.id === this.state.reportContentType
-      ) || {}
-    );
-  };
-
-  private _handleClose = (event: MouseEvent | KeyboardEvent) => {
-    if (
-      event.type === 'keypress' &&
-      get(event, 'keyCode', null) !== KeyboardKeys.Enter
-    ) {
-      return;
-    }
-    this.props.onClick();
+  private _getContentType = (): any => {
+    return this.props.moderateOptions.find((moderateOption: ModerateOption) => moderateOption.id === this.state.reportContentType) || {};
   };
 
   render(props: ModerationProps) {
-    const {reportLength, subtitle, tooltipMessage} = props;
+    const {reportLength, subtitle, tooltipMessage, onClick, closeLabel} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
-        <div
-          className={[
-            styles.closeButton,
-            'kaltura-moderation__close-button',
-          ].join(' ')}
-          role="button"
-          tabIndex={1}
-          onClick={this._handleClose}
-          onKeyPress={this._handleClose}
-          ref={(node: HTMLDivElement | null) => {
-            this._closeButtonNode = node;
-          }}
-        />
+        <A11yWrapper onClick={onClick}>
+          <button
+            aria-label={closeLabel}
+            className={[styles.closeButton, 'kaltura-moderation__close-button'].join(' ')}
+            tabIndex={1}
+            ref={node => {
+              this._closeButtonNode = node;
+            }}>
+            <Icon
+              id="moderation-plugin-close-button"
+              height={icons.BigSize}
+              width={icons.BigSize}
+              viewBox={`0 0 ${icons.BigSize} ${icons.BigSize}`}
+              path={icons.CLOSE_ICON}
+            />
+          </button>
+        </A11yWrapper>
         <div className={styles.mainWrapper}>
-          <div
-            className={[styles.title, 'kaltura-moderation__title'].join(' ')}>
-            What’s wrong with this content?
-          </div>
-          {subtitle ? (
-            <div className={[styles.subtitle].join(' ')}>{subtitle}</div>
-          ) : null}
+          <div className={[styles.title, 'kaltura-moderation__title'].join(' ')}>{this.props.reportTitle}</div>
+          {subtitle ? <div className={[styles.subtitle].join(' ')}>{subtitle}</div> : null}
           <Popover
             className={styles.reportPopover}
             verticalPosition={PopoverVerticalPositions.Bottom}
@@ -192,43 +165,30 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             content={this._popoverContent()}>
             <Fragment>
               <button className={styles.selectWrapper} tabIndex={1}>
-                <div className={styles.select}>
-                  {reportContentType > -1
-                    ? get(this._getContentType(), 'label', '')
-                    : DEFAULT_CONTENT_TYPE}
-                </div>
+                <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
                 <div className={styles.downArrow} />
               </button>
             </Fragment>
           </Popover>
-          <form onSubmit={this._handleSubmit}>
+          <form>
             <textarea
-              className={[
-                styles.textarea,
-                isTextareaActive ? styles.active : '',
-              ].join(' ')}
+              className={[styles.textarea, isTextareaActive ? styles.active : ''].join(' ')}
               onInput={this._onContentChange}
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}
               tabIndex={1}
-              placeholder="Describe what you saw..."
+              placeholder={this.props.reportPlaceholder}
               value={reportContent}
               maxLength={reportLength}
             />
             <div className={styles.submitWrapper}>
-              <div className={styles.characterCounter}>
-                {`${reportContent.length}/${reportLength}`}
-              </div>
+              <div className={styles.characterCounter}>{`${reportContent.length}/${reportLength}`}</div>
               <Tooltip label={tooltipMessage} classNames={styles.tooltip}>
-                <button
-                  className={[
-                    styles.submitButton,
-                    reportContentType === -1 ? styles.disabled : '',
-                  ].join(' ')}
-                  tabIndex={1}
-                  type="submit">
-                  Report
-                </button>
+                <A11yWrapper onClick={this._handleSubmit}>
+                  <button className={[styles.submitButton, reportContentType === -1 ? styles.disabled : ''].join(' ')} tabIndex={1}>
+                    {this.props.sendReportLabel}
+                  </button>
+                </A11yWrapper>
               </Tooltip>
             </div>
           </form>

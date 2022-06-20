@@ -1,35 +1,13 @@
 import {h, ComponentChild} from 'preact';
-import {
-  ContribPluginManager,
-  CorePlugin,
-  OnMediaLoad,
-  OnMediaUnload,
-  OnPluginSetup,
-  ContribServices,
-  ContribPluginData,
-  ContribPluginConfigs,
-} from '@playkit-js-contrib/plugin';
-import {
-  UpperBarItem,
-  OverlayItem,
-  OverlayPositions,
-  ToastSeverity,
-} from '@playkit-js-contrib/ui';
-import {getContribLogger} from '@playkit-js-contrib/common';
-import {KalturaModerationFlagType} from 'kaltura-typescript-client/api/types/KalturaModerationFlagType';
-import {BaseEntryFlagAction} from 'kaltura-typescript-client/api/types/BaseEntryFlagAction';
-import {KalturaClient} from 'kaltura-typescript-client';
-import {KalturaModerationFlag} from 'kaltura-typescript-client/api/types/KalturaModerationFlag';
+import {ToastSeverity} from './contrib-services/toast-manager';
 import {Moderation, ModerateOption} from './components/moderation';
 import {PluginButton} from './components/plugin-button';
 import * as styles from './moderation-plugin.scss';
-
-const pluginName = `playkit-js-moderation`;
-
-const logger = getContribLogger({
-  class: 'ModerationPlugin',
-  module: 'moderation-plugin',
-});
+import {ui} from 'kaltura-player-js';
+import {ContribServices} from './contrib-services';
+import {OnClickEvent} from './components/a11y-wrapper';
+import {ReportLoader, KalturaModerationFlag} from './providers';
+const {ReservedPresetAreas, ReservedPresetNames} = ui;
 
 interface ModerationPluginConfig {
   reportLength: number;
@@ -41,139 +19,125 @@ interface ModerationPluginConfig {
   tooltipMessage: string;
 }
 
-export class ModerationPlugin
-  implements OnMediaLoad, OnMediaUnload, OnPluginSetup {
-  private _upperBarItem: UpperBarItem | null = null;
-  private _moderationOverlay: OverlayItem | null = null;
+// @ts-ignore
+export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
+  static defaultConfig: ModerationPluginConfig = {
+    reportLength: 500,
+    onReportSentMessage: 'The report sent',
+    onReportErrorMessage: 'The report failed to send',
+    subtitle: '',
+    notificatonDuration: 5000,
+    tooltipMessage: 'Send report',
+    moderateOptions: [
+      {id: 1, label: 'Sexual Content'},
+      {id: 2, label: 'Violent Or Repulsive'},
+      {id: 3, label: 'Harmful Or Dangerous Act'},
+      {id: 4, label: 'Spam / Commercials'}
+    ]
+  };
+
+  private _moderationOverlay = null;
   private _wasPlayed = false; // keep state of the player so we can resume if needed
-  private _kalturaClient = new KalturaClient();
+  private _removeActiveOverlay: null | Function = null;
+  private _removePluginIcon: null | Function = null;
+  private _contribServices: ContribServices;
 
-  constructor(
-    private _corePlugin: CorePlugin,
-    private _contribServices: ContribServices,
-    private _configs: ContribPluginConfigs<ModerationPluginConfig>,
-    private _player: KalturaPlayerTypes.Player
-  ) {}
-
-  onPluginSetup(): void {
-    const {playerConfig} = this._configs;
-
-    this._kalturaClient.setOptions({
-      clientTag: 'playkit-js-transcript',
-      endpointUrl: playerConfig.provider.env.serviceUrl,
-    });
-
-    this._kalturaClient.setDefaultRequestOptions({
-      ks: playerConfig.session.ks,
-    });
+  constructor(name: string, private _player: KalturaPlayerTypes.Player, config: ModerationPluginConfig) {
+    super(name, _player, config);
+    this._contribServices = ContribServices.get({kalturaPlayer: _player});
   }
 
-  onMediaLoad(): void {
-    logger.trace('Moderation plugin loaded', {
-      method: 'onMediaLoad',
+  loadMedia(): void {
+    this.logger.debug('Moderation plugin loaded', {
+      method: 'loadMedia'
     });
     this._addPluginIcon();
   }
 
-  onMediaUnload(): void {
-    if (this._upperBarItem) {
-      logger.trace('Moderation plugin unloaded', {
-        method: 'onMediaUnload',
-      });
-      this._moderationOverlay = null;
-    }
+  getUIComponents(): any[] {
+    return this._contribServices.presetManager.registerComponents();
   }
 
-  private _sentReport = (
-    contentType: KalturaModerationFlagType,
-    content: string,
-    callback?: () => void
-  ) => {
-    const {
-      playerConfig,
-      pluginConfig: {onReportSentMessage, onReportErrorMessage},
-    } = this._configs;
-    const request = new BaseEntryFlagAction({
-      moderationFlag: new KalturaModerationFlag({
-        flaggedEntryId: playerConfig.sources.id,
-        flagType: contentType,
-        comments: content,
-      }),
-    });
-
-    this._kalturaClient.request(request).then(
-      () => {
-        logger.trace('Moderation plugin submit OK', {
-          method: 'handleSubmit',
-        });
-        this._toggleOverlay();
-        this._displayToast({
-          text: onReportSentMessage,
-          icon: (
-            <div className={[styles.toastIcon, styles.success].join(' ')} />
-          ),
-          severity: ToastSeverity.Success,
-        });
-        if (this._wasPlayed) {
-          this._player.play();
+  private _sentReport = (contentType: number, content: string, callback?: () => void) => {
+    const {onReportSentMessage, onReportErrorMessage} = this.config;
+    const {sources} = this._player;
+    return this._player.provider
+      .doRequest([{loader: ReportLoader, params: {comments: content, flagType: contentType, flaggedEntryId: sources.id}}])
+      .then((data: Map<string, any>) => {
+        if (data && data.has(ReportLoader.id)) {
+          const reportLoader = data.get(ReportLoader.id);
+          const moderationFlag: KalturaModerationFlag = reportLoader?.response?.moderationFlag;
+          if (moderationFlag) {
+            this.logger.debug('Moderation plugin submit OK');
+            this._toggleOverlay();
+            this._displayToast({
+              text: onReportSentMessage,
+              icon: <div className={[styles.toastIcon, styles.success].join(' ')} />,
+              severity: ToastSeverity.Success
+            });
+            if (this._wasPlayed) {
+              this._player.play();
+            }
+            if (callback) {
+              callback();
+            }
+          }
         }
-        if (callback) {
-          callback();
-        }
-      },
-      error => {
-        logger.trace('Moderation plugin submit failed', {
-          method: 'handleSubmit',
-          data: error,
-        });
+      })
+      .catch((e: any) => {
+        this.logger.warn(e);
         this._toggleOverlay();
         this._displayToast({
           text: onReportErrorMessage,
           icon: <div className={[styles.toastIcon, styles.error].join(' ')} />,
-          severity: ToastSeverity.Error,
+          severity: ToastSeverity.Error
         });
-      }
-    );
+      });
   };
 
-  private _displayToast = (options: {
-    text: string;
-    icon: ComponentChild;
-    severity: ToastSeverity;
-  }): void => {
-    const {notificatonDuration} = this._configs.pluginConfig;
-    //display toast
+  private _displayToast = (options: {text: string; icon: ComponentChild; severity: ToastSeverity}): void => {
+    const {notificatonDuration} = this.config;
     this._contribServices.toastManager.add({
       title: 'Report Content',
       text: options.text,
       icon: options.icon,
       duration: notificatonDuration,
-      severity: ToastSeverity.Success || ToastSeverity.Error,
+      severity: options.severity,
       onClick: () => {
-        logger.trace(`Moderation clicked on toast`, {
-          method: '_displayToast',
+        this.logger.debug(`Moderation clicked on toast`, {
+          method: '_displayToast'
         });
-      },
+      }
     });
   };
 
-  private _toggleOverlay = (event?: MouseEvent) => {
+  private _toggleOverlay = (event?: OnClickEvent, byKeyboard?: boolean) => {
+    if (this._removeActiveOverlay !== null) {
+      this._removeOverlay();
+
+      if (this._wasPlayed) {
+        this._player.play();
+        this._wasPlayed = false;
+      }
+      return;
+    }
+
     let closeButtonSelected = false;
-    if (event && event.x === 0 && event.y === 0) {
-      // triggered by keyboard
+    if (byKeyboard) {
       closeButtonSelected = true;
     }
-    const {reportLength, moderateOptions, subtitle, tooltipMessage} = this._configs.pluginConfig;
+    const {reportLength, moderateOptions, subtitle, tooltipMessage} = this.config;
     const isPlaying = !(this._player as any).paused;
-    logger.trace(`Moderation toggle overlay player`, {
-      method: '_toggleOverlay',
+
+    this.logger.debug(`Moderation toggle overlay player`, {
+      method: '_toggleOverlay'
     });
+
     if (this._moderationOverlay) {
-      this._contribServices.overlayManager.remove(this._moderationOverlay);
       this._moderationOverlay = null;
       if (this._wasPlayed) {
-        logger.trace(`Moderation plugin paused player`, {
-          method: '_toggleOverlay',
+        this.logger.debug(`Moderation plugin paused player`, {
+          method: '_toggleOverlay'
         });
         this._wasPlayed = false;
         this._player.play();
@@ -185,10 +149,11 @@ export class ModerationPlugin
       this._player.pause();
     }
 
-    this._moderationOverlay = this._contribServices.overlayManager.add({
+    this._removeActiveOverlay = this._player.ui.addComponent({
       label: 'moderation-overlay',
-      position: OverlayPositions.PlayerArea,
-      renderContent: () => (
+      area: ReservedPresetAreas.PlayerArea,
+      presets: [ReservedPresetNames.Playback, ReservedPresetNames.Live],
+      get: () => (
         <Moderation
           onClick={this._toggleOverlay}
           onSubmit={this._sentReport}
@@ -198,44 +163,42 @@ export class ModerationPlugin
           moderateOptions={moderateOptions}
           closeButtonSelected={closeButtonSelected}
         />
-      ),
+      )
     });
   };
 
   private _addPluginIcon(): void {
-    const {} = this._configs.pluginConfig;
-    this._upperBarItem = this._contribServices.upperBarManager.add({
+    const {tooltipMessage} = this.config;
+    if (this._removePluginIcon) {
+      return;
+    }
+    this._removePluginIcon = this._player.ui.addComponent({
       label: 'Moderation',
-      onClick: this._toggleOverlay,
-      renderItem: () => <PluginButton />,
+      area: ReservedPresetAreas.TopBarRightControls,
+      presets: [ReservedPresetNames.Playback, ReservedPresetNames.Live],
+      get: () => <PluginButton onClick={this._toggleOverlay} label={tooltipMessage} />
     });
   }
-}
 
-ContribPluginManager.registerPlugin(
-  pluginName,
-  (data: ContribPluginData<ModerationPluginConfig>) => {
-    return new ModerationPlugin(
-      data.corePlugin,
-      data.contribServices,
-      data.configs,
-      data.player
-    );
-  },
-  {
-    defaultConfig: {
-      reportLength: 500,
-      onReportSentMessage: 'Send report',
-      onReportErrorMessage: 'The report failed to send',
-      subtitle: '',
-      notificatonDuration: 5000,
-      tooltipMessage: 'Send report',
-      moderateOptions: [
-        {id: 1, label: 'Sexual Content'},
-        {id: 2, label: 'Violent Or Repulsive'},
-        {id: 3, label: 'Harmful Or Dangerous Act'},
-        {id: 4, label: 'Spam / Commercials'},
-      ],
-    },
+  private _removeOverlay = () => {
+    if (this._removeActiveOverlay) {
+      this._removeActiveOverlay();
+      this._removeActiveOverlay = null;
+    }
+  };
+
+  static isValid(): boolean {
+    return true;
   }
-);
+
+  reset(): void {
+    return;
+  }
+
+  destroy(): void {
+    this._removeOverlay();
+    if (this._removePluginIcon) {
+      this._removePluginIcon();
+    }
+  }
+}
