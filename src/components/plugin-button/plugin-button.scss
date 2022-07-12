@@ -8,3 +8,7 @@
   border-radius: 4px;
   cursor: pointer;
 }
+
+:global(.playkit-player .playkit-top-bar .playkit-right-controls) {
+  display: flex;
+}
