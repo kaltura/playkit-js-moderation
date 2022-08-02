@@ -1,7 +1,7 @@
 import {h, Component, Fragment} from 'preact';
 import {KeyboardKeys, Popover, PopoverHorizontalPositions, PopoverVerticalPositions} from '../popover';
 import {PopoverMenu, PopoverMenuItem} from '../popover-menu';
-import {OnClick, A11yWrapper} from '../a11y-wrapper';
+import {OnClick, A11yWrapper} from '@playkit-js/common';
 import {icons} from '../icons';
 import * as styles from './moderation.scss';
 import {DownIcon} from './down-icon';
