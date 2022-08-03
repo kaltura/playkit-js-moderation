@@ -1,12 +1,12 @@
 import {h, ComponentChild} from 'preact';
-import {ToastSeverity} from './contrib-services/toast-manager';
 import {Moderation, ModerateOption} from './components/moderation';
 import {PluginButton} from './components/plugin-button';
 import * as styles from './moderation-plugin.scss';
 import {ui} from 'kaltura-player-js';
-import {ContribServices} from './contrib-services';
-import {OnClickEvent} from './components/a11y-wrapper';
+import {ContribServices, ToastSeverity, OnClickEvent} from '@playkit-js/common';
 import {ReportLoader, KalturaModerationFlag} from './providers';
+import {ErrorIcon} from './components/icons/error-icon';
+import {SuccessIcon} from './components/icons/success-icon';
 const {ReservedPresetAreas, ReservedPresetNames} = ui;
 
 interface ModerationPluginConfig {
@@ -19,7 +19,6 @@ interface ModerationPluginConfig {
   tooltipMessage: string;
 }
 
-// @ts-ignore
 export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: ModerationPluginConfig = {
     reportLength: 500,
@@ -54,8 +53,9 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     this._addPluginIcon();
   }
 
+  // TODO: remove once contribServices migrated to BasePlugin
   getUIComponents(): any[] {
-    return this._contribServices.presetManager.registerComponents();
+    return this._contribServices.register();
   }
 
   private _sentReport = (contentType: number, content: string, callback?: () => void) => {
@@ -72,7 +72,11 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
             this._toggleOverlay();
             this._displayToast({
               text: onReportSentMessage,
-              icon: <div className={[styles.toastIcon, styles.success].join(' ')} />,
+              icon: (
+                <div className={styles.toastIcon}>
+                  <SuccessIcon />
+                </div>
+              ),
               severity: ToastSeverity.Success
             });
             if (this._wasPlayed) {
@@ -89,7 +93,11 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
         this._toggleOverlay();
         this._displayToast({
           text: onReportErrorMessage,
-          icon: <div className={[styles.toastIcon, styles.error].join(' ')} />,
+          icon: (
+            <div className={styles.toastIcon}>
+              <ErrorIcon />
+            </div>
+          ),
           severity: ToastSeverity.Error
         });
       });
@@ -192,7 +200,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   }
 
   reset(): void {
-    return;
+    this._contribServices.reset();
   }
 
   destroy(): void {

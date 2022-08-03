@@ -1,9 +1,10 @@
 import {h, Component, Fragment} from 'preact';
 import {KeyboardKeys, Popover, PopoverHorizontalPositions, PopoverVerticalPositions} from '../popover';
 import {PopoverMenu, PopoverMenuItem} from '../popover-menu';
-import {OnClick, A11yWrapper} from '../a11y-wrapper';
+import {OnClick, A11yWrapper} from '@playkit-js/common';
 import {icons} from '../icons';
 import * as styles from './moderation.scss';
+import {DownIcon} from './down-icon';
 
 const {Tooltip, Icon} = KalturaPlayer.ui.components;
 const {withText, Text} = KalturaPlayer.ui.preacti18n;
@@ -166,7 +167,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             <Fragment>
               <button className={styles.selectWrapper} tabIndex={1}>
                 <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
-                <div className={styles.downArrow} />
+                <div className={styles.downArrow}>
+                  <DownIcon />
+                </div>
               </button>
             </Fragment>
           </Popover>
