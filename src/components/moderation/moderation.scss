@@ -8,6 +8,7 @@
   height: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 60px 32px 32px 32px;
   color: $white-color;
   background-color: $root-background;
@@ -30,13 +31,13 @@
     }
   }
   .main-wrapper {
-    height: 100%;
-    width: 400px;
+    width: 60%;
     .title {
       margin-bottom: 8px;
       font-size: 28px;
       font-weight: bold;
-      text-align: center;
+      text-align: left;
+      line-height: 32px;
     }
     .subtitle {
       margin-top: 16px;
@@ -149,22 +150,24 @@
         color: $character-counter-color;
       }
       .submit-button {
-        width: 88px;
         height: 32px;
-        border-radius: 18px;
-        color: $white-color;
+        border-radius: 4px;
+        color: white;
         text-align: center;
-        font-size: 15px;
+        font-size: 14px;
         font-weight: bold;
-        background-color: $submit-button-color;
+        background-color: #006EFA;
+        padding-left: 12px;
+        padding-right: 12px;
         border: none;
         outline: none !important; // overwrites player styles
         cursor: pointer;
         &.disabled {
-          background-color: $semigray-color;
-        }
-        &:hover:not(.disabled) {
-          background-color: darken($color: $submit-button-color, $amount: 10);
+          background-color: rgba(0,0,0,0);
+          padding-left: 11px;
+          padding-right: 11px;
+          color: #888888;
+          border: 1px solid #888888;
         }
         &:focus {
           box-shadow: 0px 0px 0px 1px $focus-color;
