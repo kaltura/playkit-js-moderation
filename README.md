@@ -64,25 +64,7 @@ Finally, add the bundle as a script tag in your page, and initialize the player
 
 Moderation plugin configuration can been found here:
 
-- **[Configuration](docs/configuration.md)**
-
-## Running the tests
-
-Tests can be run locally via [Karma], which will run on Chrome, Firefox and Safari
-
-[karma]: https://karma-runner.github.io/1.0/index.html
-
-```
-yarn run test
-```
-
-You can test individual browsers:
-
-```
-yarn run test:chrome
-yarn run test:firefox
-yarn run test:safari
-```
+- **[Configuration](#configuration)**
 
 ### And coding style tests
 
@@ -91,10 +73,6 @@ We use ESLint [recommended set](http://eslint.org/docs/rules/) with some additio
 See [ESLint config](.eslintrc.json) for full configuration.
 
 We also use [.editorconfig](.editorconfig) to maintain consistent coding styles and settings, please make sure you comply with the styling.
-
-## Compatibility
-
-TBD
 
 ## Contributing
 
@@ -107,3 +85,94 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## License
 
 This project is licensed under the AGPL-3.0 License - see the [LICENSE.md](LICENSE.md) file for details
+
+<a name="configuration"></a>
+## Configuration
+
+#### Configuration Structure
+
+```js
+//Default configuration
+"moderation" = {};
+//Plugin params
+"moderation" = {
+  reportLength?: number, // optional
+  onReportSentMessage?: string, // optional
+  onReportErrorMessage?: string, // optional
+  subtitle?: string, // optional
+  tooltipMessage?: string, // optional
+  notificatonDuration?: number, // optional
+  moderateOptions?: Array< {id: number, label: string} > // optional
+}
+```
+
+##
+
+> ### config.reportLength
+>
+> ##### Type: `number`
+>
+> ##### Default: `500`
+>
+
+##
+
+> ### config.onReportSentMessage
+>
+> ##### Type: `string`
+>
+> ##### Default: `The report sent`
+>
+
+##
+
+> ### config.onReportErrorMessage
+>
+> ##### Type: `string`
+>
+> ##### Default: `The report failed to send`
+>
+
+##
+
+> ### config.subtitle
+>
+> ##### Type: `string`
+>
+> ##### Default: `-`
+>
+
+##
+
+> ### config.tooltipMessage
+>
+> ##### Type: `string`
+>
+> ##### Default: `Send report`
+>
+
+##
+
+> ### config.notificatonDuration
+>
+> ##### Type: `number`
+>
+> ##### Default: `5000`
+>
+
+##
+
+> ### config.moderateOptions
+>
+> ##### Type: `Array< {id: number, label: string} >`
+>
+> ##### Default: 
+```js
+moderateOptions = [
+  {id: 1, label: 'Sexual Content'},      
+  {id: 2, label: 'Violent Or Repulsive'},      
+  {id: 3, label: 'Harmful Or Dangerous Act'},      
+  {id: 4, label: 'Spam / Commercials'}
+]
+```
+>
