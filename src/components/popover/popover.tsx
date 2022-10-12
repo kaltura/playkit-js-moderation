@@ -37,6 +37,7 @@ const defaultProps = {
 interface PopoverProps {
   onClose?: () => void;
   onOpen?: () => void;
+  addAccessibleChild?: (node: HTMLElement | null) => void
   closeOnClick: boolean;
   closeOnEsc: boolean;
   verticalPosition: PopoverVerticalPositions;
@@ -203,6 +204,7 @@ export class Popover extends Component<PopoverProps, PopoverState> {
           ref={node => {
             // @ts-ignore
             this._controlElement = node;
+            props.addAccessibleChild?.(node)
           }}
           {...targetEvents}>
           {props.children}

@@ -119,7 +119,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     });
   };
 
-  private _toggleOverlay = (event?: OnClickEvent, byKeyboard?: boolean) => {
+  private _toggleOverlay = () => {
     if (this._removeActiveOverlay !== null) {
       this._removeOverlay();
 
@@ -128,11 +128,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
         this._wasPlayed = false;
       }
       return;
-    }
-
-    let closeButtonSelected = false;
-    if (byKeyboard) {
-      closeButtonSelected = true;
     }
     const {reportLength, moderateOptions, subtitle, tooltipMessage} = this.config;
     const isPlaying = !(this._player as any).paused;
@@ -169,7 +164,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
           subtitle={subtitle}
           tooltipMessage={tooltipMessage}
           moderateOptions={moderateOptions}
-          closeButtonSelected={closeButtonSelected}
         />
       )
     });

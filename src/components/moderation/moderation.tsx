@@ -8,6 +8,7 @@ import {DownIcon} from './down-icon';
 
 const {Tooltip, Icon} = KalturaPlayer.ui.components;
 const {withText, Text} = KalturaPlayer.ui.preacti18n;
+const {withKeyboardA11y} = (KalturaPlayer.ui.utils as any);
 
 export interface ModerateOption {
   id: number;
@@ -21,7 +22,8 @@ interface ModerationProps {
   moderateOptions: ModerateOption[];
   subtitle: string;
   tooltipMessage: string;
-  closeButtonSelected: boolean;
+  setIsModal?: (value: boolean) => void;
+  addAccessibleChild?: (node: HTMLElement | null) => void;
   sendReportLabel?: string;
   closeLabel?: string;
   reportPlaceholder?: string;
@@ -50,15 +52,12 @@ const translates = {
 };
 
 @withText(translates)
+@withKeyboardA11y
 export class Moderation extends Component<ModerationProps, ModerationState> {
-  _closeButtonNode: null | HTMLButtonElement = null;
-
   state: ModerationState = {...initialState};
 
   componentDidMount(): void {
-    if (this._closeButtonNode && this.props.closeButtonSelected) {
-      this._closeButtonNode.focus();
-    }
+    this.props.setIsModal?.(true);
   }
 
   private _onContentTypeChange = (id: number) => {
@@ -112,6 +111,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     <div
       tabIndex={1}
       role="menuitem"
+      ref={node => this.props.addAccessibleChild?.(node)}
       aria-label={el.label}
       onClick={() => el.onMenuChosen()}
       onKeyDown={e => this._onKeyDown(e, el.onMenuChosen)}
@@ -136,7 +136,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   };
 
   render(props: ModerationProps) {
-    const {reportLength, subtitle, tooltipMessage, onClick, closeLabel} = props;
+    const {reportLength, subtitle, tooltipMessage, onClick, closeLabel, addAccessibleChild} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     return (
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
@@ -146,9 +146,8 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             aria-label={closeLabel}
             className={[styles.closeButton, 'kaltura-moderation__close-button'].join(' ')}
             tabIndex={1}
-            ref={node => {
-              this._closeButtonNode = node;
-            }}>
+            ref={node => addAccessibleChild?.(node)}
+          >
             <Icon
               id="moderation-plugin-close-button"
               height={icons.BigSize}
@@ -165,6 +164,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
             className={styles.reportPopover}
             verticalPosition={PopoverVerticalPositions.Bottom}
             horizontalPosition={PopoverHorizontalPositions.Right}
+            addAccessibleChild={addAccessibleChild}
             content={this._popoverContent()}>
             <Fragment>
               <button className={styles.selectWrapper} tabIndex={1}>
@@ -175,9 +175,10 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
               </button>
             </Fragment>
           </Popover>
-          <form>
+          <form ref={node => addAccessibleChild?.(node)}>
             <textarea
               className={[styles.textarea, isTextareaActive ? styles.active : ''].join(' ')}
+              ref={node => addAccessibleChild?.(node)}
               onInput={this._onContentChange}
               onFocus={this._handleFocus}
               onBlur={this._handleBlur}
@@ -193,6 +194,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
                   <button
                     role="button"
                     aria-label={this.props.sendReportLabel}
+                    ref={node => addAccessibleChild?.(node)}
                     className={[styles.submitButton, reportContentType === -1 ? styles.disabled : ''].join(' ')}
                     tabIndex={1}>
                     {this.props.sendReportLabel}
