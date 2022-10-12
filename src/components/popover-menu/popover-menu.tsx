@@ -32,7 +32,7 @@ interface PopoverMenuProps {
 export class PopoverMenu extends Component<PopoverMenuProps> {
     render(props: PopoverMenuProps) {
         return (
-            <div className={styles.popoverMenu}>
+            <div role="menu" className={styles.popoverMenu}>
                 {props.options.map((el: PopoverMenuItem) => {
                     if (el.customRenderer) {
                         return el.customRenderer(el);
@@ -41,7 +41,11 @@ export class PopoverMenu extends Component<PopoverMenuProps> {
                         return props.itemRenderer(el);
                     }
                     return (
-                        <div className="popover-menu-item" onClick={() => el.onMenuChosen(el)}>
+                        <div
+                            role="menuitem"
+                            aria-label={el.label}
+                            className="popover-menu-item"
+                            onClick={() => el.onMenuChosen(el)}>
                             {el.label}
                         </div>
                     );

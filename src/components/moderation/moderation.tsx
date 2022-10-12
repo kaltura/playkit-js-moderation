@@ -111,7 +111,8 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   private _popoverMenuItemRenderer = (el: PopoverMenuItem) => (
     <div
       tabIndex={1}
-      role="button"
+      role="menuitem"
+      aria-label={el.label}
       onClick={() => el.onMenuChosen()}
       onKeyDown={e => this._onKeyDown(e, el.onMenuChosen)}
       className={styles.popoverMenuItem}>
@@ -141,6 +142,7 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
       <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
         <A11yWrapper onClick={onClick}>
           <button
+            role="button"
             aria-label={closeLabel}
             className={[styles.closeButton, 'kaltura-moderation__close-button'].join(' ')}
             tabIndex={1}
@@ -188,7 +190,11 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
               <div className={styles.characterCounter}>{`${reportContent.length}/${reportLength}`}</div>
               <Tooltip label={tooltipMessage} classNames={styles.tooltip}>
                 <A11yWrapper onClick={this._handleSubmit}>
-                  <button className={[styles.submitButton, reportContentType === -1 ? styles.disabled : ''].join(' ')} tabIndex={1}>
+                  <button
+                    role="button"
+                    aria-label={this.props.sendReportLabel}
+                    className={[styles.submitButton, reportContentType === -1 ? styles.disabled : ''].join(' ')}
+                    tabIndex={1}>
                     {this.props.sendReportLabel}
                   </button>
                 </A11yWrapper>
