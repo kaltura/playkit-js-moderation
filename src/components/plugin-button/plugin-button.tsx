@@ -14,7 +14,7 @@ export const PluginButton = ({onClick, label}: PluginButtonProps) => {
   return (
     <Tooltip label={label} type="bottom">
       <A11yWrapper onClick={onClick}>
-        <button role="button" aria-label={label} className={styles.pluginButton}>
+        <button aria-label={label} className={styles.pluginButton}>
           <Icon
             id="moderation-plugin-button"
             height={icons.BigSize}

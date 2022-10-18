@@ -198,8 +198,6 @@ export class Popover extends Component<PopoverProps, PopoverState> {
       <div className={styles.popoverContainer}>
         <div
           className="popover-anchor-container"
-          aria-expanded={this.state.open}
-          role="button"
           ref={node => {
             // @ts-ignore
             this._controlElement = node;
@@ -209,6 +207,7 @@ export class Popover extends Component<PopoverProps, PopoverState> {
         </div>
         {this.state.open && (
           <div
+            aria-expanded="true"
             className={[
               props.className,
               styles.popoverComponent,
