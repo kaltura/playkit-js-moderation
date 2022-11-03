@@ -1,6 +1,6 @@
 import {h} from 'preact';
-import * as styles from './plugin-button.scss';
 import {icons} from '../icons';
+import {ui} from 'kaltura-player-js';
 import {A11yWrapper, OnClick} from '@playkit-js/common';
 
 const {Tooltip, Icon} = KalturaPlayer.ui.components;
@@ -14,7 +14,7 @@ export const PluginButton = ({onClick, label}: PluginButtonProps) => {
   return (
     <Tooltip label={label} type="bottom">
       <A11yWrapper onClick={onClick}>
-        <button role="button" aria-label={label} className={styles.pluginButton}>
+        <button aria-label={label} className={ui.style.upperBarIcon}>
           <Icon
             id="moderation-plugin-button"
             height={icons.BigSize}
