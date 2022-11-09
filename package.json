@@ -74,6 +74,6 @@
     "html5 player"
   ],
   "dependencies": {
-    "@playkit-js/common": "^1.0.2"
+    "@playkit-js/common": "^1.0.8"
   }
 }
