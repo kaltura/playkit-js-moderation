@@ -1,5 +1,6 @@
-import {h, Component} from 'preact';
-import {Popover} from '../popover';
+import {h, Component, Fragment} from 'preact';
+import {KeyboardKeys, Popover, PopoverHorizontalPositions, PopoverVerticalPositions} from '../popover';
+import {PopoverMenu, PopoverMenuItem} from '../popover-menu';
 import {OnClick, A11yWrapper} from '@playkit-js/common';
 import {icons} from '../icons';
 import * as styles from './moderation.scss';
@@ -95,11 +96,39 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     });
   };
 
+  private _onKeyDown = (e: KeyboardEvent, callBack: Function) => {
+    if (e.keyCode !== KeyboardKeys.Enter && e.keyCode !== KeyboardKeys.Esc) {
+      // don't stopPropagation on ESC and Enter pressed as it prevent the popup closing
+      e.stopPropagation();
+    }
+    switch (e.keyCode) {
+      case KeyboardKeys.Enter: // Enter pressed
+        callBack();
+        break;
+    }
+  };
+
+  private _popoverMenuItemRenderer = (el: PopoverMenuItem) => (
+    <div
+      tabIndex={1}
+      role="menuitem"
+      aria-label={el.label}
+      onClick={() => el.onMenuChosen()}
+      onKeyDown={e => this._onKeyDown(e, el.onMenuChosen)}
+      className={styles.popoverMenuItem}>
+      {el.label}
+    </div>
+  );
+
   private _getPopoverMenuOptions = () => {
     return this.props.moderateOptions.map(({label, id}: ModerateOption) => ({
       label: label || '',
       onMenuChosen: () => this._onContentTypeChange(id || -1)
     }));
+  };
+
+  private _popoverContent = () => {
+    return <PopoverMenu itemRenderer={this._popoverMenuItemRenderer} options={this._getPopoverMenuOptions()} />;
   };
 
   private _getContentType = (): any => {
@@ -133,13 +162,18 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
           <div className={[styles.title, 'kaltura-moderation__title'].join(' ')}>{this.props.reportTitle}</div>
           {subtitle ? <div className={[styles.subtitle].join(' ')}>{subtitle}</div> : null}
           <Popover
-            options={this._getPopoverMenuOptions()}>
-            <button className={styles.selectWrapper} tabIndex={1}>
-              <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
-              <div className={styles.downArrow}>
-                <DownIcon />
-              </div>
-            </button>
+            className={styles.reportPopover}
+            verticalPosition={PopoverVerticalPositions.Bottom}
+            horizontalPosition={PopoverHorizontalPositions.Right}
+            content={this._popoverContent()}>
+            <Fragment>
+              <button className={styles.selectWrapper} tabIndex={1}>
+                <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
+                <div className={styles.downArrow}>
+                  <DownIcon />
+                </div>
+              </button>
+            </Fragment>
           </Popover>
           <form>
             <textarea

@@ -1,5 +1,3 @@
-@import '../../variables.scss';
-
 .popover-container {
     position: relative;
     .popover-component {
@@ -29,28 +27,4 @@
             right: 0px;
         }
     }
-}
-.popover-menu {
-    padding-top: 6px;
-    padding-bottom: 6px;
-}
-.popover-menu-item {
-    display: flex;
-    align-items: center;
-    padding: 9px 24px 9px 16px;
-    white-space: nowrap;
-    min-height: 30px;
-    line-height: 18px;
-    font-size: 15px;
-    &:hover {
-        cursor: pointer;
-        background-color: $semigray-color;
-    }
-    &:focus {
-        outline: 1px solid $focus-color;
-    }
-}
-.report-popover {
-    width: 100%;
-    max-width: 280px;
 }
