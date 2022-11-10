@@ -2,7 +2,7 @@ import {h, Component, VNode} from 'preact';
 import {A11yWrapper, OnClickEvent} from '@playkit-js/common';
 import * as styles from './popover.scss';
 
-const {ENTER, ESC, SPACE, TAB} = KalturaPlayer.ui.utils.KeyMap;
+const {ESC} = KalturaPlayer.ui.utils.KeyMap;
 
 export interface PopoverMenuItem {
   label?: string;
@@ -76,12 +76,9 @@ export class Popover extends Component<PopoverProps, PopoverState> {
     document.removeEventListener('keydown', this._handleKeyboardEvent);
   };
 
-  private _handleClickOnOption = (cb: () => void) => (event: OnClickEvent, byKeyboard?: boolean) => {
+  private _handleClickOnOption = (cb: (byKeyboard?: boolean) => void) => (event: OnClickEvent, byKeyboard?: boolean) => {
     this._closePopover();
-    cb();
-    if (byKeyboard) {
-      setTimeout(() => {});
-    }
+    cb(byKeyboard);
   };
 
   render(props: PopoverProps) {

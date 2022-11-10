@@ -51,6 +51,7 @@ const translates = {
 @withText(translates)
 export class Moderation extends Component<ModerationProps, ModerationState> {
   _closeButtonNode: null | HTMLButtonElement = null;
+  _textAreaElementRef: null | HTMLTextAreaElement = null;
 
   state: ModerationState = {...initialState};
 
@@ -98,7 +99,12 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
   private _getPopoverMenuOptions = () => {
     return this.props.moderateOptions.map(({label, id}: ModerateOption) => ({
       label: label || '',
-      onMenuChosen: () => this._onContentTypeChange(id || -1)
+      onMenuChosen: (byKeyboard?: boolean) => {
+        this._onContentTypeChange(id || -1);
+        if (byKeyboard) {
+          this._textAreaElementRef?.focus();
+        }
+      }
     }));
   };
 
@@ -151,6 +157,9 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
               placeholder={this.props.reportPlaceholder}
               value={reportContent}
               maxLength={reportLength}
+              ref={node => {
+                this._textAreaElementRef = node;
+              }}
             />
             <div className={styles.submitWrapper}>
               <div className={styles.characterCounter}>{`${reportContent.length}/${reportLength}`}</div>
