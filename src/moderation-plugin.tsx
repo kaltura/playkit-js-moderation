@@ -3,7 +3,9 @@ import {Moderation, ModerateOption} from './components/moderation';
 import {PluginButton} from './components/plugin-button';
 import * as styles from './moderation-plugin.scss';
 import {ui} from 'kaltura-player-js';
+import {icons} from './components/icons';
 import {ContribServices, ToastSeverity, OnClickEvent} from '@playkit-js/common';
+import {UpperBarManager} from '@playkit-js/ui-managers';
 import {ReportLoader, KalturaModerationFlag} from './providers';
 import {ErrorIcon} from './components/icons/error-icon';
 import {SuccessIcon} from './components/icons/success-icon';
@@ -38,7 +40,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   private _moderationOverlay = null;
   private _wasPlayed = false; // keep state of the player so we can resume if needed
   private _removeActiveOverlay: null | Function = null;
-  private _removePluginIcon: null | Function = null;
+  private _pluginIcon = -1;
   private _contribServices: ContribServices;
 
   constructor(name: string, private _player: KalturaPlayerTypes.Player, config: ModerationPluginConfig) {
@@ -46,10 +48,15 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     this._contribServices = ContribServices.get({kalturaPlayer: _player});
   }
 
+  get upperBarManager() {
+    return this.player.getService('upperBarManager') as UpperBarManager | undefined;
+  }
+
   loadMedia(): void {
-    this.logger.debug('Moderation plugin loaded', {
-      method: 'loadMedia'
-    });
+    if (!this.upperBarManager) {
+      this.logger.warn('upperBarManager service not registered');
+      return;
+    }
     this._addPluginIcon();
   }
 
@@ -177,14 +184,16 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
 
   private _addPluginIcon(): void {
     const {tooltipMessage} = this.config;
-    if (this._removePluginIcon) {
+    if (this._pluginIcon > 0) {
       return;
     }
-    this._removePluginIcon = this._player.ui.addComponent({
-      label: 'Moderation',
-      area: ReservedPresetAreas.TopBarRightControls,
-      presets: [ReservedPresetNames.Playback, ReservedPresetNames.Live],
-      get: () => <PluginButton onClick={this._toggleOverlay} label={tooltipMessage} />
+    this.player.ready().then(() => {
+      this._pluginIcon = this.upperBarManager!.add({
+        label: 'Moderation',
+        component: () => <PluginButton onClick={this._toggleOverlay} label={tooltipMessage} />,
+        svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
+        onClick: this._toggleOverlay
+      }) as number;
     });
   }
 
@@ -200,13 +209,14 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   }
 
   reset(): void {
+    this._removeOverlay();
     this._contribServices.reset();
   }
 
   destroy(): void {
-    this._removeOverlay();
-    if (this._removePluginIcon) {
-      this._removePluginIcon();
+    if (this._pluginIcon > 0) {
+      this.upperBarManager!.remove(this._pluginIcon);
+      this._pluginIcon = -1;
     }
   }
 }
