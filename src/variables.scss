@@ -1,11 +1,5 @@
-$white-color: #ffffff;
-$black-color: #000000;
-$gray-color: #cccccc;
-$semigray-color: #666666;
-$character-counter-color: #ebebeb;
-$focus-color: #00cbff;
-$submit-button-color: #01819a;
-$root-background: rgba(
-  $color: $black-color,
-  $alpha: 0.7
-);
+@import '~@playkit-js/playkit-js-ui';
+
+$brand-color: #006EFA;
+$focus-color: #4798FF;
+$root-background: rgba(0, 0, 0, 0.7);

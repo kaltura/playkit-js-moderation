@@ -3,11 +3,10 @@
 .popover-container {
     position: relative;
     .popover-component {
-        background-color: #222222;
+        background-color: $tone-7;
         border-radius: 4px;
         position: absolute;
         right: 0px;
-        font-size: 15px;
         display: block;
         &.visible {
             visibility: visible;
@@ -41,10 +40,12 @@
     white-space: nowrap;
     min-height: 30px;
     line-height: 18px;
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 700;
+    color: $tone-1;
     &:hover {
         cursor: pointer;
-        background-color: $semigray-color;
+        background-color: $tone-5;
     }
     &:focus {
         outline: 1px solid $focus-color;
