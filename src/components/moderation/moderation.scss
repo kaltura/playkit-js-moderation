@@ -10,7 +10,7 @@
   justify-content: center;
   align-items: center;
   padding: 60px 32px 32px 32px;
-  color: $tone-1;
+  color: white;
   background-color: $root-background;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
@@ -54,7 +54,7 @@
       cursor: pointer;
       padding: 0;
       background: initial;
-      color: $tone-1;
+      color: white;
       border: none;
       &:focus {
         outline: 1px solid $focus-color;
@@ -87,8 +87,8 @@
       border: solid 1px $tone-4;
       overflow-y: auto;
       &.active {
-        border: solid 1px $tone-1;
-        color: $tone-1;
+        border: solid 1px white;
+        color: white;
       }
       &:-ms-input-placeholderr {
         /* Internet Explorer 10-11 */
@@ -130,7 +130,7 @@
         font-size: 14px;
         text-align: right;
         margin-right: 12px;
-        color: $tone-1;
+        color: white;
       }
       .submit-button {
         height: 32px;
@@ -138,7 +138,8 @@
         color: $primary-text-contrast;
         text-align: center;
         font-size: 14px;
-        font-weight: bold;
+        font-weight: 700;
+        line-height: 17px;
         background-color: $brand-color;
         padding-left: 12px;
         padding-right: 12px;
