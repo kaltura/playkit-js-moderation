@@ -27,7 +27,7 @@
     border: none;
     cursor: pointer;
     &:focus {
-      outline: 1px solid $focus-color;
+      outline: 1px solid var(--primary-color);
     }
   }
   .main-wrapper {
@@ -57,7 +57,7 @@
       color: white;
       border: none;
       &:focus {
-        outline: 1px solid $focus-color;
+        outline: 1px solid var(--primary-color);
       }
       .select {
         font-size: 16px;
@@ -81,10 +81,10 @@
       padding: 7px 8px;
       font-size: 14px;
       font-weight: 400;
-      color: $tone-2;
+      color: var(--tone-2-color);
       background-color: rgba(0, 0, 0, 0.3);
       border-radius: $roundness-1;
-      border: solid 1px $tone-4;
+      border: solid 1px var(--tone-4-color);
       overflow-y: auto;
       &.active {
         border: solid 1px white;
@@ -135,12 +135,12 @@
       .submit-button {
         height: 32px;
         border-radius: $roundness-1;
-        color: $primary-text-contrast;
+        color: var(--primary-text-contrast-color);
         text-align: center;
         font-size: 14px;
         font-weight: 700;
         line-height: 17px;
-        background-color: $brand-color;
+        background-color: var(--primary-color);
         padding-left: 12px;
         padding-right: 12px;
         border: none;
@@ -150,11 +150,12 @@
           background-color: rgba(0,0,0,0);
           padding-left: 11px;
           padding-right: 11px;
-          color: $tone-4;
-          border: 1px solid $tone-4;
+          color: var(--tone-4-color);
+          border: 1px solid var(--tone-4-color);
         }
         &:focus {
-          box-shadow: 0px 0px 0px 1px $focus-color;
+          background-color: var(--primary-brighter-color);
+          box-shadow: 0px 0px 0px 1px var(--primary-color);
         }
       }
     }
