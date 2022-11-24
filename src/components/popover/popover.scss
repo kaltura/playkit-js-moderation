@@ -3,7 +3,7 @@
 .popover-container {
     position: relative;
     .popover-component {
-        background-color: var(--tone-7-color);
+        background-color: $tone-7-color;
         border-radius: $roundness-1;
         position: absolute;
         right: 0px;
@@ -42,13 +42,13 @@
     line-height: 18px;
     font-size: 14px;
     font-weight: 700;
-    color: var(--tone-1-color);
+    color: $tone-1-color;
     &:hover {
         cursor: pointer;
-        background-color: var(--tone-5-color);
+        background-color: $tone-5-color;
     }
     &:focus {
-        outline: 1px solid var(--primary-color);
+        outline: 1px solid $primary-color;
     }
 }
 .report-popover {

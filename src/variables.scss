@@ -1,4 +1,15 @@
 $root-background: rgba(0, 0, 0, 0.7);
 
+// colors
+$primary-color: var(--playkit-primary-color);
+$primary-text-contrast-color: var(--playkit-primary-text-contrast-color);
+$primary-brighter-color: var(--playkit-primary-brighter-color);
+$tone-1-color: var(--playkit-tone-1-color);
+$tone-2-color: var(--playkit-tone-2-color);
+$tone-4-color: var(--playkit-tone-4-color);
+$tone-5-color: var(--playkit-tone-5-color);
+$tone-7-color: var(--playkit-tone-7-color);
+
+// border radius
 $roundness-1: 4px;
 $roundness-2: 8px;
