@@ -1,37 +1,37 @@
 @import '../../variables.scss';
 
 .root {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  position: relative;
   height: 100%;
+  width: 100%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  padding: 60px 32px 32px 32px;
+  justify-content: center;
   color: $white-color;
-  background-color: $root-background;
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  z-index: 1;
-  .close-button {
-    position: absolute;
-    top: 32px;
-    right: 32px;
-    display: flex;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    &:focus {
-      outline: 1px solid $focus-color;
+
+  &.extrasmall,
+  &.small {
+    .main-wrapper .title {
+      margin-bottom: 12px;
+      font-size: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
+
+  div {
+    margin: 0px;
+  }
+  * {
+    font-family: Lato, sans-serif;
+    font-style: normal;
+  }
+
   .main-wrapper {
-    width: 60%;
+    width: 100%;
+    max-width: 461px;
     .title {
       margin-bottom: 8px;
       font-size: 28px;
@@ -64,6 +64,9 @@
         font-size: 15px;
         line-height: 1.6;
         font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .down-arrow {
         width: 14px;
@@ -136,14 +139,14 @@
         text-align: center;
         font-size: 14px;
         font-weight: bold;
-        background-color: #006EFA;
+        background-color: #006efa;
         padding-left: 12px;
         padding-right: 12px;
         border: none;
         outline: none !important; // overwrites player styles
         cursor: pointer;
         &.disabled {
-          background-color: rgba(0,0,0,0);
+          background-color: rgba(0, 0, 0, 0);
           padding-left: 11px;
           padding-right: 11px;
           color: #888888;
@@ -153,44 +156,9 @@
           box-shadow: 0px 0px 0px 1px $focus-color;
         }
       }
-    }
-  }
-
-  // TODO: remove once player fix the font
-  * {
-    font-family: sans-serif;
-    font-style: normal;
-  }
-}
-
-:global {
-  .kaltura-moderation__root .playkit-tooltip {
-    width: auto;
-  }
-  .playkit-player.playkit-size-sm,
-  .playkit-player.playkit-size-xs {
-    .kaltura-moderation__close-button {
-      top: 10px;
-      right: 16px;
-    }
-    .kaltura-moderation__root {
-      padding: 14px 16px;
-      .kaltura-moderation__title {
-        margin-bottom: 16px;
-        font-size: 20px;
-        text-align: left;
+      :global(.playkit-tooltip) {
+        width: auto;
       }
     }
   }
-  .playkit-player.playkit-size-ty {
-    .kaltura-moderation__root {
-      display: none;
-    }
-  }
-}
-
-// TODO: remove once core team fix alignment of plugin icons
-:global(.playkit-player .playkit-top-bar .playkit-right-controls) {
-  display: flex;
-  flex-direction: row;
 }

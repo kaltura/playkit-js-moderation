@@ -1,12 +1,14 @@
 import {h, Component} from 'preact';
 import {Popover} from '../popover';
-import {OnClick, A11yWrapper} from '@playkit-js/common';
-import {icons} from '../icons';
+import {OnClick, A11yWrapper, OverlayPortal} from '@playkit-js/common';
 import * as styles from './moderation.scss';
 import {DownIcon} from './down-icon';
 
-const {Tooltip, Icon} = KalturaPlayer.ui.components;
+const {Tooltip, Overlay, PLAYER_SIZE} = KalturaPlayer.ui.components;
 const {withText, Text} = KalturaPlayer.ui.preacti18n;
+const {
+  redux: {connect}
+} = KalturaPlayer.ui;
 
 export interface ModerateOption {
   id: number;
@@ -28,6 +30,12 @@ interface ModerationProps {
   reportTitle?: string;
 }
 
+interface ConnectProps {
+  playerSize?: string;
+}
+
+type MergedProps = ModerationProps & ConnectProps;
+
 interface ModerationState {
   reportContentType: number;
   reportContent: string;
@@ -48,16 +56,21 @@ const translates = {
   reportTitle: <Text id="moderation.report_title">What’s wrong with this content?</Text>
 };
 
+const mapStateToProps = (state: Record<string, any>) => ({
+  playerSize: state.shell.playerSize
+});
+
 @withText(translates)
-export class Moderation extends Component<ModerationProps, ModerationState> {
-  _closeButtonNode: null | HTMLButtonElement = null;
+@connect(mapStateToProps)
+export class Moderation extends Component<MergedProps, ModerationState> {
+  _buttonRef: null | HTMLButtonElement = null;
   _textAreaElementRef: null | HTMLTextAreaElement = null;
 
   state: ModerationState = {...initialState};
 
   componentDidMount(): void {
-    if (this._closeButtonNode && this.props.closeButtonSelected) {
-      this._closeButtonNode.focus();
+    if (this._buttonRef && this.props.closeButtonSelected) {
+      this._buttonRef.focus();
     }
   }
 
@@ -112,72 +125,68 @@ export class Moderation extends Component<ModerationProps, ModerationState> {
     return this.props.moderateOptions.find((moderateOption: ModerateOption) => moderateOption.id === this.state.reportContentType) || {};
   };
 
-  render(props: ModerationProps) {
-    const {reportLength, subtitle, tooltipMessage, onClick, closeLabel} = props;
+  render(props: MergedProps) {
+    const {playerSize = '', reportLength, subtitle, tooltipMessage, onClick} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
+    if (playerSize === PLAYER_SIZE.TINY) {
+      return null;
+    }
+    const submitButtonDisabled = reportContentType === -1;
     return (
-      <div className={[styles.root, 'kaltura-moderation__root'].join(' ')}>
-        <A11yWrapper onClick={onClick}>
-          <button
-            role="button"
-            aria-label={closeLabel}
-            className={[styles.closeButton, 'kaltura-moderation__close-button'].join(' ')}
-            tabIndex={1}
-            ref={node => {
-              this._closeButtonNode = node;
-            }}>
-            <Icon
-              id="moderation-plugin-close-button"
-              height={icons.BigSize}
-              width={icons.BigSize}
-              viewBox={`0 0 ${icons.BigSize} ${icons.BigSize}`}
-              path={icons.CLOSE_ICON}
-            />
-          </button>
-        </A11yWrapper>
-        <div className={styles.mainWrapper}>
-          <div className={[styles.title, 'kaltura-moderation__title'].join(' ')}>{this.props.reportTitle}</div>
-          {subtitle ? <div className={[styles.subtitle].join(' ')}>{subtitle}</div> : null}
-          <Popover
-            options={this._getPopoverMenuOptions()}>
-            <button className={styles.selectWrapper} tabIndex={1}>
-              <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
-              <div className={styles.downArrow}>
-                <DownIcon />
-              </div>
-            </button>
-          </Popover>
-          <form>
-            <textarea
-              className={[styles.textarea, isTextareaActive ? styles.active : ''].join(' ')}
-              onInput={this._onContentChange}
-              onFocus={this._handleFocus}
-              onBlur={this._handleBlur}
-              tabIndex={1}
-              placeholder={this.props.reportPlaceholder}
-              value={reportContent}
-              maxLength={reportLength}
-              ref={node => {
-                this._textAreaElementRef = node;
-              }}
-            />
-            <div className={styles.submitWrapper}>
-              <div className={styles.characterCounter}>{`${reportContent.length}/${reportLength}`}</div>
-              <Tooltip label={tooltipMessage} classNames={styles.tooltip}>
-                <A11yWrapper onClick={this._handleSubmit}>
-                  <button
-                    role="button"
-                    aria-label={this.props.sendReportLabel}
-                    className={[styles.submitButton, reportContentType === -1 ? styles.disabled : ''].join(' ')}
-                    tabIndex={1}>
-                    {this.props.sendReportLabel}
-                  </button>
-                </A11yWrapper>
-              </Tooltip>
+      <OverlayPortal>
+        <Overlay open onClose={onClick}>
+          <div className={[styles.root, styles[playerSize]].join(' ')}>
+            <div className={styles.mainWrapper}>
+              <div className={styles.title}>{this.props.reportTitle}</div>
+              {subtitle ? <div className={[styles.subtitle].join(' ')}>{subtitle}</div> : null}
+              <Popover options={this._getPopoverMenuOptions()}>
+                <button
+                  className={styles.selectWrapper}
+                  tabIndex={0}
+                  ref={node => {
+                    this._buttonRef = node;
+                  }}>
+                  <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
+                  <div className={styles.downArrow}>
+                    <DownIcon />
+                  </div>
+                </button>
+              </Popover>
+              <form>
+                <textarea
+                  className={[styles.textarea, isTextareaActive ? styles.active : ''].join(' ')}
+                  onInput={this._onContentChange}
+                  onFocus={this._handleFocus}
+                  onBlur={this._handleBlur}
+                  tabIndex={0}
+                  placeholder={this.props.reportPlaceholder}
+                  aria-label={this.props.reportPlaceholder}
+                  value={reportContent}
+                  maxLength={reportLength}
+                  ref={node => {
+                    this._textAreaElementRef = node;
+                  }}
+                />
+                <div className={styles.submitWrapper}>
+                  <div className={styles.characterCounter}>{`${reportContent.length}/${reportLength}`}</div>
+                  <Tooltip label={tooltipMessage} classNames={styles.tooltip}>
+                    <A11yWrapper onClick={this._handleSubmit}>
+                      <button
+                        role="button"
+                        aria-disabled={submitButtonDisabled}
+                        aria-label={this.props.sendReportLabel}
+                        className={[styles.submitButton, submitButtonDisabled ? styles.disabled : ''].join(' ')}
+                        tabIndex={0}>
+                        {this.props.sendReportLabel}
+                      </button>
+                    </A11yWrapper>
+                  </Tooltip>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-      </div>
+          </div>
+        </Overlay>
+      </OverlayPortal>
     );
   }
 }

@@ -3,6 +3,7 @@
 .popover-container {
     position: relative;
     .popover-component {
+        z-index: 1;
         background-color: #222222;
         border-radius: 4px;
         position: absolute;
