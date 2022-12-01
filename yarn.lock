@@ -628,10 +628,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@playkit-js/common@^1.0.13":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@playkit-js/common/-/common-1.0.13.tgz#7c80c2e4283c956a74728a86fe52cb8ad6294f04"
-  integrity sha512-uDL5IpmHhtrlWlMX6Gw/Zgrmjz0Ju+pn/nkqsBaW90S5lmu7VDeqjlFkwTQ4pF+GNFaYwD4oirDrfWNRdYDiTQ==
+"@playkit-js/common@^1.0.14":
+  version "1.0.14"
+  resolved "https://registry.yarnpkg.com/@playkit-js/common/-/common-1.0.14.tgz#e88114a17042156e11f3869cf2b9884b50438fd5"
+  integrity sha512-vwIoQ+kjWe6giS4c7UR7ZbPwRo9Ak4ZeEOBoXYN+9t5SvKBjHRTMsZ8r5JQo9n5HV6sd1MtSX9R3/lYcWQHovA==
   dependencies:
     linkify-it "^4.0.1"
 
