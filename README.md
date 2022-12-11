@@ -136,7 +136,15 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE.md](LICEN
       },
       {
       		"id": 4,
-      		 "label": "Spam / Commercials"
+      		"label": "Spam / Commercials"
+      },
+      {
+	       "id": 5,
+	       "label": "Copyright Violation"
+      },
+      {
+      		"id": 6,
+      		"label": "Terms of Use Violation"
       }
     ]
   }
