@@ -3,7 +3,7 @@
 
 ### About
 
-Moderation Plugin provides appplication ability to add reporting mechanisem for the content that being played in case they find it problematic
+Moderation plugin provides applications ability to add reporting mechanisem for the content that being played in case users find it not appropriate.
 
 PlayKit JS Moderation is written in [ECMAScript6], statically analysed using [Typescript] and transpiled in ECMAScript5 using [Babel].
 
