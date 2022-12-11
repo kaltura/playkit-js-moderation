@@ -1,5 +1,10 @@
 # PlayKit JS Moderation - plugin for the [PlayKit JS Player]
 
+
+### About
+
+Moderation Plugin provides appplication ability to add reporting mechanisem for the content that being played in case they find it problematic
+
 PlayKit JS Moderation is written in [ECMAScript6], statically analysed using [Typescript] and transpiled in ECMAScript5 using [Babel].
 
 [typescript]: https://www.typescriptlang.org/
@@ -50,7 +55,7 @@ Finally, add the bundle as a script tag in your page, and initialize the player
      ...
      targetId: 'player-placeholder',
      plugins: {
-       moderation: { ... }
+       playkit-js-moderation: { ... }
      }
      ...
     };
@@ -92,21 +97,61 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE.md](LICEN
 #### Configuration Structure
 
 ```js
-//Default configuration
-"moderation" = {};
+
 //Plugin params
-"moderation" = {
+"playkit-js-moderation": {
   reportLength?: number, // optional
   onReportSentMessage?: string, // optional
   onReportErrorMessage?: string, // optional
-  subtitle?: string, // optional
+  subtitle?: string, // optional extra information to be displayed
   tooltipMessage?: string, // optional
-  notificatonDuration?: number, // optional
+  notificatonDuration?: number, // miliseconds, optional
   moderateOptions?: Array< {id: number, label: string} > // optional
 }
 ```
+#### Plugin Default configuration
 
-##
+"playkit-js-moderation" = {};
+
+```
+"playkit-js-moderation": {
+    "reportLength": 500,
+    "onReportSentMessage": "The report sent",
+    "onReportErrorMessage": "The report failed to send",
+    "subtitle": "",
+    "notificatonDuration": 5000,
+    "tooltipMessage": "Send report",
+    "moderateOptions": [
+      {
+      		"id": 1,
+      		"label": "Sexual Content"
+      },
+      {
+      		"id": 2,
+      		"label": "Violent Or Repulsive"
+      },
+      {
+      		"id": 3,
+       	"label": 'Harmful Or Dangerous Act"
+      },
+      {
+      		"id": 4,
+      		 "label": "Spam / Commercials"
+      }
+    ]
+  }
+```
+
+### Example:
+
+![Moderation1](docs/images/moderation1.png)
+
+![Moderation2](docs/images/moderation2.png)
+
+![Moderation2](docs/images/moderation3.png)
+
+
+## Docs:
 
 > ### config.reportLength
 >
