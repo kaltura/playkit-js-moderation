@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/kaltura/playkit-js-moderation/compare/v3.0.0...v3.1.0) (2022-12-12)
+
+
+### Features
+
+* **FEV-1453:** a11y fixes (remove unused files) ([649a782](https://github.com/kaltura/playkit-js-moderation/commit/649a78246d87e439d0d0e5f24b7f32111362dbeb))
+* **FEV-1552:** Add support to the More plugin ([#34](https://github.com/kaltura/playkit-js-moderation/issues/34)) ([37260a3](https://github.com/kaltura/playkit-js-moderation/commit/37260a3a9676ac602cb2e95ac53f0083100383c5))
+
+
+### Bug Fixes
+
+* **FEV-1557:** Space doesn't work inside the reasons list and refactoring popover ([f2f3e1a](https://github.com/kaltura/playkit-js-moderation/commit/f2f3e1a9ed683b813b939e16c944f6785ee1fca7))
+* **FEV-1557:** Space doesn't work inside the reasons list and refactoring popover ([#35](https://github.com/kaltura/playkit-js-moderation/issues/35)) ([4ffbe6d](https://github.com/kaltura/playkit-js-moderation/commit/4ffbe6d55663963f4083a38a1c55a32d2321406d))
+* **FEV-1590:** mac a11y issues ([#37](https://github.com/kaltura/playkit-js-moderation/issues/37)) ([2699c73](https://github.com/kaltura/playkit-js-moderation/commit/2699c73bd5f0701479850cc6218c2ca2287f88f1))
+
 ### [2.1.1](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.11...v2.1.1) (2022-01-19)
 
 ### [2.0.11](https://github.com/kaltura/playkit-js-moderation/compare/v2.0.10...v2.0.11) (2021-12-06)
