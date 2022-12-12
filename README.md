@@ -132,7 +132,7 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE.md](LICEN
       },
       {
       		"id": 3,
-       		"label": 'Harmful Or Dangerous Act"
+      		"label": 'Harmful Or Dangerous Act"
       },
       {
       		"id": 4,
