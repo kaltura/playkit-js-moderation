@@ -4,11 +4,10 @@
     position: relative;
     .popover-component {
         z-index: 1;
-        background-color: #222222;
-        border-radius: 4px;
+        background-color: $tone-7-color;
+        border-radius: $roundness-1;
         position: absolute;
         right: 0px;
-        font-size: 15px;
         display: block;
         &.visible {
             visibility: visible;
@@ -42,13 +41,15 @@
     white-space: nowrap;
     min-height: 30px;
     line-height: 18px;
-    font-size: 15px;
+    font-size: 14px;
+    font-weight: 700;
+    color: $tone-1-color;
     &:hover {
         cursor: pointer;
-        background-color: $semigray-color;
+        background-color: $tone-5-color;
     }
     &:focus {
-        outline: 1px solid $focus-color;
+        outline: 1px solid $primary-color;
     }
 }
 .report-popover {
