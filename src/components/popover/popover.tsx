@@ -113,7 +113,7 @@ export class Popover extends Component<PopoverProps, PopoverState> {
               this._popoverElementRef = node;
             }}
             className={[styles.reportPopover, styles.popoverComponent, styles.bottom, styles.right].join(' ')}>
-            <div role="menu" className={styles.popoverMenu}>
+            <div role="menu" className={styles.popoverMenu} data-testid="popoverMenu">
               {props.options.map((el, index) => {
                 return (
                   <A11yWrapper
