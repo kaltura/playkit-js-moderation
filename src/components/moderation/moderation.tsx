@@ -135,7 +135,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
     return (
       <OverlayPortal>
         <Overlay open onClose={onClick}>
-          <div className={[styles.root, styles[playerSize]].join(' ')}>
+          <div className={[styles.root, styles[playerSize]].join(' ')} data-testid="moderationRoot">
             <div className={styles.mainWrapper}>
               <div className={styles.title}>{this.props.reportTitle}</div>
               {subtitle ? <div className={[styles.subtitle].join(' ')}>{subtitle}</div> : null}
@@ -145,7 +145,8 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                   tabIndex={0}
                   ref={node => {
                     this._buttonRef = node;
-                  }}>
+                  }}
+                  data-testid="selectButton">
                   <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
                   <div className={styles.downArrow}>
                     <DownIcon />
@@ -168,7 +169,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                   }}
                 />
                 <div className={styles.submitWrapper}>
-                  <div className={styles.characterCounter}>{`${reportContent.length}/${reportLength}`}</div>
+                  <div className={styles.characterCounter} data-testid="characterCounter">{`${reportContent.length}/${reportLength}`}</div>
                   <Tooltip label={tooltipMessage} classNames={styles.tooltip}>
                     <A11yWrapper onClick={this._handleSubmit}>
                       <button
@@ -176,7 +177,8 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                         aria-disabled={submitButtonDisabled}
                         aria-label={this.props.sendReportLabel}
                         className={[styles.submitButton, submitButtonDisabled ? styles.disabled : ''].join(' ')}
-                        tabIndex={0}>
+                        tabIndex={0}
+                        data-testid="submitButton">
                         {this.props.sendReportLabel}
                       </button>
                     </A11yWrapper>
