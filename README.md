@@ -119,7 +119,7 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE.md](LICEN
 ```
 "playkit-js-moderation": {
     "reportLength": 500,
-    "onReportSentMessage": "The report sent",
+    "onReportSentMessage": "The report was sent successfully",
     "onReportErrorMessage": "The report failed to send",
     "subtitle": "",
     "notificatonDuration": 5000,
@@ -177,7 +177,7 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE.md](LICEN
 >
 > ##### Type: `string`
 >
-> ##### Default: `The report sent`
+> ##### Default: `The report was sent successfully`
 >
 
 ##

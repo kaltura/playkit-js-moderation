@@ -71,7 +71,7 @@ describe('Moderation plugin', () => {
     // verify overlay was closed
     cy.get('[data-testid="moderationRoot"]').should('not.exist');
     // verify toast appears
-    cy.get('.playkit-interactive-area').contains('The report sent').should('exist');
+    cy.get('.playkit-interactive-area').contains('The report was sent successfully').should('exist');
   });
 
   it('should submit a report with a comment', () => {

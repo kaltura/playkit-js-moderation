@@ -24,7 +24,7 @@ interface ModerationPluginConfig {
 export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: ModerationPluginConfig = {
     reportLength: 500,
-    onReportSentMessage: 'The report sent',
+    onReportSentMessage: 'The report was sent successfully',
     onReportErrorMessage: 'The report failed to send',
     subtitle: '',
     notificatonDuration: 5000,
@@ -194,6 +194,15 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
       }) as number;
+      this._displayToast({
+        text: this.config.onReportSentMessage,
+        icon: (
+            <div className={styles.toastIcon}>
+              <SuccessIcon />
+            </div>
+        ),
+        severity: ToastSeverity.Success
+      });
     });
   }
 
