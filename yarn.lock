@@ -130,10 +130,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@playkit-js/common@^1.0.14":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@playkit-js/common/-/common-1.0.17.tgz#4d0aee766e2839914df2adfe8e36b476e72ec16c"
-  integrity sha512-ENd2oOa5AMH3MZnaqe2MiNUUYz29KkN+fIeMWuIr0J4GpMsgyXk37slyBsNatb+M6M0irgAMvsbM7eCNDmYLPw==
+"@playkit-js/common@^1.0.18":
+  version "1.0.18"
+  resolved "https://registry.yarnpkg.com/@playkit-js/common/-/common-1.0.18.tgz#16b93e58d7f9119f6da0192f6c9788cd6d94098d"
+  integrity sha512-+7wRoZ4cx4icNiOUiHliailsLbPCD4H8ADjdWXDJLXMSDmooUU8yaDCjiahvla64a7ddIwkiNHsVbw2+XW8ujw==
   dependencies:
     linkify-it "^4.0.1"
 
