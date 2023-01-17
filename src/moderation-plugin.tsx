@@ -24,7 +24,7 @@ interface ModerationPluginConfig {
 export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: ModerationPluginConfig = {
     reportLength: 500,
-    onReportSentMessage: 'The report sent',
+    onReportSentMessage: 'The report was sent successfully',
     onReportErrorMessage: 'The report failed to send',
     subtitle: '',
     notificatonDuration: 5000,
