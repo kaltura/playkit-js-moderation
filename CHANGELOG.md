@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/kaltura/playkit-js-moderation/compare/v3.1.1...v3.2.0) (2023-01-19)
+
+
+### Features
+
+* **FEV-1568:** migrate styles ([#43](https://github.com/kaltura/playkit-js-moderation/issues/43)) ([4961e3d](https://github.com/kaltura/playkit-js-moderation/commit/4961e3dd5a35ada073ce6eccb1ae72901037be2f))
+* **FEV-1628:** add Cypress tests ([#42](https://github.com/kaltura/playkit-js-moderation/issues/42)) ([3a1409b](https://github.com/kaltura/playkit-js-moderation/commit/3a1409bca48c63c821a5b5c69bfe2395bcb5b3c3))
+
+
+### Bug Fixes
+
+* **FEV-1536:** change the text of the toast ([#45](https://github.com/kaltura/playkit-js-moderation/issues/45)) ([0851e61](https://github.com/kaltura/playkit-js-moderation/commit/0851e617d39a3b1041773e9afc8180210b9eb94c))
+
 ### [3.1.1](https://github.com/kaltura/playkit-js-moderation/compare/v3.1.0...v3.1.1) (2022-12-12)
 
 ## [3.1.0](https://github.com/kaltura/playkit-js-moderation/compare/v3.0.0...v3.1.0) (2022-12-12)
