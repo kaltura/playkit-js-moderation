@@ -1,10 +1,10 @@
 import {h, Component} from 'preact';
 import {Popover} from '../popover';
-import {OnClick, A11yWrapper, OverlayPortal} from '@playkit-js/common';
+import {OnClick, Button, OverlayPortal} from '@playkit-js/common';
 import * as styles from './moderation.scss';
 import {DownIcon} from './down-icon';
 
-const {Tooltip, Overlay, PLAYER_SIZE} = KalturaPlayer.ui.components;
+const {Overlay, PLAYER_SIZE} = KalturaPlayer.ui.components;
 const {withText, Text} = KalturaPlayer.ui.preacti18n;
 const {
   redux: {connect}
@@ -170,19 +170,14 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                 />
                 <div className={styles.submitWrapper}>
                   <div className={styles.characterCounter} data-testid="characterCounter">{`${reportContent.length}/${reportLength}`}</div>
-                  <Tooltip label={tooltipMessage} classNames={styles.tooltip}>
-                    <A11yWrapper onClick={this._handleSubmit}>
-                      <button
-                        role="button"
-                        aria-disabled={submitButtonDisabled}
-                        aria-label={this.props.sendReportLabel}
-                        className={[styles.submitButton, submitButtonDisabled ? styles.disabled : ''].join(' ')}
-                        tabIndex={0}
-                        data-testid="submitButton">
-                        {this.props.sendReportLabel}
-                      </button>
-                    </A11yWrapper>
-                  </Tooltip>
+                  <Button
+                    onClick={this._handleSubmit}
+                    tooltip={{label: tooltipMessage, className: styles.tooltip}}
+                    disabled={submitButtonDisabled}
+                    ariaLabel={this.props.sendReportLabel}
+                    testId={'submitButton'}>
+                    {this.props.sendReportLabel}
+                  </Button>
                 </div>
               </form>
             </div>
