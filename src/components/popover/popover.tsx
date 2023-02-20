@@ -117,12 +117,12 @@ export class Popover extends Component<PopoverProps, PopoverState> {
               {props.options.map((el, index) => {
                 return (
                   <A11yWrapper
+                    role="menuitem"
                     onClick={this._handleClickOnOption(el.onMenuChosen)}
                     onDownKeyPressed={this._handleDownKeyPressed(index)}
                     onUpKeyPressed={this._handleUpKeyPressed(index)}>
                     <div
                       tabIndex={0}
-                      role="menuitem"
                       aria-label={el.label}
                       className={styles.popoverMenuItem}
                       ref={node => {
