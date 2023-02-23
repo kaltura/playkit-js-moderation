@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.2](https://github.com/kaltura/playkit-js-moderation/compare/v3.2.1...v3.2.2) (2023-02-23)
+
+
+### Bug Fixes
+
+* **FEV-1655:** on the moderation plugin when the report button is disabled on hover it does not look like the design ([#47](https://github.com/kaltura/playkit-js-moderation/issues/47)) ([2e54290](https://github.com/kaltura/playkit-js-moderation/commit/2e542908f3c4b2876babc7b8df8393e4f5bbb19d))
+
 ### [3.2.1](https://github.com/kaltura/playkit-js-moderation/compare/v3.2.0...v3.2.1) (2023-01-26)
 
 ## [3.2.0](https://github.com/kaltura/playkit-js-moderation/compare/v3.1.1...v3.2.0) (2023-01-19)
