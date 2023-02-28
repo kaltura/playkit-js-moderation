@@ -1,6 +1,8 @@
 import {h, Component} from 'preact';
 import {Popover} from '../popover';
-import {OnClick, Button, OverlayPortal} from '@playkit-js/common';
+import {OnClick} from '@playkit-js/common/dist/hoc/a11y-wrapper';
+import {Button} from '@playkit-js/common/dist/components/button';
+import {OverlayPortal} from '@playkit-js/common/dist/hoc/overlay-portal';
 import * as styles from './moderation.scss';
 import {DownIcon} from './down-icon';
 
