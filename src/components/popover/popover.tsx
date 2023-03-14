@@ -1,5 +1,5 @@
 import {h, Component, VNode} from 'preact';
-import {A11yWrapper, OnClickEvent} from '@playkit-js/common';
+import {A11yWrapper, OnClickEvent} from '@playkit-js/common/dist/hoc/a11y-wrapper';
 import * as styles from './popover.scss';
 
 const {ESC, TAB} = KalturaPlayer.ui.utils.KeyMap;
