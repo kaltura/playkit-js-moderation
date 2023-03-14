@@ -56,9 +56,6 @@
       background: initial;
       color: white;
       border: none;
-      &:focus {
-        outline: 1px solid $primary-color;
-      }
       .select {
         font-size: 16px;
         line-height: 21px;
