@@ -42,7 +42,8 @@
     "LICENSE",
     "README.md",
     "CHANGELOG.md",
-    "src"
+    "src",
+    "translations"
   ],
   "scripts": {
     "clean": "rm -rf ./dist",
