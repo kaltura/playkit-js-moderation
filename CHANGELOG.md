@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.3](https://github.com/kaltura/playkit-js-moderation/compare/v3.2.2...v3.2.3) (2023-03-22)
+
+
+### Bug Fixes
+
+* **FEV-1656:** focus border on the dropdown should appear only when using the keyboard to navigate ([#50](https://github.com/kaltura/playkit-js-moderation/issues/50)) ([7d72ac4](https://github.com/kaltura/playkit-js-moderation/commit/7d72ac47d95fd128b19f83d5ac0c7e80dfba67b3))
+
 ### [3.2.2](https://github.com/kaltura/playkit-js-moderation/compare/v3.2.1...v3.2.2) (2023-02-23)
 
 
