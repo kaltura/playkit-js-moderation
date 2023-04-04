@@ -1,0 +1,11 @@
+{
+  "zh_tw": {
+    "moderation": {
+      "send_report": "報告",
+      "close": "關閉",
+      "report_placeholder": "描述您所看到的...",
+      "default_content_type": "選擇報告此內容的原因",
+      "report_title": "此內容有什麼問題？"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "fi": {
+    "moderation": {
+      "send_report": "Raportoi",
+      "close": "Sulje",
+      "report_placeholder": "Kuvaile näkemäsi...",
+      "default_content_type": "Valitse syy tämän sisällön raportointiin",
+      "report_title": "Mitä vikaa tässä sisällössä on?"
+    }
+  }
+}
