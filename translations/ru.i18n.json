@@ -1,0 +1,11 @@
+{
+  "ru": {
+    "moderation": {
+      "send_report": "Сообщить",
+      "close": "Закрыть",
+      "report_placeholder": "Опишите, что вы видели...",
+      "default_content_type": "Выберите причину сообщения об этом контенте",
+      "report_title": "Что не так с этим контентом?"
+    }
+  }
+}

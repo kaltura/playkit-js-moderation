@@ -1,0 +1,11 @@
+{
+  "fr": {
+    "moderation": {
+      "send_report": "Rapport",
+      "close": "Fermer",
+      "report_placeholder": "Décrivez ce que vous avez vu...",
+      "default_content_type": "Sélectionner une raison de signaler ce contenu",
+      "report_title": "Quel est le problème avec ce contenu ?"
+    }
+  }
+}
