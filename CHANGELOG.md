@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.4](https://github.com/kaltura/playkit-js-moderation/compare/v3.2.3...v3.2.4) (2023-04-19)
+
+
+### Bug Fixes
+
+* **FEC-13084:** add translations folder ([#53](https://github.com/kaltura/playkit-js-moderation/issues/53)) ([96ec9ca](https://github.com/kaltura/playkit-js-moderation/commit/96ec9cab4a6a91f2d7091f96ac195235a3f0f950))
+
 ### [3.2.3](https://github.com/kaltura/playkit-js-moderation/compare/v3.2.2...v3.2.3) (2023-03-22)
 
 
