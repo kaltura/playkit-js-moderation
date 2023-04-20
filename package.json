@@ -71,7 +71,7 @@
   "dependencies": {
     "@playkit-js/common": "^1.1.3",
     "@playkit-js/playkit-js-ui": "^0.73.0",
-    "@playkit-js/ui-managers": "^1.3.2"
+    "@playkit-js/ui-managers": "^1.3.5"
   },
   "kaltura": {
     "name": "playkit-js-moderation",
