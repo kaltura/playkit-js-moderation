@@ -1,0 +1,21 @@
+[
+  {
+    "partnerId": 1091,
+    "ks": "",
+    "userId": 0,
+    "objectType": "KalturaStartWidgetSessionResponse"
+  },
+  {
+    "id": 1433532,
+    "partnerId": 27017,
+    "userId": "aaa",
+    "moderationObjectType": 2,
+    "flaggedEntryId": "1_vqro0wdl",
+    "status": 1,
+    "comments": "comment",
+    "flagType": 4,
+    "createdAt": 1683720848,
+    "updatedAt": 1683720848,
+    "objectType": "KalturaModerationFlag"
+  }
+]

@@ -1,5 +1,4 @@
 export const openModerationPlugin = () => {
-  cy.get('.playkit-pre-playback-play-button').click({force: true});
   cy.get('[data-testid="moderationPluginButton"]').click({force: true});
 };
 
@@ -28,9 +27,8 @@ export const addComment = (comment: string) => {
 };
 
 export const reportAndVerifyRequest = (flagType: number, expectedComment?: string) => {
-  cy.intercept('POST', 'http://mock-api/service/multirequest').as('submit');
   cy.get('[data-testid="submitButton"]').click({force: true});
-  cy.get('@submit')
+  cy.wait('@submit')
     .its('request.body[2]')
     .should('deep.equal', {
       service: 'baseentry',
@@ -45,7 +43,12 @@ export const reportAndVerifyRequest = (flagType: number, expectedComment?: strin
     });
 };
 
-export const preparePage = (pluginConf = {}, playerConf = {}) => {
+const getPlayer = () => {
+  // @ts-ignore
+  return cy.window().then($win => $win.KalturaPlayer.getPlayers()['player-placeholder']);
+};
+
+const preparePage = (pluginConf = {}, playbackConf = {}) => {
   cy.visit('index.html');
   return cy.window().then(win => {
     try {
@@ -59,14 +62,36 @@ export const preparePage = (pluginConf = {}, playerConf = {}) => {
             serviceUrl: 'http://mock-api'
           }
         },
-        ...playerConf,
+        playback: {muted: true, autoplay: true, ...playbackConf},
         plugins: {
           'playkit-js-moderation': pluginConf
         }
       });
-      kalturaPlayer.loadMedia({entryId: '0_wifqaipd'});
+      return kalturaPlayer.loadMedia({entryId: '0_wifqaipd'});
     } catch (e: any) {
-      console.error(e.message);
+      return Promise.reject(e.message);
     }
   });
+};
+
+export const loadPlayer = (pluginConf = {}, playbackConf = {}) => {
+  return preparePage(pluginConf, playbackConf).then(() => getPlayer().then(kalturaPlayer => kalturaPlayer.ready().then(() => kalturaPlayer)));
+};
+
+const checkRequest = (reqBody: any, service: string, action: string) => {
+  return reqBody?.service === service && reqBody?.action === action;
+};
+
+export const mockKalturaBe = (entryFixture = 'vod-entry.json') => {
+  cy.intercept('http://mock-api/service/multirequest', req => {
+    if (checkRequest(req.body[2], 'baseEntry', 'list')) {
+      return req.reply({fixture: entryFixture});
+    }
+    if (checkRequest(req.body[2], 'baseentry', 'flag')) {
+      req.alias = 'submit';
+      return req.reply({fixture: 'report.json'});
+    }
+  });
+  cy.intercept('GET', '**/ks/123', {fixture: 'thumb-asset.jpeg'}).as('getSlides');
+  cy.intercept('GET', '**/vid_sec/*', {fixture: 'thumb-asset.jpeg'}).as('getChapters');
 };

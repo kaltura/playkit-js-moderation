@@ -5,7 +5,8 @@ import {
   openPopoverMenu,
   reportAndVerifyRequest,
   openAndSelectItemFromDropdown,
-  preparePage
+  loadPlayer,
+  mockKalturaBe
 } from './utils';
 
 const MANIFEST = `#EXTM3U
@@ -39,58 +40,70 @@ describe('Moderation plugin', () => {
   });
 
   it('should open and close Moderation plugin', () => {
-    preparePage();
-    openModerationPlugin();
-    cy.get('[data-testid="moderationRoot"]').should('exist');
-    closeModerationPlugin();
-    cy.get('[data-testid="moderationRoot"]').should('not.exist');
+    mockKalturaBe();
+    loadPlayer().then(() => {
+      openModerationPlugin();
+      cy.get('[data-testid="moderationRoot"]').should('exist');
+      closeModerationPlugin();
+      cy.get('[data-testid="moderationRoot"]').should('not.exist');
+    });
   });
 
   it('should not allow clicking on report button', () => {
-    preparePage();
-    openModerationPlugin();
-    cy.get('[data-testid="submitButton"]').should('have.attr', 'aria-disabled', 'true');
-    closeModerationPlugin();
+    mockKalturaBe();
+    loadPlayer().then(() => {
+      openModerationPlugin();
+      cy.get('[data-testid="submitButton"]').should('have.attr', 'aria-disabled', 'true');
+      closeModerationPlugin();
+    });
   });
 
   it('should validate labels of popover menu items', () => {
-    preparePage();
-    openModerationPlugin();
-    openPopoverMenu();
-    for (let index = 0; index < moderateItems.length; index++) {
-      const itemLabel = moderateItems[index].label;
-      cy.get('[data-testid="popoverMenu"]').contains(itemLabel).should('exist');
-    }
-    closeModerationPlugin();
+    mockKalturaBe();
+    loadPlayer().then(() => {
+      openModerationPlugin();
+      openPopoverMenu();
+      for (let index = 0; index < moderateItems.length; index++) {
+        const itemLabel = moderateItems[index].label;
+        cy.get('[data-testid="popoverMenu"]').contains(itemLabel).should('exist');
+      }
+      closeModerationPlugin();
+    });
   });
 
   it('should allow clicking on report button', () => {
-    preparePage();
-    openModerationPlugin();
-    cy.get('[data-testid="submitButton"]').should('have.attr', 'aria-disabled', 'true');
-    openAndSelectItemFromDropdown(moderateItems[0].label);
-    cy.get('[data-testid="submitButton"]').should('have.attr', 'aria-disabled', 'false');
-    closeModerationPlugin();
+    mockKalturaBe();
+    loadPlayer().then(() => {
+      openModerationPlugin();
+      cy.get('[data-testid="submitButton"]').should('have.attr', 'aria-disabled', 'true');
+      openAndSelectItemFromDropdown(moderateItems[0].label);
+      cy.get('[data-testid="submitButton"]').should('have.attr', 'aria-disabled', 'false');
+      closeModerationPlugin();
+    });
   });
 
   it('should submit a report without a comment', () => {
-    preparePage();
-    openModerationPlugin();
-    openAndSelectItemFromDropdown(moderateItems[0].label);
-    reportAndVerifyRequest(moderateItems[0].id);
-    // verify overlay was closed
-    cy.get('[data-testid="moderationRoot"]').should('not.exist');
-    // verify toast appears
-    cy.get('.playkit-interactive-area').contains('The report was sent successfully').should('exist');
+    mockKalturaBe();
+    loadPlayer().then(() => {
+      openModerationPlugin();
+      openAndSelectItemFromDropdown(moderateItems[0].label);
+      reportAndVerifyRequest(moderateItems[0].id);
+      // verify overlay was closed
+      cy.get('[data-testid="moderationRoot"]').should('not.exist');
+      // verify toast appears
+      cy.get('.playkit-interactive-area').contains('The report was sent successfully').should('exist');
+    });
   });
 
   it('should submit a report with a comment', () => {
     const comment = 'Writing a comment to report on this video';
-    preparePage();
-    openModerationPlugin();
-    openAndSelectItemFromDropdown(moderateItems[2].label);
-    addComment(comment);
-    reportAndVerifyRequest(moderateItems[2].id, comment);
+    mockKalturaBe();
+    loadPlayer().then(() => {
+      openModerationPlugin();
+      openAndSelectItemFromDropdown(moderateItems[2].label);
+      addComment(comment);
+      reportAndVerifyRequest(moderateItems[2].id, comment);
+    });
   });
 
   it('should reach textarea limit of 500 chars', () => {
@@ -99,15 +112,17 @@ describe('Moderation plugin', () => {
     for (let i = 0; i < 510; i++) {
       longText += 'a';
     }
-    preparePage();
-    openModerationPlugin();
-    addComment(longText);
-    cy.get('textarea').should($div => {
-      expect($div[0].textLength).to.eq(500);
+    mockKalturaBe();
+    loadPlayer().then(() => {
+      openModerationPlugin();
+      addComment(longText);
+      cy.get('textarea').should($div => {
+        expect($div[0].textLength).to.eq(500);
+      });
+      cy.get('[data-testid="characterCounter"]').should($div => {
+        expect($div[0].textContent).to.eq('500/500');
+      });
+      closeModerationPlugin();
     });
-    cy.get('[data-testid="characterCounter"]').should($div => {
-      expect($div[0].textContent).to.eq('500/500');
-    });
-    closeModerationPlugin();
   });
 });
