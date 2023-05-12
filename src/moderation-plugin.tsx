@@ -2,7 +2,7 @@ import {h, ComponentChild} from 'preact';
 import {Moderation, ModerateOption} from './components/moderation';
 import {PluginButton} from './components/plugin-button';
 import * as styles from './moderation-plugin.scss';
-import {ui} from 'kaltura-player-js';
+import {ui} from '@playkit-js/kaltura-player-js';
 import {icons} from './components/icons';
 import {ContribServices, ToastSeverity} from '@playkit-js/common/dist/ui-common';
 import {OnClickEvent} from '@playkit-js/common/dist/hoc/a11y-wrapper';
@@ -22,6 +22,7 @@ interface ModerationPluginConfig {
   tooltipMessage: string;
 }
 
+// @ts-ignore
 export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: ModerationPluginConfig = {
     reportLength: 500,
