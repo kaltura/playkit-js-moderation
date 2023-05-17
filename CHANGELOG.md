@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.2.5](https://github.com/kaltura/playkit-js-moderation/compare/v3.2.4...v3.2.5) (2023-05-17)
+
+
+### Bug Fixes
+
+* **FEC-13145:** upgrade dependancies for common and ui-managers etc ([#54](https://github.com/kaltura/playkit-js-moderation/issues/54)) ([fbca84b](https://github.com/kaltura/playkit-js-moderation/commit/fbca84bc718c19938aefc8acc97f51b7b8ed21bc))
+* **FEC-13145:** upgrade dependancies for common and ui-managers etc ([#55](https://github.com/kaltura/playkit-js-moderation/issues/55)) ([323fe87](https://github.com/kaltura/playkit-js-moderation/commit/323fe87c365c7982743989ed6cb2de0e57507d45))
+
 ### [3.2.4](https://github.com/kaltura/playkit-js-moderation/compare/v3.2.3...v3.2.4) (2023-04-19)
 
 
