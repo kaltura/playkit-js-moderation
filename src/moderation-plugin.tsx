@@ -10,27 +10,23 @@ import {UpperBarManager} from '@playkit-js/ui-managers';
 import {ReportLoader, KalturaModerationFlag} from './providers';
 import {ErrorIcon} from './components/icons/error-icon';
 import {SuccessIcon} from './components/icons/success-icon';
+
 const {ReservedPresetAreas, ReservedPresetNames} = ui;
+const {Text} = ui.preacti18n;
 
 interface ModerationPluginConfig {
   reportLength: number;
-  onReportSentMessage: string;
-  onReportErrorMessage: string;
   notificatonDuration: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
-  tooltipMessage: string;
 }
 
 // @ts-ignore
 export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   static defaultConfig: ModerationPluginConfig = {
     reportLength: 500,
-    onReportSentMessage: 'The report was sent successfully',
-    onReportErrorMessage: 'The report failed to send',
     subtitle: '',
     notificatonDuration: 5000,
-    tooltipMessage: 'Send report',
     moderateOptions: [
       {id: 1, label: 'Sexual Content'},
       {id: 2, label: 'Violent Or Repulsive'},
@@ -68,7 +64,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   }
 
   private _sentReport = (contentType: number, content: string, callback?: () => void) => {
-    const {onReportSentMessage, onReportErrorMessage} = this.config;
     const {sources} = this._player;
     return this._player.provider
       .doRequest([{loader: ReportLoader, params: {comments: content, flagType: contentType, flaggedEntryId: sources.id}}])
@@ -80,7 +75,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
             this.logger.debug('Moderation plugin submit OK');
             this._toggleOverlay();
             this._displayToast({
-              text: onReportSentMessage,
+              text: (<Text id="moderation.send_success">The report was sent successfully</Text>) as any,
               icon: (
                 <div className={styles.toastIcon}>
                   <SuccessIcon />
@@ -101,7 +96,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
         this.logger.warn(e);
         this._toggleOverlay();
         this._displayToast({
-          text: onReportErrorMessage,
+          text: (<Text id="moderation.send_fail">The report failed to send</Text>) as any,
           icon: (
             <div className={styles.toastIcon}>
               <ErrorIcon />
@@ -115,7 +110,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   private _displayToast = (options: {text: string; icon: ComponentChild; severity: ToastSeverity}): void => {
     const {notificatonDuration} = this.config;
     this._contribServices.toastManager.add({
-      title: 'Report Content',
+      title: (<Text id="moderation.report_content">Report Content</Text>) as any,
       text: options.text,
       icon: options.icon,
       duration: notificatonDuration,
@@ -143,7 +138,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     if (byKeyboard) {
       closeButtonSelected = true;
     }
-    const {reportLength, moderateOptions, subtitle, tooltipMessage} = this.config;
+    const {reportLength, moderateOptions, subtitle} = this.config;
     const isPlaying = !(this._player as any).paused;
 
     this.logger.debug(`Moderation toggle overlay player`, {
@@ -176,7 +171,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
           onSubmit={this._sentReport}
           reportLength={reportLength}
           subtitle={subtitle}
-          tooltipMessage={tooltipMessage}
           moderateOptions={moderateOptions}
           closeButtonSelected={closeButtonSelected}
         />
@@ -185,14 +179,13 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   };
 
   private _addPluginIcon(): void {
-    const {tooltipMessage} = this.config;
     if (this._pluginIcon > 0) {
       return;
     }
     this.player.ready().then(() => {
       this._pluginIcon = this.upperBarManager!.add({
         label: 'Moderation',
-        component: () => <PluginButton onClick={this._toggleOverlay} label={tooltipMessage} />,
+        component: () => <PluginButton onClick={this._toggleOverlay} />,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
       }) as number;

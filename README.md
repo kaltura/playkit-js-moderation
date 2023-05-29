@@ -108,10 +108,7 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE.md](LICEN
 //Plugin params
 "playkit-js-moderation": {
   reportLength?: number, // optional
-  onReportSentMessage?: string, // optional
-  onReportErrorMessage?: string, // optional
   subtitle?: string, // optional extra information to be displayed
-  tooltipMessage?: string, // optional
   notificatonDuration?: number, // miliseconds, optional
   moderateOptions?: Array< {id: number, label: string} > // optional
 }
@@ -123,11 +120,8 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE.md](LICEN
 ```
 "playkit-js-moderation": {
     "reportLength": 500,
-    "onReportSentMessage": "The report was sent successfully",
-    "onReportErrorMessage": "The report failed to send",
     "subtitle": "",
     "notificatonDuration": 5000,
-    "tooltipMessage": "Send report",
     "moderateOptions": [
       {
       		"id": 1,
@@ -177,38 +171,11 @@ This project is licensed under the AGPL-3.0 License - see the [LICENSE.md](LICEN
 
 ##
 
-> ### config.onReportSentMessage
->
-> ##### Type: `string`
->
-> ##### Default: `The report was sent successfully`
->
-
-##
-
-> ### config.onReportErrorMessage
->
-> ##### Type: `string`
->
-> ##### Default: `The report failed to send`
->
-
-##
-
 > ### config.subtitle
 >
 > ##### Type: `string`
 >
 > ##### Default: `-`
->
-
-##
-
-> ### config.tooltipMessage
->
-> ##### Type: `string`
->
-> ##### Default: `Send report`
 >
 
 ##
