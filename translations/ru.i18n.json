@@ -1,7 +1,7 @@
 {
   "ru": {
     "moderation": {
-      "send_report": "Сообщить",
+      "report_button": "Сообщить",
       "close": "Закрыть",
       "report_placeholder": "Опишите, что вы видели...",
       "default_content_type": "Выберите причину сообщения об этом контенте",

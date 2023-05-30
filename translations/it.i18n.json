@@ -1,7 +1,7 @@
 {
   "it": {
     "moderation": {
-      "send_report": "Rapporto",
+      "report_button": "Rapporto",
       "close": "Chiudi",
       "report_placeholder": "Descrivi ciò che hai visto...",
       "default_content_type": "Seleziona un motivo per segnalare questo contenuto",

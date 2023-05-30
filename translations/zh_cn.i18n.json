@@ -1,7 +1,7 @@
 {
   "zh_cn": {
     "moderation": {
-      "send_report": "报告",
+      "report_button": "报告",
       "close": "关闭",
       "report_placeholder": "描述您所看到的……",
       "default_content_type": "选择报告此内容的原因",
