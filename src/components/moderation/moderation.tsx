@@ -23,7 +23,6 @@ interface ModerationProps {
   reportLength: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
-  tooltipMessage: string;
   closeButtonSelected: boolean;
   sendReportLabel?: string;
   closeLabel?: string;
@@ -50,12 +49,16 @@ const initialState: ModerationState = {
   isTextareaActive: false
 };
 
-const translates = {
-  sendReportLabel: <Text id="moderation.send_report">Report</Text>,
-  closeLabel: <Text id="moderation.close">Close</Text>,
-  reportPlaceholder: <Text id="moderation.report_placeholder">Describe what you saw...</Text>,
-  defaultContentType: <Text id="moderation.default_content_type">Choose a reason for reporting this content</Text>,
-  reportTitle: <Text id="moderation.report_title">What’s wrong with this content?</Text>
+const translates = ({moderateOptions}: ModerationProps) => {
+  const translatedOptions = moderateOptions.reduce((prev, {label}) => ({...prev, [label]: <Text id={`moderation.${label}`}>{label}</Text>}), {});
+  return {
+    ...translatedOptions,
+    sendReportLabel: <Text id="moderation.report_button">Report</Text>,
+    closeLabel: <Text id="moderation.close">Close</Text>,
+    reportPlaceholder: <Text id="moderation.report_placeholder">Describe what you saw...</Text>,
+    defaultContentType: <Text id="moderation.default_content_type">Choose a reason for reporting this content</Text>,
+    reportTitle: <Text id="moderation.report_title">What’s wrong with this content?</Text>
+  };
 };
 
 const mapStateToProps = (state: Record<string, any>) => ({
@@ -113,7 +116,8 @@ export class Moderation extends Component<MergedProps, ModerationState> {
 
   private _getPopoverMenuOptions = () => {
     return this.props.moderateOptions.map(({label, id}: ModerateOption) => ({
-      label: label || '',
+      // @ts-ignore
+      label: this.props[label],
       onMenuChosen: (byKeyboard?: boolean) => {
         this._onContentTypeChange(id || -1);
         if (byKeyboard) {
@@ -128,7 +132,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
   };
 
   render(props: MergedProps) {
-    const {playerSize = '', reportLength, subtitle, tooltipMessage, onClick} = props;
+    const {playerSize = '', reportLength, subtitle, onClick} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     if (playerSize === PLAYER_SIZE.TINY) {
       return null;
@@ -174,7 +178,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                   <div className={styles.characterCounter} data-testid="characterCounter">{`${reportContent.length}/${reportLength}`}</div>
                   <Button
                     onClick={this._handleSubmit}
-                    tooltip={{label: tooltipMessage, className: styles.tooltip}}
+                    tooltip={{label: this.props.sendReportLabel!, className: styles.tooltip}}
                     disabled={submitButtonDisabled}
                     ariaLabel={this.props.sendReportLabel}
                     testId={'submitButton'}>

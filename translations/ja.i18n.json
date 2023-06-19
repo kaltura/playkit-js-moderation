@@ -1,7 +1,7 @@
 {
   "ja": {
     "moderation": {
-      "send_report": "レポート",
+      "report_button": "レポート",
       "close": "閉じる",
       "report_placeholder": "あなたが見たものを記述する",
       "default_content_type": "このコンテンツを報告する理由を選択する",

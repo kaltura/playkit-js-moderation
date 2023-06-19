@@ -1,7 +1,14 @@
 {
   "en": {
     "moderation": {
-      "send_report": "Report",
+      "report_button": "Report",
+      "report_content": "Report Content",
+      "send_success": "The report was sent successfully",
+      "send_fail": "The report failed to send",
+      "Sexual Content": "Sexual Content",
+      "Violent Or Repulsive": "Violent Or Repulsive",
+      "Harmful Or Dangerous Act": "Harmful Or Dangerous Act",
+      "Spam / Commercials": "Spam / Commercials",
       "close": "Close",
       "report_placeholder": "Describe what you saw...",
       "default_content_type": "Choose a reason for reporting this content",

@@ -4,13 +4,18 @@ import {ui} from '@playkit-js/kaltura-player-js';
 import {A11yWrapper, OnClick} from '@playkit-js/common/dist/hoc/a11y-wrapper';
 
 const {Tooltip, Icon} = KalturaPlayer.ui.components;
+const {withText, Text} = KalturaPlayer.ui.preacti18n;
+
+const translates = {
+  label: <Text id="moderation.report_content">Report Content</Text>
+};
 
 interface PluginButtonProps {
   onClick: OnClick;
   label?: string;
 }
 
-export const PluginButton = ({onClick, label}: PluginButtonProps) => {
+export const PluginButton = withText(translates)(({onClick, label}: PluginButtonProps) => {
   return (
     <Tooltip label={label} type="bottom">
       <A11yWrapper onClick={onClick}>
@@ -26,4 +31,4 @@ export const PluginButton = ({onClick, label}: PluginButtonProps) => {
       </A11yWrapper>
     </Tooltip>
   );
-};
+});
