@@ -185,7 +185,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     this.player.ready().then(() => {
       this._pluginIcon = this.upperBarManager!.add({
         label: 'Moderation',
-        component: () => <PluginButton onClick={this._toggleOverlay} />,
+        component: () => <PluginButton />,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
       }) as number;
