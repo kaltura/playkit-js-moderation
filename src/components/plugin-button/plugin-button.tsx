@@ -16,7 +16,7 @@ interface PluginButtonProps {
 export const PluginButton = withText(translates)(({label}: PluginButtonProps) => {
   return (
     <Tooltip label={label} type="bottom">
-        <button aria-label={label} className={ui.style.upperBarIcon} data-testid="moderationPluginButton">
+        <button type="button" aria-label={label} className={ui.style.upperBarIcon} data-testid="moderationPluginButton">
           <Icon
             id="moderation-plugin-button"
             height={icons.BigSize}
