@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.2.10 (2023-11-26)
+
+
+### Bug Fixes
+
+* **SUP-39294:** Page refreshes after clicking on player buttons ([#64](https://github.com/kaltura/playkit-js-moderation/issues/64)) ([56ac886](https://github.com/kaltura/playkit-js-moderation/commit/56ac88685eceeaff2d92a9b123ec3f207ff39f0c))
+
 ### 3.2.9 (2023-09-11)
 
 ### 3.2.8 (2023-09-11)
