@@ -4,9 +4,8 @@ import {PluginButton} from './components/plugin-button';
 import * as styles from './moderation-plugin.scss';
 import {ui} from '@playkit-js/kaltura-player-js';
 import {icons} from './components/icons';
-import {ContribServices, ToastSeverity} from '@playkit-js/common/dist/ui-common';
 import {OnClickEvent} from '@playkit-js/common/dist/hoc/a11y-wrapper';
-import {UpperBarManager} from '@playkit-js/ui-managers';
+import {UpperBarManager, ToastManager, ToastSeverity} from '@playkit-js/ui-managers';
 import {ReportLoader, KalturaModerationFlag} from './providers';
 import {ErrorIcon} from './components/icons/error-icon';
 import {SuccessIcon} from './components/icons/success-icon';
@@ -39,15 +38,17 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   private _wasPlayed = false; // keep state of the player so we can resume if needed
   private _removeActiveOverlay: null | Function = null;
   private _pluginIcon = -1;
-  private _contribServices: ContribServices;
 
   constructor(name: string, private _player: KalturaPlayerTypes.Player, config: ModerationPluginConfig) {
     super(name, _player, config);
-    this._contribServices = ContribServices.get({kalturaPlayer: _player});
   }
 
   get upperBarManager() {
     return this.player.getService('upperBarManager') as UpperBarManager | undefined;
+  }
+
+  private get toastManager(): ToastManager {
+    return (this.player.getService('toastManager') as ToastManager) || {};
   }
 
   loadMedia(): void {
@@ -56,11 +57,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       return;
     }
     this._addPluginIcon();
-  }
-
-  // TODO: remove once contribServices migrated to BasePlugin
-  getUIComponents(): any[] {
-    return this._contribServices.register();
   }
 
   private _sentReport = (contentType: number, content: string, callback?: () => void) => {
@@ -109,7 +105,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
 
   private _displayToast = (options: {text: string; icon: ComponentChild; severity: ToastSeverity}): void => {
     const {notificatonDuration} = this.config;
-    this._contribServices.toastManager.add({
+    this.toastManager.add({
       title: (<Text id="moderation.report_content">Report Content</Text>) as any,
       text: options.text,
       icon: options.icon,
@@ -205,7 +201,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
 
   reset(): void {
     this._removeOverlay();
-    this._contribServices.reset();
   }
 
   destroy(): void {
