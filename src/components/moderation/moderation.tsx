@@ -152,6 +152,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                   ref={node => {
                     this._buttonRef = node;
                   }}
+                  aria-required="true"
                   data-testid="selectButton">
                   <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
                   <div className={styles.downArrow}>
