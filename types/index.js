@@ -1,0 +1,1 @@
+export {ModerationEvent} from '../src/event/moderation-event';
