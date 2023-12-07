@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.2.11 (2023-12-07)
+
+
+### Bug Fixes
+
+* **ADA-102:** 'Choose a reason for reporting this content’ is not marked as required ([#66](https://github.com/kaltura/playkit-js-moderation/issues/66)) ([e35af3a](https://github.com/kaltura/playkit-js-moderation/commit/e35af3a8330de3abc7e54820605f0de1c7f8a170))
+
 ### 3.2.10 (2023-11-26)
 
 
