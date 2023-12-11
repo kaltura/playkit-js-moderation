@@ -44,7 +44,8 @@
     "README.md",
     "CHANGELOG.md",
     "src",
-    "translations"
+    "translations",
+    "types"
   ],
   "scripts": {
     "clean": "rm -rf ./dist",
