@@ -77,7 +77,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
                   <SuccessIcon />
                 </div>
               ),
-              severity: ToastSeverity.Success
+              severity: 'Success'
             });
             if (this._wasPlayed) {
               this._player.play();
@@ -98,7 +98,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
               <ErrorIcon />
             </div>
           ),
-          severity: ToastSeverity.Error
+          severity: 'Error'
         });
       });
   };
