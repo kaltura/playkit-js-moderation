@@ -10,6 +10,9 @@ import {UpperBarManager} from '@playkit-js/ui-managers';
 import {ReportLoader, KalturaModerationFlag} from './providers';
 import {ErrorIcon} from './components/icons/error-icon';
 import {SuccessIcon} from './components/icons/success-icon';
+import {ModerationEvent} from './event';
+// @ts-ignore
+import {FakeEvent} from '@playkit-js/playkit-js';
 
 const {ReservedPresetAreas, ReservedPresetNames} = ui;
 const {Text} = ui.preacti18n;
@@ -64,6 +67,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   }
 
   private _sentReport = (contentType: number, content: string, callback?: () => void) => {
+    this.player.dispatchEvent(new FakeEvent(ModerationEvent.REPORT_SUBMITTED, {reportType: contentType}))
     const {sources} = this._player;
     return this._player.provider
       .doRequest([{loader: ReportLoader, params: {comments: content, flagType: contentType, flaggedEntryId: sources.id}}])
@@ -176,6 +180,8 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
         />
       )
     });
+
+    this.dispatchEvent(ModerationEvent.REPORT_CLICKED);
   };
 
   private _addPluginIcon(): void {
