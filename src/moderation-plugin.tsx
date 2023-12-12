@@ -43,6 +43,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   private _removeActiveOverlay: null | Function = null;
   private _pluginIcon = -1;
   private _contribServices: ContribServices;
+  private _pluginButtonRef: HTMLButtonElement | null = null;
 
   constructor(name: string, private _player: KalturaPlayerTypes.Player, config: ModerationPluginConfig) {
     super(name, _player, config);
@@ -127,6 +128,16 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     });
   };
 
+  private _setPluginButtonRef = (ref: HTMLButtonElement) => {
+    this._pluginButtonRef = ref;
+  };
+
+  private _focusPluginButton = () => {
+    setTimeout(() => {
+      this._pluginButtonRef?.focus();
+    },100);
+  };
+
   private _toggleOverlay = (event?: OnClickEvent, byKeyboard?: boolean) => {
     if (this._removeActiveOverlay !== null) {
       this._removeOverlay();
@@ -177,6 +188,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
           subtitle={subtitle}
           moderateOptions={moderateOptions}
           closeButtonSelected={closeButtonSelected}
+          focusButton={this._focusPluginButton}
         />
       )
     });
@@ -191,7 +203,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     this.player.ready().then(() => {
       this._pluginIcon = this.upperBarManager!.add({
         label: 'Moderation',
-        component: () => <PluginButton />,
+        component: () => <PluginButton setRef={this._setPluginButtonRef}/>,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
       }) as number;

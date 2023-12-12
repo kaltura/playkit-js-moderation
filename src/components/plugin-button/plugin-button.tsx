@@ -11,12 +11,13 @@ const translates = {
 
 interface PluginButtonProps {
   label?: string;
+  setRef: (ref: HTMLButtonElement | null) => void;
 }
 
-export const PluginButton = withText(translates)(({label}: PluginButtonProps) => {
+export const PluginButton = withText(translates)(({label, setRef}: PluginButtonProps) => {
   return (
     <Tooltip label={label} type="bottom">
-        <button type="button" aria-label={label} className={ui.style.upperBarIcon} data-testid="moderationPluginButton">
+        <button aria-label={label} className={ui.style.upperBarIcon} data-testid="moderationPluginButton" ref={setRef}>
           <Icon
             id="moderation-plugin-button"
             height={icons.BigSize}

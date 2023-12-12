@@ -29,6 +29,7 @@ interface ModerationProps {
   reportPlaceholder?: string;
   defaultContentType?: string;
   reportTitle?: string;
+  focusButton: () => void;
 }
 
 interface ConnectProps {
@@ -132,7 +133,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
   };
 
   render(props: MergedProps) {
-    const {playerSize = '', reportLength, subtitle, onClick} = props;
+    const {playerSize = '', reportLength, subtitle, onClick, focusButton} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
     if (playerSize === PLAYER_SIZE.TINY) {
       return null;
@@ -140,7 +141,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
     const submitButtonDisabled = reportContentType === -1;
     return (
       <OverlayPortal>
-        <Overlay open onClose={onClick}>
+        <Overlay open onClose={onClick} focusButton={focusButton}>
           <div className={[styles.root, styles[playerSize]].join(' ')} data-testid="moderationRoot">
             <div className={styles.mainWrapper}>
               <div className={styles.title}>{this.props.reportTitle}</div>
