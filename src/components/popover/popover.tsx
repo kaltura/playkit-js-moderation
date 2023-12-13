@@ -12,20 +12,16 @@ export interface PopoverMenuItem {
 interface PopoverProps {
   options: Array<PopoverMenuItem>;
   children: VNode;
-}
-
-interface PopoverState {
+  setExpandedState: (open: boolean, callback?: () => void) => void;
   open: boolean;
 }
 
-export class Popover extends Component<PopoverProps, PopoverState> {
+
+export class Popover extends Component<PopoverProps> {
   private _controlElementRef: HTMLDivElement | null = null;
   private _popoverElementRef: HTMLDivElement | null = null;
   private _optionsRefMap: Map<number, HTMLDivElement | null> = new Map();
 
-  state = {
-    open: false
-  };
 
   componentWillUnmount() {
     this._removeListeners();
@@ -61,7 +57,7 @@ export class Popover extends Component<PopoverProps, PopoverState> {
   };
 
   private _openPopover = (byKeyboard?: boolean) => {
-    this.setState({open: true}, () => {
+    this.props.setExpandedState(true, () => {
       this._addListeners();
       if (byKeyboard) {
         this._getOptionRef(0)?.focus();
@@ -71,11 +67,11 @@ export class Popover extends Component<PopoverProps, PopoverState> {
 
   private _closePopover = () => {
     this._removeListeners();
-    this.setState({open: false});
+    this.props.setExpandedState(false);
   };
 
   private _togglePopover = (e: MouseEvent | KeyboardEvent, byKeyboard?: boolean) => {
-    if (this.state.open) {
+    if (this.props.open) {
       this._closePopover();
     } else {
       this._openPopover(byKeyboard);
@@ -96,7 +92,7 @@ export class Popover extends Component<PopoverProps, PopoverState> {
   };
 
   render(props: PopoverProps) {
-    const {open} = this.state;
+    const {open} = this.props;
     return (
       <div className={styles.popoverContainer}>
         <div
