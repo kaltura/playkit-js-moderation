@@ -19,7 +19,7 @@ export interface ModerateOption {
 
 interface ModerationProps {
   onClick: OnClick;
-  onSubmit: (contentType: number, content: string, callBack: () => void) => void;
+  onSubmit: (contentType: number, content: string, event: KeyboardEvent, byKeyboard:boolean, callBack: () => void) => void;
   reportLength: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
@@ -106,13 +106,13 @@ export class Moderation extends Component<MergedProps, ModerationState> {
     }));
   };
 
-  private _handleSubmit = (event: any) => {
+  private _handleSubmit = (event: any, bykeyboard: boolean) => {
     event.preventDefault();
     const {reportContent, reportContentType} = this.state;
     if (reportContentType === -1) {
       return;
     }
-    this.props.onSubmit(reportContentType, reportContent, () => {
+    this.props.onSubmit(reportContentType, reportContent, event, bykeyboard,() => {
       this.setState({...initialState});
     });
   };

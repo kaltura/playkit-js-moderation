@@ -41,6 +41,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
   private _wasPlayed = false; // keep state of the player so we can resume if needed
   private _removeActiveOverlay: null | Function = null;
   private _pluginIcon = -1;
+  private _pluginButtonRef: HTMLButtonElement | null = null;
 
   constructor(name: string, private _player: KalturaPlayerTypes.Player, config: ModerationPluginConfig) {
     super(name, _player, config);
@@ -62,7 +63,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     this._addPluginIcon();
   }
 
-  private _sentReport = (contentType: number, content: string, callback?: () => void) => {
+  private _sentReport = (contentType: number, content: string, event: KeyboardEvent, byKeyboard:boolean, callback?: () => void) => {
     this.player.dispatchEvent(new FakeEvent(ModerationEvent.REPORT_SUBMITTED, {reportType: contentType}))
     const {sources} = this._player;
     return this._player.provider
@@ -73,7 +74,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
           const moderationFlag: KalturaModerationFlag = reportLoader?.response?.moderationFlag;
           if (moderationFlag) {
             this.logger.debug('Moderation plugin submit OK');
-            this._toggleOverlay();
             this._displayToast({
               text: (<Text id="moderation.send_success">The report was sent successfully</Text>) as any,
               icon: (
@@ -94,7 +94,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       })
       .catch((e: any) => {
         this.logger.warn(e);
-        this._toggleOverlay();
         this._displayToast({
           text: (<Text id="moderation.send_fail">The report failed to send</Text>) as any,
           icon: (
@@ -104,7 +103,10 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
           ),
           severity: 'Error'
         });
-      });
+      })
+      .finally(() => {
+        this._toggleOverlay(event, byKeyboard);
+      })
   };
 
   private _displayToast = (options: {text: string; icon: ComponentChild; severity: ToastSeverity}): void => {
@@ -123,6 +125,10 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     });
   };
 
+  private _setPluginButtonRef = (ref: HTMLButtonElement) => {
+    this._pluginButtonRef = ref;
+  };
+
   private _toggleOverlay = (event?: OnClickEvent, byKeyboard?: boolean) => {
     if (this._removeActiveOverlay !== null) {
       this._removeOverlay();
@@ -130,6 +136,11 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       if (this._wasPlayed) {
         this._player.play();
         this._wasPlayed = false;
+      }
+      if(byKeyboard){
+        // TODO: add focusElement to ts-typed
+        // @ts-ignore
+        KalturaPlayer.ui.utils.focusElement(this._pluginButtonRef, 100)
       }
       return;
     }
@@ -187,7 +198,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     this.player.ready().then(() => {
       this._pluginIcon = this.upperBarManager!.add({
         label: 'Moderation',
-        component: () => <PluginButton />,
+        component: () => <PluginButton setRef={this._setPluginButtonRef}/>,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
       }) as number;
