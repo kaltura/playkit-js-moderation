@@ -41,12 +41,15 @@ interface ModerationState {
   reportContentType: number;
   reportContent: string;
   isTextareaActive: boolean;
+  open: boolean;
+
 }
 
 const initialState: ModerationState = {
   reportContent: '',
   reportContentType: -1,
-  isTextareaActive: false
+  isTextareaActive: false,
+  open: false
 };
 
 const translates = ({moderateOptions}: ModerationProps) => {
@@ -131,6 +134,10 @@ export class Moderation extends Component<MergedProps, ModerationState> {
     return this.props.moderateOptions.find((moderateOption: ModerateOption) => moderateOption.id === this.state.reportContentType) || {};
   };
 
+  private _togglePopoverMenu = (open: boolean, callback?: () => void) => {
+    callback ? this.setState({open: open}, callback) : this.setState({open: open});
+  };
+
   render(props: MergedProps) {
     const {playerSize = '', reportLength, subtitle, onClick} = props;
     const {reportContent, reportContentType, isTextareaActive} = this.state;
@@ -145,7 +152,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
             <div className={styles.mainWrapper}>
               <div className={styles.title}>{this.props.reportTitle}</div>
               {subtitle ? <div className={[styles.subtitle].join(' ')}>{subtitle}</div> : null}
-              <Popover options={this._getPopoverMenuOptions()}>
+              <Popover options={this._getPopoverMenuOptions()} setExpandedState={this._togglePopoverMenu} open={this.state.open}>
                 <button
                   className={styles.selectWrapper}
                   tabIndex={0}
@@ -153,6 +160,8 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                     this._buttonRef = node;
                   }}
                   aria-required="true"
+                  aria-expanded={this.state.open}
+                  aria-controls="popoverContent"
                   data-testid="selectButton">
                   <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
                   <div className={styles.downArrow}>
