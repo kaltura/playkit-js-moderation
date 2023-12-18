@@ -105,6 +105,7 @@ export class Popover extends Component<PopoverProps> {
         {open && (
           <div
             aria-expanded={open}
+            id="popoverContent"
             ref={node => {
               this._popoverElementRef = node;
             }}

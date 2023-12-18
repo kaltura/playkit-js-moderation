@@ -161,6 +161,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                   }}
                   aria-required="true"
                   aria-expanded={this.state.open}
+                  aria-controls="popoverContent"
                   data-testid="selectButton">
                   <div className={styles.select}>{reportContentType > -1 ? this._getContentType()?.label || '' : this.props.defaultContentType}</div>
                   <div className={styles.downArrow}>
