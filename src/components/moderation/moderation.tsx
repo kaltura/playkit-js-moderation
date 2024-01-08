@@ -19,7 +19,7 @@ export interface ModerateOption {
 
 interface ModerationProps {
   onClick: OnClick;
-  onSubmit: (contentType: number, content: string, event: KeyboardEvent, byKeyboard:boolean, callBack: () => void) => void;
+  onSubmit: (contentType: number, content: string, event: KeyboardEvent, byKeyboard: boolean) => void;
   reportLength: number;
   moderateOptions: ModerateOption[];
   subtitle: string;
@@ -42,14 +42,15 @@ interface ModerationState {
   reportContent: string;
   isTextareaActive: boolean;
   open: boolean;
-
+  loading: boolean;
 }
 
 const initialState: ModerationState = {
   reportContent: '',
   reportContentType: -1,
   isTextareaActive: false,
-  open: false
+  open: false,
+  loading: false
 };
 
 const translates = ({moderateOptions}: ModerationProps) => {
@@ -108,13 +109,12 @@ export class Moderation extends Component<MergedProps, ModerationState> {
 
   private _handleSubmit = (event: any, bykeyboard: boolean) => {
     event.preventDefault();
-    const {reportContent, reportContentType} = this.state;
-    if (reportContentType === -1) {
+    const {reportContent, reportContentType, loading} = this.state;
+    if (reportContentType === -1 || loading) {
       return;
     }
-    this.props.onSubmit(reportContentType, reportContent, event, bykeyboard,() => {
-      this.setState({...initialState});
-    });
+    this.setState({loading: true});
+    this.props.onSubmit(reportContentType, reportContent, event, bykeyboard);
   };
 
   private _getPopoverMenuOptions = () => {
@@ -140,7 +140,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
 
   render(props: MergedProps) {
     const {playerSize = '', reportLength, subtitle, onClick} = props;
-    const {reportContent, reportContentType, isTextareaActive} = this.state;
+    const {reportContent, reportContentType, isTextareaActive, loading} = this.state;
     if (playerSize === PLAYER_SIZE.TINY) {
       return null;
     }
@@ -189,8 +189,10 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                   <Button
                     onClick={this._handleSubmit}
                     tooltip={{label: this.props.sendReportLabel!, className: styles.tooltip}}
+                    className={styles.submitButton}
                     disabled={submitButtonDisabled}
                     ariaLabel={this.props.sendReportLabel}
+                    loading={loading}
                     testId={'submitButton'}>
                     {this.props.sendReportLabel}
                   </Button>

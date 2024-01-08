@@ -63,8 +63,8 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     this._addPluginIcon();
   }
 
-  private _sentReport = (contentType: number, content: string, event: KeyboardEvent, byKeyboard:boolean, callback?: () => void) => {
-    this.player.dispatchEvent(new FakeEvent(ModerationEvent.REPORT_SUBMITTED, {reportType: contentType}))
+  private _sentReport = (contentType: number, content: string, event: KeyboardEvent, byKeyboard: boolean) => {
+    this.player.dispatchEvent(new FakeEvent(ModerationEvent.REPORT_SUBMITTED, {reportType: contentType}));
     const {sources} = this._player;
     return this._player.provider
       .doRequest([{loader: ReportLoader, params: {comments: content, flagType: contentType, flaggedEntryId: sources.id}}])
@@ -86,9 +86,6 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
             if (this._wasPlayed) {
               this._player.play();
             }
-            if (callback) {
-              callback();
-            }
           }
         }
       })
@@ -106,7 +103,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       })
       .finally(() => {
         this._toggleOverlay(event, byKeyboard);
-      })
+      });
   };
 
   private _displayToast = (options: {text: string; icon: ComponentChild; severity: ToastSeverity}): void => {
@@ -137,10 +134,10 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
         this._player.play();
         this._wasPlayed = false;
       }
-      if(byKeyboard){
+      if (byKeyboard) {
         // TODO: add focusElement to ts-typed
         // @ts-ignore
-        KalturaPlayer.ui.utils.focusElement(this._pluginButtonRef, 100)
+        KalturaPlayer.ui.utils.focusElement(this._pluginButtonRef, 100);
       }
       return;
     }
@@ -198,7 +195,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
     this.player.ready().then(() => {
       this._pluginIcon = this.upperBarManager!.add({
         label: 'Moderation',
-        component: () => <PluginButton setRef={this._setPluginButtonRef}/>,
+        component: () => <PluginButton setRef={this._setPluginButtonRef} />,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
       }) as number;

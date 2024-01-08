@@ -89,7 +89,7 @@ export const mockKalturaBe = (entryFixture = 'vod-entry.json') => {
     }
     if (checkRequest(req.body[2], 'baseentry', 'flag')) {
       req.alias = 'submit';
-      return req.reply({fixture: 'report.json'});
+      return req.reply({delayMs: 400, fixture: 'report.json'});
     }
   });
   cy.intercept('GET', '**/ks/123', {fixture: 'thumb-asset.jpeg'}).as('getSlides');

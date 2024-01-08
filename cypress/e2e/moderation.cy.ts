@@ -19,6 +19,10 @@ const MANIFEST_SAFARI = `#EXTM3U
 #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=504265,RESOLUTION=480x272,AUDIO="audio",SUBTITLES="subs"
 ${location.origin}/media/index.m3u8`;
 
+Cypress.on('uncaught:exception', (err, runnable) => {
+  return false;
+});
+
 const moderateItems = [
   {id: 1, label: 'Sexual Content'},
   {id: 2, label: 'Violent Or Repulsive'},
@@ -34,7 +38,7 @@ describe('Moderation plugin', () => {
     cy.intercept('GET', '**/width/164/vid_slices/100', {fixture: '100.jpeg'});
     cy.intercept('GET', '**/height/360/width/640', {fixture: '640.jpeg'});
     // kava
-    cy.intercept('GET', '**/index.php?service=analytics*', {});
+    cy.intercept('POST', '**/index.php?service=analytics*', {});
     // go to test page
     cy.intercept('POST', 'http://mock-api/service/multirequest', {fixture: 'vod-entry.json'});
   });
@@ -79,6 +83,17 @@ describe('Moderation plugin', () => {
       openAndSelectItemFromDropdown(moderateItems[0].label);
       cy.get('[data-testid="submitButton"]').should('have.attr', 'aria-disabled', 'false');
       closeModerationPlugin();
+    });
+  });
+
+  it('should set loading state once submit button clicked', () => {
+    mockKalturaBe();
+    loadPlayer().then(() => {
+      openModerationPlugin();
+      cy.get('[data-testid="submitButton"]').should('have.attr', 'aria-busy', 'false');
+      openAndSelectItemFromDropdown(moderateItems[0].label);
+      cy.get('[data-testid="submitButton"]').click({force: true});
+      cy.get('[data-testid="submitButton"]').should('have.attr', 'aria-busy', 'true');
     });
   });
 
