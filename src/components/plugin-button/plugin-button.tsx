@@ -1,6 +1,7 @@
 import {h} from 'preact';
 import {icons} from '../icons';
 import {ui} from '@playkit-js/kaltura-player-js';
+import { pluginName } from "../../index";
 
 const {Tooltip, Icon} = KalturaPlayer.ui.components;
 const {withText, Text} = KalturaPlayer.ui.preacti18n;
@@ -19,7 +20,7 @@ export const PluginButton = withText(translates)(({label, setRef}: PluginButtonP
     <Tooltip label={label} type="bottom">
         <button type="button" aria-label={label} className={ui.style.upperBarIcon} data-testid="moderationPluginButton" ref={setRef}>
           <Icon
-            id="moderation-plugin-button"
+            id={pluginName}
             height={icons.BigSize}
             width={icons.BigSize}
             viewBox={`0 0 ${icons.BigSize} ${icons.BigSize}`}

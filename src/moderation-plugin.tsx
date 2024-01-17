@@ -12,6 +12,7 @@ import {SuccessIcon} from './components/icons/success-icon';
 import {ModerationEvent} from './event';
 // @ts-ignore
 import {FakeEvent} from '@playkit-js/playkit-js';
+import { pluginName } from "./index";
 
 const {ReservedPresetAreas, ReservedPresetNames} = ui;
 const {Text} = ui.preacti18n;
@@ -193,8 +194,13 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       return;
     }
     this.player.ready().then(() => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this._pluginIcon = this.upperBarManager!.add({
-        label: 'Moderation',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        displayName: 'Moderation',
+        ariaLabel: 'Moderation',
         component: () => <PluginButton setRef={this._setPluginButtonRef} />,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
