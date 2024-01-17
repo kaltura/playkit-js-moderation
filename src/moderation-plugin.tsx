@@ -201,6 +201,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
         // @ts-ignore
         displayName: 'Moderation',
         ariaLabel: 'Moderation',
+        order: 90,
         component: () => <PluginButton setRef={this._setPluginButtonRef} />,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
