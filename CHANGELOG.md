@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.2.14 (2024-01-18)
+
+
+### Bug Fixes
+
+* **FEC-13572:** Double click on report button close and open the plugin again ([#73](https://github.com/kaltura/playkit-js-moderation/issues/73)) ([51d50ef](https://github.com/kaltura/playkit-js-moderation/commit/51d50efc24d90246b7640c40105e56049c52aff3))
+
 ### 3.2.13 (2023-12-21)
 
 ### 3.2.12 (2023-12-10)
