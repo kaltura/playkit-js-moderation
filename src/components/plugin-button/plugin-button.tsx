@@ -1,7 +1,7 @@
 import {h} from 'preact';
 import {icons} from '../icons';
 import {ui} from '@playkit-js/kaltura-player-js';
-import { pluginName } from "../../index";
+import { pluginName } from "../../moderation-plugin";
 
 const {Tooltip, Icon} = KalturaPlayer.ui.components;
 const {withText, Text} = KalturaPlayer.ui.preacti18n;

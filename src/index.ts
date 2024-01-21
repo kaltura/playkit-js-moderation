@@ -1,4 +1,4 @@
-import {ModerationPlugin} from './moderation-plugin';
+import { ModerationPlugin, pluginName } from "./moderation-plugin";
 
 declare var __VERSION__: string;
 declare var __NAME__: string;
@@ -9,6 +9,5 @@ const NAME = __NAME__;
 export {ModerationPlugin as Plugin};
 export {VERSION, NAME};
 
-export const pluginName: string = 'playkit-js-moderation';
 
 KalturaPlayer.core.registerPlugin(pluginName, ModerationPlugin);

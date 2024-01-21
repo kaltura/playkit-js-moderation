@@ -10,9 +10,10 @@ import {ReportLoader, KalturaModerationFlag} from './providers';
 import {ErrorIcon} from './components/icons/error-icon';
 import {SuccessIcon} from './components/icons/success-icon';
 import {ModerationEvent} from './event';
+
+export const pluginName: string = 'playkit-js-moderation';
 // @ts-ignore
 import {FakeEvent} from '@playkit-js/playkit-js';
-import { pluginName } from "./index";
 
 const {ReservedPresetAreas, ReservedPresetNames} = ui;
 const {Text} = ui.preacti18n;
