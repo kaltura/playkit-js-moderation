@@ -10,6 +10,8 @@ import {ReportLoader, KalturaModerationFlag} from './providers';
 import {ErrorIcon} from './components/icons/error-icon';
 import {SuccessIcon} from './components/icons/success-icon';
 import {ModerationEvent} from './event';
+
+export const pluginName: string = 'playkit-js-moderation';
 // @ts-ignore
 import {FakeEvent} from '@playkit-js/playkit-js';
 
@@ -193,8 +195,14 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       return;
     }
     this.player.ready().then(() => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       this._pluginIcon = this.upperBarManager!.add({
-        label: 'Moderation',
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        displayName: 'Moderation',
+        ariaLabel: 'Moderation',
+        order: 90,
         component: () => <PluginButton setRef={this._setPluginButtonRef} />,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
