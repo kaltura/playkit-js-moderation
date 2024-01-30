@@ -6,6 +6,8 @@ import {OverlayPortal} from '@playkit-js/common/dist/hoc/overlay-portal';
 import * as styles from './moderation.scss';
 import {DownIcon} from './down-icon';
 
+// @ts-ignore
+const {withKeyboardA11y} = KalturaPlayer.ui.utils;
 const {Overlay, PLAYER_SIZE} = KalturaPlayer.ui.components;
 const {withText, Text} = KalturaPlayer.ui.preacti18n;
 const {
@@ -35,7 +37,13 @@ interface ConnectProps {
   playerSize?: string;
 }
 
-type MergedProps = ModerationProps & ConnectProps;
+interface KeyboardA11yProps {
+  handleKeyDown?: () => void;
+  setIsModal?: (isModel: boolean) => void;
+  addAccessibleChild?: (element: HTMLElement) => void;
+}
+
+type MergedProps = ModerationProps & ConnectProps & KeyboardA11yProps;
 
 interface ModerationState {
   reportContentType: number;
@@ -71,6 +79,7 @@ const mapStateToProps = (state: Record<string, any>) => ({
 
 @withText(translates)
 @connect(mapStateToProps)
+@withKeyboardA11y
 export class Moderation extends Component<MergedProps, ModerationState> {
   _buttonRef: null | HTMLButtonElement = null;
   _textAreaElementRef: null | HTMLTextAreaElement = null;
@@ -81,6 +90,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
     if (this._buttonRef && this.props.closeButtonSelected) {
       this._buttonRef.focus();
     }
+    this.props.setIsModal && this.props.setIsModal(true);
   }
 
   private _onContentTypeChange = (id: number) => {
@@ -139,7 +149,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
   };
 
   render(props: MergedProps) {
-    const {playerSize = '', reportLength, subtitle, onClick} = props;
+    const {playerSize = '', reportLength, subtitle, onClick, handleKeyDown, addAccessibleChild} = props;
     const {reportContent, reportContentType, isTextareaActive, loading} = this.state;
     if (playerSize === PLAYER_SIZE.TINY) {
       return null;
@@ -147,7 +157,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
     const submitButtonDisabled = reportContentType === -1;
     return (
       <OverlayPortal>
-        <Overlay open onClose={onClick}>
+        <Overlay open onClose={onClick} handleKeyDown={handleKeyDown} addAccessibleChild={addAccessibleChild}>
           <div className={[styles.root, styles[playerSize]].join(' ')} data-testid="moderationRoot">
             <div className={styles.mainWrapper}>
               <div className={styles.title}>{this.props.reportTitle}</div>
@@ -158,6 +168,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
                   tabIndex={0}
                   ref={node => {
                     this._buttonRef = node;
+                    addAccessibleChild && addAccessibleChild(node!);
                   }}
                   aria-required="true"
                   aria-expanded={this.state.open}
