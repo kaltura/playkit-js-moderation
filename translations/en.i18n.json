@@ -11,7 +11,7 @@
       "Spam / Commercials": "Spam / Commercials",
       "close": "Close",
       "report_placeholder": "Describe what you saw...",
-      "default_content_type": "Choose a reason for reporting this content",
+      "default_content_type": "Choose a reason for reporting this content (required)",
       "report_title": "What’s wrong with this content?"
     }
   }
