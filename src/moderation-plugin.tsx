@@ -137,9 +137,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
         this._wasPlayed = false;
       }
       if (byKeyboard) {
-        // TODO: add focusElement to ts-typed
-        // @ts-ignore
-        KalturaPlayer.ui.utils.focusElement(this._pluginButtonRef, 100);
+        ui.utils.focusElement(this._pluginButtonRef, 100);
       }
       return;
     }
@@ -195,15 +193,13 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       return;
     }
     this.player.ready().then(() => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
       this._pluginIcon = this.upperBarManager!.add({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         displayName: 'Moderation',
         ariaLabel: 'Moderation',
         order: 90,
-        component: () => <PluginButton setRef={this._setPluginButtonRef} />,
+        component: () => (<PluginButton setRef={this._setPluginButtonRef} />) as any,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
         onClick: this._toggleOverlay
       }) as number;
