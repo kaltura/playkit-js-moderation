@@ -106,7 +106,7 @@ export class Popover extends Component<PopoverProps> {
         <div
           className="popover-anchor-container"
           ref={node => {
-            if (node != null){
+            if (node){
               this._controlElementRef = node;
             }
           }}>
