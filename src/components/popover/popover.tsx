@@ -3,6 +3,7 @@ import {A11yWrapper, OnClickEvent} from '@playkit-js/common/dist/hoc/a11y-wrappe
 import * as styles from './popover.scss';
 
 const {ESC, TAB} = KalturaPlayer.ui.utils.KeyMap;
+const {withEventManager} = KalturaPlayer.ui.Event;
 
 export interface PopoverMenuItem {
   label?: string;
@@ -14,9 +15,10 @@ interface PopoverProps {
   children: VNode;
   setExpandedState: (open: boolean, callback?: () => void) => void;
   open: boolean;
+  eventManager?: any;
 }
 
-
+@withEventManager
 export class Popover extends Component<PopoverProps> {
   private _controlElementRef: HTMLDivElement | null = null;
   private _popoverElementRef: HTMLDivElement | null = null;
@@ -35,7 +37,9 @@ export class Popover extends Component<PopoverProps> {
   };
 
   private _handleKeyboardEvent = (event: KeyboardEvent) => {
-    if (event.keyCode === ESC || !this._popoverElementRef?.contains(event.target as Node | null)) {
+    if (event.keyCode === ESC || (!this._popoverElementRef?.contains(event.target as Node | null)
+        && !this._controlElementRef?.contains(event.target as Node | null))) {
+
       this._closePopover();
     }
   };
@@ -60,7 +64,11 @@ export class Popover extends Component<PopoverProps> {
     this.props.setExpandedState(true, () => {
       this._addListeners();
       if (byKeyboard) {
-        this._getOptionRef(0)?.focus();
+        this.props.eventManager?.listen(this._controlElementRef, 'keydown', (event: KeyboardEvent) => {
+          if (event.keyCode === TAB){
+            this._getOptionRef(-1)?.focus();
+          }
+        })
       }
     });
   };
@@ -98,7 +106,9 @@ export class Popover extends Component<PopoverProps> {
         <div
           className="popover-anchor-container"
           ref={node => {
-            this._controlElementRef = node;
+            if (node){
+              this._controlElementRef = node;
+            }
           }}>
           <A11yWrapper onClick={this._togglePopover}>{props.children}</A11yWrapper>;
         </div>
