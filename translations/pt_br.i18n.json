@@ -4,7 +4,7 @@
       "report_button": "Relatório",
       "close": "Fechar",
       "report_placeholder": "Descreva o que você viu...",
-      "default_content_type": "Escolha o motivo da denúncia deste conteúdo",
+      "report_select_title": "Escolha o motivo da denúncia deste conteúdo",
       "report_title": "O que há de errado com este conteúdo?"
     }
   }

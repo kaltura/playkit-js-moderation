@@ -4,7 +4,7 @@
       "report_button": "보고서",
       "close": "닫기",
       "report_placeholder": "관찰한 것을 설명하십시오.",
-      "default_content_type": "해당 콘텐츠를 신고하는 이유를 선택하십시오.",
+      "report_select_title": "해당 콘텐츠를 신고하는 이유를 선택하십시오.",
       "report_title": "콘텐츠에 어떠한 문제가 있습니까?"
     }
   }

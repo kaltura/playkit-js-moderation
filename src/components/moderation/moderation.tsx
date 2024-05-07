@@ -30,6 +30,7 @@ interface ModerationProps {
   closeLabel?: string;
   reportPlaceholder?: string;
   defaultContentType?: string;
+  reportSelectTitle?: string;
   reportTitle?: string;
 }
 
@@ -68,8 +69,9 @@ const translates = ({moderateOptions}: ModerationProps) => {
     sendReportLabel: <Text id="moderation.report_button">Report</Text>,
     closeLabel: <Text id="moderation.close">Close</Text>,
     reportPlaceholder: <Text id="moderation.report_placeholder">Describe what you saw...</Text>,
-    defaultContentType: <Text id="moderation.default_content_type">Choose a reason for reporting this content</Text>,
-    reportTitle: <Text id="moderation.report_title">What’s wrong with this content?</Text>
+    defaultContentType: <Text id="moderation.default_content_type">Select</Text>,
+    reportSelectTitle: <Text id="moderation.report_select_title">Choose a reason for reporting this content (required)</Text>,
+    reportTitle: <Text id="moderation.report_title">What’s wrong with this content?</Text>,
   };
 };
 
@@ -162,6 +164,7 @@ export class Moderation extends Component<MergedProps, ModerationState> {
             <div className={styles.mainWrapper}>
               <div className={styles.title}>{this.props.reportTitle}</div>
               {subtitle ? <div className={[styles.subtitle].join(' ')}>{subtitle}</div> : null}
+              <div className={styles.selectTitle}>{this.props.reportSelectTitle}</div>
               <Popover options={this._getPopoverMenuOptions()} setExpandedState={this._togglePopoverMenu} open={this.state.open}>
                 <button
                   className={styles.selectWrapper}
