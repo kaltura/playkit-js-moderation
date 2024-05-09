@@ -4,7 +4,7 @@
       "report_button": "Rapporteren",
       "close": "Sluiten",
       "report_placeholder": "Beschrijf wat je hebt gezien...",
-      "default_content_type": "Kies een reden om deze inhoud te rapporteren",
+      "report_select_title": "Kies een reden om deze inhoud te rapporteren",
       "report_title": "Wat is er mis met de inhoud?"
     }
   }

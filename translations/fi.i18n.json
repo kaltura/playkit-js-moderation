@@ -4,7 +4,7 @@
       "report_button": "Raportoi",
       "close": "Sulje",
       "report_placeholder": "Kuvaile näkemäsi...",
-      "default_content_type": "Valitse syy tämän sisällön raportointiin",
+      "report_select_title": "Valitse syy tämän sisällön raportointiin",
       "report_title": "Mitä vikaa tässä sisällössä on?"
     }
   }

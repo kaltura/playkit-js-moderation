@@ -4,7 +4,7 @@
       "report_button": "报告",
       "close": "关闭",
       "report_placeholder": "描述您所看到的……",
-      "default_content_type": "选择报告此内容的原因",
+      "report_select_title": "选择报告此内容的原因",
       "report_title": "此内容有什么问题"
     }
   }
