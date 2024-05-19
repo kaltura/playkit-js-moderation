@@ -1,6 +1,6 @@
 {
   "name": "@playkit-js/moderation",
-  "version": "3.2.16",
+  "version": "3.2.17",
   "main": "dist/playkit-moderation.js",
   "private": false,
   "bugs": {
