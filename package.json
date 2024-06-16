@@ -80,7 +80,7 @@
   "kaltura": {
     "name": "playkit-js-moderation",
     "dependencies": {
-      "playkit-ui-managers": "1.5.3"
+      "playkit-ui-managers": "1.5.4"
     }
   }
 }
