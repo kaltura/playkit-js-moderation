@@ -4,6 +4,8 @@ import * as styles from './popover.scss';
 
 const {ESC, TAB} = KalturaPlayer.ui.utils.KeyMap;
 const {withEventManager} = KalturaPlayer.ui.Event;
+const {Tooltip} = KalturaPlayer.ui.components;
+
 
 export interface PopoverMenuItem {
   label?: string;
@@ -99,8 +101,23 @@ export class Popover extends Component<PopoverProps> {
     cb(byKeyboard);
   };
 
+  private _createOptionDiv = (el:PopoverMenuItem, index: number) =>{
+    return (
+        <div
+            tabIndex={0}
+            aria-label={el.label}
+            className={styles.popoverMenuItem}
+            ref={node => {
+              this._setOptionRef(index, node);
+            }}>
+          {el.label}
+        </div>
+    )
+  }
+
   render(props: PopoverProps) {
     const {open} = this.props;
+
     return (
       <div className={styles.popoverContainer}>
         <div
@@ -122,21 +139,18 @@ export class Popover extends Component<PopoverProps> {
             className={[styles.reportPopover, styles.popoverComponent, styles.bottom, styles.right].join(' ')}>
             <div role="menu" className={styles.popoverMenu} data-testid="popoverMenu">
               {props.options.map((el, index) => {
+                const isTitle = el.label?.length ? el.label?.length > 58 : ''
                 return (
                   <A11yWrapper
                     role="menuitem"
                     onClick={this._handleClickOnOption(el.onMenuChosen)}
                     onDownKeyPressed={this._handleDownKeyPressed(index)}
                     onUpKeyPressed={this._handleUpKeyPressed(index)}>
-                    <div
-                      tabIndex={0}
-                      aria-label={el.label}
-                      className={styles.popoverMenuItem}
-                      ref={node => {
-                        this._setOptionRef(index, node);
-                      }}>
-                      {el.label}
-                    </div>
+                    {isTitle?
+                        (<Tooltip label={el.label}>
+                          {this._createOptionDiv(el, index)}
+                        </Tooltip>)
+                    :(this._createOptionDiv(el, index))}
                   </A11yWrapper>
                 );
               })}
