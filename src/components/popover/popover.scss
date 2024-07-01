@@ -3,6 +3,9 @@
 .popover-container {
     position: relative;
     .popover-component {
+        width: fit-content;
+        min-width: 280px;
+        max-width: 500px;
         z-index: 1;
         background-color: $tone-7-color;
         border-radius: $roundness-1;
@@ -33,10 +36,14 @@
 .popover-menu {
     padding-top: 6px;
     padding-bottom: 6px;
+    display: inline-block;
 }
 .popover-menu-item {
-    display: flex;
-    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 280px;
+    max-width: 461px;
+    text-align: left;
     padding: 9px 24px 9px 16px;
     white-space: nowrap;
     min-height: 30px;
