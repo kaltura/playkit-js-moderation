@@ -38,7 +38,6 @@
       font-weight: 700;
       text-align: left;
       line-height: 32px;
-      padding-right: 44px;
     }
     .selectTitle {
       font-size: 14px;
@@ -46,7 +45,6 @@
       font-weight: 700;
       text-align: left;
       margin-top: 24px;
-      padding-right: 44px;
     }
     .subtitle {
       margin-top: 16px;
@@ -148,5 +146,12 @@
         width: auto;
       }
     }
+  }
+}
+
+@media (max-width: 768px) {
+  .main-wrapper .title,
+  .main-wrapper .selectTitle {
+    padding-right: 44px;
   }
 }
