@@ -11,7 +11,8 @@
   color: white;
 
   &.extrasmall,
-  &.small {
+  &.small,
+  &.medium {
     .main-wrapper .title {
       margin-bottom: 12px;
       font-size: 20px;
@@ -146,12 +147,5 @@
         width: auto;
       }
     }
-  }
-}
-
-@media (max-width: 768px) {
-  .main-wrapper .title,
-  .main-wrapper .selectTitle {
-    padding-right: 44px;
   }
 }
