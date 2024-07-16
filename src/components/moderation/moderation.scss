@@ -13,13 +13,19 @@
   &.extrasmall,
   &.small,
   &.medium {
-    .main-wrapper .title {
-      margin-bottom: 12px;
-      font-size: 20px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+    .main-wrapper{
+      .title {
+        margin-bottom: 12px;
+        font-size: 20px;
+        padding-right: 20px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      } 
+      .selectTitle {
+        padding-right: 20px;
+      }
+    } 
   }
 
   div {
