@@ -75,7 +75,7 @@
     "html5 player"
   ],
   "dependencies": {
-    "@playkit-js/common": "1.5.9"
+    "@playkit-js/common": "1.5.17"
   },
   "kaltura": {
     "name": "playkit-js-moderation",
