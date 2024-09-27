@@ -1,6 +1,7 @@
 {
   "en": {
     "moderation": {
+      "moderation": "Moderation",
       "report_button": "Report",
       "report_content": "Report Content",
       "send_success": "The report was sent successfully",
