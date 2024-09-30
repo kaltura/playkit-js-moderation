@@ -16,7 +16,7 @@ export const pluginName: string = 'playkit-js-moderation';
 import {FakeEvent} from '@playkit-js/playkit-js';
 
 const {ReservedPresetAreas, ReservedPresetNames} = ui;
-const {Text, Localizer} = ui.preacti18n;
+const {Text} = ui.preacti18n;
 
 interface ModerationPluginConfig {
   reportLength: number;
@@ -197,14 +197,7 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         displayName: 'Moderation',
-        ariaLabel: () => {
-          const textJSX = (
-            <Localizer>
-              <Text id="moderation.moderation">Moderation</Text>
-            </Localizer>
-          );
-          return textJSX
-        },
+        ariaLabel: <Text id="moderation.moderation">Moderation</Text>,
         order: 90,
         component: () => (<PluginButton setRef={this._setPluginButtonRef} />) as any,
         svgIcon: {path: icons.PLUGIN_ICON, viewBox: `0 0 ${icons.BigSize} ${icons.BigSize}`},
