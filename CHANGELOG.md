@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.2.25 (2024-11-28)
+
+
+### Bug Fixes
+
+* **ADA-1805:** Continues ADA-1734 adding proper translated label for the moderation plugin ([#100](https://github.com/kaltura/playkit-js-moderation/issues/100)) ([d02ed0e](https://github.com/kaltura/playkit-js-moderation/commit/d02ed0e6c4644f5f31471092dd0e70fb5e1c2449))
+
 ### 3.2.24 (2024-11-14)
 
 ### 3.2.23 (2024-11-14)
