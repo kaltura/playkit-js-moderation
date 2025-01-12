@@ -1,0 +1,19 @@
+{
+  "ca": {
+    "moderation": {
+      "report_button": "Denunciar",
+      "report_content": "Denunciar contingut",
+      "send_success": "La denúncia s'ha enviat correctament",
+      "send_fail": "La denúncia no s'ha pogut enviar",
+      "Sexual Content": "Contingut sexual",
+      "Violent Or Repulsive": "Violent o repulsiu",
+      "Harmful Or Dangerous Act": "Acte nociu o perillós",
+      "Spam / Commercials": "Spam / Comercials",
+      "close": "Tancar",
+      "report_placeholder": "Descriu el que has vist...",
+      "default_content_type": "Selecciona",
+      "report_select_title": "Tria un motiu per denunciar aquest contingut (obligatori)",
+      "report_title": "Què està malament amb aquest contingut?"
+    }
+  }
+}
