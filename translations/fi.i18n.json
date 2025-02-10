@@ -5,7 +5,9 @@
       "close": "Sulje",
       "report_placeholder": "Kuvaile näkemäsi...",
       "report_select_title": "Valitse syy tämän sisällön raportointiin",
-      "report_title": "Mitä vikaa tässä sisällössä on?"
+      "report_title": "Mitä vikaa tässä sisällössä on?",
+      "report_content": "Raportoi sisältö",
+      "send_success": "Raportin lähettäminen onnistui"
     }
   }
 }

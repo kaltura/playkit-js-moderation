@@ -5,7 +5,9 @@
       "close": "Cerrar",
       "report_placeholder": "Describa lo que ha visto…",
       "report_select_title": "Elija una razón para denunciar este contenido",
-      "report_title": "¿Qué le ocurre a este contenido?"
+      "report_title": "¿Qué le ocurre a este contenido?",
+      "report_content": "Denunciar contenido",
+      "send_success": "La denuncia se ha enviado correctamente"
     }
   }
 }

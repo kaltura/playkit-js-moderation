@@ -5,7 +5,9 @@
       "close": "閉じる",
       "report_placeholder": "あなたが見たものを記述する",
       "report_select_title": "このコンテンツを報告する理由を選択する",
-      "report_title": "このコンテンツの何が悪いのですか？"
+      "report_title": "このコンテンツの何が悪いのですか？",
+      "report_content": "コンテンツの報告",
+      "send_success": "レポートが正常に送信されました"
     }
   }
 }

@@ -2,12 +2,13 @@
   "de": {
     "moderation": {
       "report_button": "Senden",
-      "report_content": "Melden",
       "close": "Schließen",
       "report_placeholder": "Beschreiben Sie, was Sie gesehen haben...",
       "default_content_type": "Bitte auswählen",
       "report_select_title": "Wählen Sie einen Grund, weswegen Sie diesen Inhalt melden",
-      "report_title": "Was stimmt mit diesem Inhalt nicht?"
+      "report_title": "Was stimmt mit diesem Inhalt nicht?",
+      "report_content": "Inhalt des Berichts",
+      "send_success": "Der Bericht wurde erfolgreich gesendet"
     }
   }
 }

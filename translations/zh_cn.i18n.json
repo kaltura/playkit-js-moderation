@@ -5,7 +5,9 @@
       "close": "关闭",
       "report_placeholder": "描述您所看到的……",
       "report_select_title": "选择报告此内容的原因",
-      "report_title": "此内容有什么问题"
+      "report_title": "此内容有什么问题",
+      "report_content": "报告内容",
+      "send_success": "报告已成功发送"
     }
   }
 }
