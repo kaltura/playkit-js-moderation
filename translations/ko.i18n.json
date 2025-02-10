@@ -5,7 +5,9 @@
       "close": "닫기",
       "report_placeholder": "관찰한 것을 설명하십시오.",
       "report_select_title": "해당 콘텐츠를 신고하는 이유를 선택하십시오.",
-      "report_title": "콘텐츠에 어떠한 문제가 있습니까?"
+      "report_title": "콘텐츠에 어떠한 문제가 있습니까?",
+      "report_content": "콘텐츠 보고하기",
+      "send_success": "보고서가 성공적으로 전송되었습니다"
     }
   }
 }
