@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.2.29 (2025-02-20)
+
+
+### Bug Fixes
+
+* **FEC-14249:** Missing translations ([#104](https://github.com/kaltura/playkit-js-moderation/issues/104)) ([f2653e7](https://github.com/kaltura/playkit-js-moderation/commit/f2653e7acb97e1857ba8f0b7a6ed52f50e3996fc))
+
 ### 3.2.28 (2025-01-23)
 
 ### 3.2.27 (2024-12-19)
