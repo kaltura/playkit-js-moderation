@@ -77,7 +77,11 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
           if (moderationFlag) {
             this.logger.debug('Moderation plugin submit OK');
             this._displayToast({
-              text: (<Text id="moderation.send_success">The report was sent successfully</Text>) as any,
+              text: (
+                <span role='alert' aria-live="polite" aria-label="Report Content">
+                  <Text id="moderation.send_success">The report was sent successfully</Text>
+                </span>
+              ) as any,
               icon: (
                 <div className={styles.toastIcon}>
                   <SuccessIcon />
@@ -94,7 +98,11 @@ export class ModerationPlugin extends KalturaPlayer.core.BasePlugin {
       .catch((e: any) => {
         this.logger.warn(e);
         this._displayToast({
-          text: (<Text id="moderation.send_fail">The report failed to send</Text>) as any,
+          text: (
+            <span role='alert' aria-live="polite" aria-label="Report Content">
+              <Text id="moderation.send_fail">The report failed to send</Text>
+            </span>
+          ) as any,
           icon: (
             <div className={styles.toastIcon}>
               <ErrorIcon />
