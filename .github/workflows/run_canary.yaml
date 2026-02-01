@@ -5,7 +5,7 @@ run-name: Canary
 on:
   push:
     branches:
-      - test-moderation-style-fix
+      - master
 
 jobs:
   test:
