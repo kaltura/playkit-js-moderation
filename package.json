@@ -76,7 +76,7 @@
     "html5 player"
   ],
   "dependencies": {
-    "@playkit-js/common": "1.5.17",
+    "@playkit-js/common": "1.5.27",
     "@playkit-js/webpack-common": "^1.0.3"
   },
   "kaltura": {
