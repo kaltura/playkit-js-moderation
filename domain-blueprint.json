@@ -1,0 +1,148 @@
+{
+  "name": "playkit-js-moderation",
+  "version": "1.0.0",
+  "lastUpdated": "2026-05-04",
+
+  "coreResponsibility": {
+    "summary": "A Kaltura Player plugin that enables end-users to report inappropriate video content by submitting moderation flags with categorized violation types and optional comments to the Kaltura backend."
+  },
+
+  "domainAndLogicOwnership": {
+    "featureOwnership": [
+      "Content reporting/flagging UI overlay",
+      "Moderation flag submission to Kaltura API",
+      "Categorized violation type selection (Sexual Content, Violent/Repulsive, Harmful/Dangerous, Spam, Copyright, Terms of Use Violation)",
+      "User feedback via toast notifications (success/error)",
+      "Multi-language support (18 locales)",
+      "Upper bar plugin icon integration",
+      "Player pause/resume during report submission flow"
+    ],
+    "dataHandling": {
+      "managedStates": [
+        "Report content type selection (KalturaModerationFlagType enum)",
+        "Report comment/description text",
+        "Overlay open/closed state",
+        "Player playback state during moderation flow",
+        "Loading state during API submission"
+      ],
+      "dataObjects": [
+        "KalturaModerationFlag (id, comments, flagType, status, objectType)",
+        "ModerateOption (id, label)",
+        "ModerationPluginConfig (reportLength, notificationDuration, moderateOptions, subtitle)"
+      ]
+    }
+  },
+
+  "integrationPoints": {
+    "upstream": {
+      "services": [
+        "Kaltura API (baseentry.flag service)"
+      ],
+      "repositories": []
+    },
+    "downstream": {
+      "consumers": [
+        "kaltura-player-js (host player)",
+        "Kaltura backend moderation queue"
+      ]
+    },
+    "externalAPIs": [
+      {
+        "name": "Kaltura baseentry.flag API",
+        "description": "Submits moderation flags for video entries",
+        "service": "baseentry",
+        "action": "flag",
+        "parameters": ["moderationFlag.comments", "moderationFlag.flagType", "moderationFlag.flaggedEntryId", "moderationFlag.objectType"]
+      }
+    ],
+    "dependencies": {
+      "peerDependencies": [
+        "@playkit-js/kaltura-player-js"
+      ],
+      "runtimeDependencies": [
+        "@playkit-js/common",
+        "@playkit-js/ui-managers (UpperBarManager, ToastManager)"
+      ]
+    }
+  },
+
+  "technicalStack": {
+    "languages": ["TypeScript", "JavaScript", "SCSS"],
+    "frameworks": ["Preact", "Webpack"],
+    "buildTools": ["webpack", "ts-loader", "sass-loader"],
+    "testingFrameworks": ["Cypress"],
+    "entryPoints": {
+      "main": "src/index.ts",
+      "plugin": "src/moderation-plugin.tsx",
+      "output": "dist/playkit-moderation.js"
+    },
+    "coreFiles": [
+      "src/moderation-plugin.tsx - Main plugin class extending BasePlugin",
+      "src/components/moderation/moderation.tsx - Report overlay UI component",
+      "src/providers/report-loader.ts - Kaltura API request builder for flag submission",
+      "src/providers/response-types/kaltura-moderation-flag.ts - Flag type enums and interfaces"
+    ]
+  },
+
+  "triageKeywords": [
+    "moderation",
+    "report content",
+    "flag content",
+    "inappropriate content",
+    "content violation",
+    "sexual content flag",
+    "spam report",
+    "copyright violation",
+    "terms of use violation",
+    "baseentry.flag",
+    "KalturaModerationFlag",
+    "report overlay",
+    "moderation toast",
+    "report failed to send",
+    "report sent successfully",
+    "playkit-js-moderation"
+  ],
+
+  "events": {
+    "dispatched": [
+      {
+        "name": "report_clicked",
+        "description": "Fired when user opens the moderation report overlay"
+      },
+      {
+        "name": "report_submitted",
+        "description": "Fired when user submits a moderation report, includes reportType in payload"
+      }
+    ]
+  },
+
+  "configuration": {
+    "pluginName": "playkit-js-moderation",
+    "configOptions": [
+      {
+        "name": "reportLength",
+        "type": "number",
+        "default": 500,
+        "description": "Maximum character length for report description"
+      },
+      {
+        "name": "subtitle",
+        "type": "string",
+        "default": "",
+        "description": "Optional extra information displayed in the report overlay"
+      },
+      {
+        "name": "notificatonDuration",
+        "type": "number",
+        "default": 5000,
+        "description": "Duration in milliseconds for toast notifications"
+      },
+      {
+        "name": "moderateOptions",
+        "type": "Array<{id: number, label: string}>",
+        "default": "[Sexual Content, Violent Or Repulsive, Harmful Or Dangerous Act, Spam / Commercials]",
+        "description": "Configurable list of violation types for reporting"
+      }
+    ]
+  }
+}
